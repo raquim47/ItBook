@@ -16,15 +16,6 @@ import initPassport from './passport';
 dotenv.config();
 initPassport();
 
-mongoose
-  .connect(
-    'mongodb+srv://Gwanggaeto:Gwang1234@cluster0.o8ndafw.mongodb.net/?retryWrites=true&w=majority'
-  )
-  .then(() => {
-    app.listen(3000);
-  })
-  .catch((err) => console.log(err));
-
 const app = express();
 
 app.use(express.json());
@@ -32,13 +23,36 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// passport/jwt
 app.use(passport.initialize());
-// jwt 로그인 미들웨어 추가
 app.use(getUserFromJWT);
 
+// Routes
 app.use(categoryRoutes);
 app.use(productRoutes);
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(viewsRoutes);
 app.use(orderRoutes);
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+const PORT = process.env.PORT || 3000;
+
+mongoose
+  .connect(process.env.DB_URI)
+  .then(() => {
+    console.log('Successfully connected to the database');
+  })
+  .catch((err) => {
+    console.error("Mongoose connection error:", err);
+    process.exit(1);
+  });
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
