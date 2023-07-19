@@ -37,8 +37,7 @@ app.use(publicRoutes);
 // 404
 app.use((req, res) => {
   res.status(404).render('404', {
-      pageTitle: 'Page Not Found',
-      path: ''
+      pageTitle: '404 - 페이지를 찾을 수 없습니다',
   });
 });
 

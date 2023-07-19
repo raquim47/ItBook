@@ -10,11 +10,11 @@ const productSchema = new Schema(
     pages: { type: Number, required: true },
     author: { type: String, required: true },
     mainCategory: {
-      type: String, 
+      type: String,
+      enum: ['frontend', 'backend'],
       required: true,
-      enum: ['frontend', 'backend']
     },
-    subCategory: { type: String, required: true }, 
+    subCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
     imageUrl: { type: String, required: true },
   },
   {

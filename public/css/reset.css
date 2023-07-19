@@ -145,3 +145,7 @@ button {
   font-family: inherit;
   padding: 0;
 }
+img {
+  display: block;
+  width: 100%;
+}

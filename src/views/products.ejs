@@ -1,15 +1,63 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/products.css" />
+  </head>
 
-<head>
-  <%- include('./includes/head.ejs') %>
-</head>
-
-<body>
-  <%- include('./includes/header.ejs') %>
-  <main class="main">
-    <h1>상품리스트</h1>
-  </main>
-  <%- include('./includes/footer.ejs') %>
-</body>
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="products">
+          <section class="products__head">
+            <div class="products__title">
+              <h2><%= title %></h2>
+              <p>총 <%= products.length %>개</p>
+            </div>
+            <ul class="products__subCategories">
+              <% for (const subCategory of subCategories) { %>
+              <li><%= subCategory.name %></li>
+              <% } %>
+            </ul>
+            <select class="products__sort" id="sortMenu">
+              <option value="최신순">최신순</option>
+              <option value="오래된순">오래된순</option>
+              <option value="가격높은순">가격높은순</option>
+              <option value="가격낮은순">가격낮은순</option>
+            </select>
+          </section>
+          <section class="products__list">
+            <% if (products.length > 0) { %>
+            <ul>
+              <% for (const product of products) { %>
+              <li class="product-item">
+                <a href="/product/<%= product._id %>">
+                  <img
+                    src="<%= product.imageUrl %>"
+                    alt="<%= product.title %>"
+                  />
+                  <div class="product-item__info">
+                    <strong class="product-item__category">
+                      <%= product.subCategories.map(category =>
+                      category.name).join(', ') %>
+                    </strong>
+                    <h4 class="product-item__title"><%= product.title %></h4>
+                    <p class="product-item__price">
+                      <%= product.price.toLocaleString() %>원
+                    </p>
+                  </div>
+                </a>
+              </li>
+              <% } %>
+            </ul>
+            <% } else { %>
+            <h1>No Products Found!</h1>
+            <% } %>
+          </section>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/footer.ejs') %>
+  </body>
 </html>
