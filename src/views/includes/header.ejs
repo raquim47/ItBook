@@ -6,11 +6,12 @@
       </a>
       <nav class="nav-main">
         <ul class="nav-main__list" id="headerMenu">
-          <li><a href="/products/전체">전체</a></li>
-          <li><a href="/products/알고리즘">알고리즘</a></li>
-          <li><a href="/products/Ai">Ai</a></li>
-          <li><a href="/products/웹">웹</a></li>
-          <li><a href="/products/모바일">모바일</a></li>
+          <li><a href="/products/all">전체</a></li>
+          <% for (const category of categories) { %>
+          <li>
+            <a href="/products/<%= category.id %>"><%= category.name %></a>
+          </li>
+          <% }%>
         </ul>
       </nav>
       <nav class="nav-user">

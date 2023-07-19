@@ -27,6 +27,10 @@ a {
   margin: 0 auto;
 }
 
+.main {
+  min-height: calc(100vh - 90px);
+}
+
 /* header */
 .header {
   position: fixed;
@@ -58,7 +62,7 @@ header.onScroll {
 }
 
 .nav-main {
-  padding-left: 50px;
+  padding-left: 40px;
 }
 
 .nav-main__list {
@@ -93,7 +97,7 @@ header.onScroll {
   padding: 0 14px;
 }
 
-.nav-user__list li a{
+.nav-user__list li a {
   cursor: pointer;
 }
 
@@ -258,55 +262,44 @@ header .header-btn ul li a span.count-none {
 .show {
   display: block;
 }
+
 /* footer */
-footer {
-  width: 100%;
+.footer {
   background-color: #c9c9c9;
 }
-.footer-in a img {
+
+.footer__logo img {
   width: 150px;
 }
 
-.footer-in {
+.footer__inner {
   display: flex;
-  width: 1200px;
-  margin: 0 auto;
-  padding: 30px 0;
   align-items: center;
+  padding: 35px 0;
+  gap: 80px;
 }
-.footer-in ul {
+
+.footer__info {
   display: flex;
-  flex-wrap: wrap;
-  padding-left: 70px;
-  line-height: 25px;
+  flex-direction: column;
 }
 
-.footer-in ul li {
+.footer__info li {
+  padding: 6px 0;
   font-size: 14px;
-}
-
-.footer-in ul .footer-address {
-  width: 100%;
-}
-
-.footer-in ul .footer-mail {
-  width: calc(100% / 2);
-}
-
-.footer-in ul .footer-reserved {
-  width: 100%;
-  font-size: 12px;
-}
-
-.footer-in ul li {
   font-weight: 400;
   color: #616161;
-  padding-right: 10px;
 }
-.footer-in ul li span {
-  font-weight: 600;
+
+.footer__contact {
+  display: flex;
+  gap: 10px;
+}
+
+.footer__info strong {
+  margin-right: 10px;
   color: #000;
-  padding-right: 7px;
+  font-weight: 600;
 }
 
 /* top-btn */

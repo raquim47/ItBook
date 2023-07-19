@@ -1,4 +1,5 @@
 import Product from '../models/product';
+import Category from '../models/category';
 
 export const renderHomePage = async (req, res) => {
   try {
@@ -8,10 +9,11 @@ export const renderHomePage = async (req, res) => {
     } else {
       products = await Product.find().sort({createdAt: -1});
     }
-
+    const categories = await Category.find();
     // 페이지 렌더링
     res.render('home.ejs', {
-      prods: products,
+      products,
+      categories,
       pageTitle: '잇북',
       path: '/',
     });
