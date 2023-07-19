@@ -5,13 +5,14 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import getUserFromJWT from './middlewares/get-user-from-jwt';
 import dotenv from 'dotenv';
-import viewsRoutes from './routes/views.js';
-import productRoutes from './routes/product.js';
-import userRoutes from './routes/user.js';
-import authRoutes from './routes/auth';
-import categoryRoutes from './routes/category';
-import orderRoutes from './routes/order';
+// import viewsRoutes from './routes/views.js';
+// import productRoutes from './routes/product.js';
+// import userRoutes from './routes/user.js';
+// import authRoutes from './routes/auth';
+// import categoryRoutes from './routes/category';
+// import orderRoutes from './routes/order';
 import initPassport from './passport';
+import publicRoutes from './routes/public'
 
 dotenv.config();
 initPassport();
@@ -27,14 +28,11 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(passport.initialize());
 app.use(getUserFromJWT);
 
-// Routes
-app.use(categoryRoutes);
-app.use(productRoutes);
-app.use(authRoutes);
-app.use(userRoutes);
-app.use(viewsRoutes);
-app.use(orderRoutes);
+// views/ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
+app.use(publicRoutes);
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
