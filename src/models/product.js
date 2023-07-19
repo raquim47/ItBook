@@ -9,7 +9,12 @@ const productSchema = new Schema(
     price: { type: Number, required: true },
     pages: { type: Number, required: true },
     author: { type: String, required: true },
-    category: { type: String, required: true },
+    mainCategory: {
+      type: String, 
+      required: true,
+      enum: ['frontend', 'backend']
+    },
+    subCategory: { type: String, required: true }, 
     imageUrl: { type: String, required: true },
   },
   {

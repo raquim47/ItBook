@@ -33,8 +33,17 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(publicRoutes);
+
+// 404
+app.use((req, res) => {
+  res.status(404).render('404', {
+      pageTitle: 'Page Not Found',
+      path: ''
+  });
+});
+
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });

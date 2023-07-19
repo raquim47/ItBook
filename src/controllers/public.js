@@ -3,19 +3,11 @@ import Category from '../models/category';
 
 export const renderHomePage = async (req, res) => {
   try {
-    let products;
-    if (req.query.category) { // 카테고리가 쿼리 파라미터로 제공된 경우
-      products = await Product.find({ category: req.query.category }).sort({createdAt: -1});
-    } else {
-      products = await Product.find().sort({createdAt: -1});
-    }
-    const categories = await Category.find();
-    // 페이지 렌더링
+    const products = await Product.find().sort({ createdAt: -1 });
+    
     res.render('home.ejs', {
       products,
-      categories,
       pageTitle: '잇북',
-      path: '/',
     });
   } catch (err) {
     console.error(err);
@@ -25,4 +17,34 @@ export const renderHomePage = async (req, res) => {
     //   error: err,
     // });
   }
-}
+};
+
+export const renderProductsPage = async (req, res) => {
+  const { mainCategory } = req.params;
+
+  if (!['all', 'frontend', 'backend'].includes(mainCategory)) {
+    return res.status(404).render('404.ejs');
+  }
+
+  const filter = mainCategory !== 'all' ? { mainCategory } : {};
+  const categoryMap = {
+    all : '전체',
+    frontend : '프론트엔드',
+    backend : '백엔드'
+  }
+  try {
+    const products = await Product.find(filter).sort({createdAt: -1});
+    res.render('products.ejs', {
+      products,
+      pageTitle: `${categoryMap[mainCategory]} - 잇북`,
+      mainCategory  // 활성 카테고리 설정
+    });
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('error', {
+      message: '서버 오류',
+      error: err,
+    });
+  }
+};

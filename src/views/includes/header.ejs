@@ -1,3 +1,5 @@
+<% const activeCategory = typeof mainCategory !== 'undefined' ? mainCategory :
+''; %>
 <header class="header">
   <div class="container">
     <div class="header__inner">
@@ -6,12 +8,27 @@
       </a>
       <nav class="nav-main">
         <ul class="nav-main__list" id="headerMenu">
-          <li><a href="/products/all">전체</a></li>
-          <% for (const category of categories) { %>
           <li>
-            <a href="/products/<%= category.id %>"><%= category.name %></a>
+            <a
+              class="<%= activeCategory === 'all' ? 'active' : '' %>"
+              href="/products/all"
+              >전체</a
+            >
           </li>
-          <% }%>
+          <li>
+            <a
+              class="<%= activeCategory === 'frontend' ? 'active' : '' %>"
+              href="/products/frontend"
+              >프론트엔드</a
+            >
+          </li>
+          <li>
+            <a
+              class="<%= activeCategory === 'backend' ? 'active' : '' %>"
+              href="/products/backend"
+              >백엔드</a
+            >
+          </li>
         </ul>
       </nav>
       <nav class="nav-user">

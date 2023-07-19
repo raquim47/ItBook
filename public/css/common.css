@@ -79,7 +79,8 @@ header.onScroll {
   transition: color 0.2s;
 }
 
-.nav-main__list li a:hover {
+.nav-main__list li a:hover,
+.nav-main__list li a.active {
   color: #7156ed;
 }
 
