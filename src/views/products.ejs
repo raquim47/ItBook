@@ -3,6 +3,7 @@
   <head>
     <%- include('./includes/head.ejs') %>
     <link rel="stylesheet" href="/css/pages/products.css" />
+    <script src="/js/pages/products.js" defer></script>
   </head>
 
   <body>
@@ -64,44 +65,5 @@
       </div>
     </main>
     <%- include('./includes/footer.ejs') %>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const productItems = Array.from(
-          document.querySelectorAll('.product-item')
-        );
-        const categoryBtns = Array.from(
-          document.querySelectorAll('.products__subCategories li')
-        );
-
-        const updateDisplay = (activeCategories) => {
-          productItems.forEach((item) => {
-            const itemCategories = item
-              .getAttribute('data-category')
-              .split(', ');
-            const matchesCategories = activeCategories.some((cat) =>
-              itemCategories.includes(cat)
-            );
-
-            item.classList.toggle(
-              'hidden',
-              !(matchesCategories || activeCategories.length === 0)
-            );
-          });
-        };
-
-        categoryBtns.forEach((button) => {
-          button.addEventListener('click', (event) => {
-            const categoryBtn = event.currentTarget;
-            categoryBtn.classList.toggle('active');
-
-            const activeCategories = categoryBtns
-              .filter((btn) => btn.classList.contains('active'))
-              .map((btn) => btn.innerText);
-
-            updateDisplay(activeCategories);
-          });
-        });
-      });
-    </script>
   </body>
 </html>
