@@ -11,7 +11,7 @@ const productSchema = new Schema(
     author: { type: String, required: true },
     mainCategory: {
       type: String,
-      enum: ['frontend', 'backend'],
+      enum: ['frontend', 'backend', 'cs'],
       required: true,
     },
     subCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],

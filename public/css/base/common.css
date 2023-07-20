@@ -67,7 +67,8 @@ header.onScroll {
 }
 
 .nav-main {
-  padding-left: 40px;
+  padding-left: 50px;
+  margin-top: 4px;
 }
 
 .nav-main__list {
@@ -77,7 +78,7 @@ header.onScroll {
 .nav-main__list li {
   white-space: nowrap;
   font-size: 18px;
-  padding: 0 20px;
+  padding: 0 15px;
 }
 
 .nav-main__list li a {
@@ -92,7 +93,7 @@ header.onScroll {
 .nav-user {
   margin-right: -10px;
   margin-left: auto;
-  margin-top: 3px;
+  margin-top: 8px;
 }
 
 .nav-user__list {
