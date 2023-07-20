@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/products.css" />
+    <link rel="stylesheet" href="/css/pages/products.css" />
   </head>
 
   <body>
@@ -20,14 +20,16 @@
               <li><%= subCategory.name %></li>
               <% } %>
             </ul>
-            <select class="products__sort" id="sortMenu">
-              <option value="최신순">최신순</option>
-              <option value="오래된순">오래된순</option>
-              <option value="가격높은순">가격높은순</option>
-              <option value="가격낮은순">가격낮은순</option>
-            </select>
           </section>
           <section class="products__list">
+            <div class="products__sort">
+              <select  id="sortMenu">
+                <option value="최신순">최신순</option>
+                <option value="오래된순">오래된순</option>
+                <option value="가격높은순">가격높은순</option>
+                <option value="가격낮은순">가격낮은순</option>
+              </select>
+            </div>
             <% if (products.length > 0) { %>
             <ul>
               <% for (const product of products) { %>
