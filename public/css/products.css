@@ -36,8 +36,9 @@
   cursor: pointer;
 }
 
-.products__subCategories li:hover {
-  background-color: #d1d1d1;
+.products__subCategories li.active {
+  background-color: #000;
+  border: 1px solid #000;
   color: white;
 }
 

@@ -38,7 +38,6 @@ export const renderProductsPage = async (req, res) => {
   try {
     const products = await Product.find(productFilter).populate('subCategories').sort({createdAt: -1});
     const subCategories = await Category.find(categoryFilter)
-    console.log(subCategories)
     res.render('products.ejs', {
       products,
       title: categoryMap[mainCategory],

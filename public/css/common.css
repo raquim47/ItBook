@@ -32,6 +32,10 @@ a {
   padding: 80px 0;
 }
 
+.hidden {
+  display: none;
+}
+
 /* header */
 .header {
   position: fixed;
