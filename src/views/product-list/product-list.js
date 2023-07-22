@@ -17,6 +17,7 @@ const fetchBooks = async (category) => {
 
 // sortMenu로 정렬
 const sortBooks = (books, sortOption) => {
+  console.log('hi')
   let sortedBooks = [...books];  
   switch (sortOption) {
     case '가격낮은순':
@@ -77,6 +78,7 @@ const displayBooks = (books, category, sortOption = '최신순')  => {
   sortMenu.value = sortOption; 
 
   sortMenu.addEventListener('change', async (event) => {
+    console.log('hi')
     sortOption = event.target.value;
     books = sortBooks(books, sortOption);  
     displayBooks(books, category, sortOption);  

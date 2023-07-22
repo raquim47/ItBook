@@ -24,11 +24,11 @@
           </section>
           <section class="products__list">
             <div class="products__sort">
-              <select  id="sortMenu">
-                <option value="최신순">최신순</option>
-                <option value="오래된순">오래된순</option>
-                <option value="가격높은순">가격높은순</option>
-                <option value="가격낮은순">가격낮은순</option>
+              <select id="sortMenu">
+                <option value="newest">최신순</option>
+                <option value="oldest">오래된순</option>
+                <option value="highPrice">가격높은순</option>
+                <option value="lowPrice">가격낮은순</option>
               </select>
             </div>
             <% if (products.length > 0) { %>
@@ -36,6 +36,8 @@
               <% for (const product of products) { %>
               <li
                 class="product-item"
+                data-price="<%= product.price %>"
+                data-createdAt="<%= product.createdAt %>"
                 data-category="<%= product.subCategories.map(category => category.name).join(', ') %>"
               >
                 <a href="/product/<%= product._id %>">
