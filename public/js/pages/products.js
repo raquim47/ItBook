@@ -1,3 +1,7 @@
+import commonModule from '../common/index.js';
+
+commonModule();
+
 const sortProducts = (productItems, sortValue) => {
   return productItems.slice().sort((a, b) => {
     switch (sortValue) {

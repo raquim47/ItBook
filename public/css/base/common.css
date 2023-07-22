@@ -309,40 +309,16 @@ header .header-btn ul li a span.count-none {
   font-weight: 600;
 }
 
-/* top-btn */
-.top-btn {
-  cursor: pointer;
-  opacity: 0;
-  transition: 0.5s;
-}
-.top-btn.on {
-  opacity: 1;
-  border: 0px;
-  padding: 0px;
-  margin: 0px;
-  outline: none;
-  appearance: none;
+/* scroll-top-btn */
+.scroll-top-btn {
   position: fixed;
   right: 90px;
   bottom: 60px;
-  display: block;
   width: 50px;
   height: 50px;
   border-radius: 50px;
   background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPHJlY3QgeD0iMC41IiB5PSIwLjUiIHdpZHRoPSI0OSIgaGVpZ2h0PSI0OSIgcng9IjI0LjUiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNEREREREQiLz4gPHBhdGggZD0iTTI1IDE5VjM2IiBzdHJva2U9ImJsYWNrIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4gPHBhdGggZD0iTTMyIDI2TDI1IDE5TDE4IDI2IiBzdHJva2U9ImJsYWNrIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4gPHBhdGggZD0iTTE4IDE0SDMyIiBzdHJva2U9ImJsYWNrIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4gPC9zdmc+IA==)
     no-repeat;
   z-index: 10;
-  transition: 0.5s;
-}
-.page-title {
-  margin: 0 auto;
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 42px;
-  text-align: center;
-  margin-bottom: 70px;
-}
-
-li.on a {
-  color: #7156ed;
+  cursor: pointer;
 }
