@@ -1,49 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/home.css" />
+  </head>
 
-<head>
-  <%- include('./includes/head.ejs') %>
-</head>
-
-<body>
-  <%- include('./includes/header.ejs') %>
-  <main class="main">
-    <!-- 메인슬라이드 -->
-    <div class="main01">
-      <div class="swiper main-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide slide01"></div>
-          <div class="swiper-slide slide02"></div>
-          <div class="swiper-slide slide03"></div>
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <section aria-label="메인 슬라이드">
+        <div class="slide-container">
+          <figure class="slide slide01"></figure>
+          <figure class="slide slide02"></figure>
+          <figure class="slide slide03"></figure>
         </div>
-        <div class="swiper-pagination"></div>
-      </div>
-    </div>
-    <div class="wrap">
-      <div class="main-container">
-        <!-- 신상품 -->
-        <div class="main04 product">
-          <h3>새로 나왔어요</h3>
-          <div class="swiper new-swiper">
-            <div class="swiper-wrapper" id="newSwiper"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+        <div class="slide-pagination"></div>
+      </section>
+      <div class="container">
+        <section aria-label="신상품 추천 슬라이드">
+          <h2>새로 나왔어요</h2>
+          <div class="product-slider">
+            <div id="newProductList"></div>
+            <button class="slider-button prev"></button>
+            <button class="slider-button next"></button>
           </div>
-        </div>
-        <div class="main04 product title-padding">
-          <div class="main-banner">
-            <a href="">
-              <img src="/img/main_banner.jpg" alt="" />
+        </section>
+        <section aria-label="메인 배너">
+          <figure class="main-banner">
+            <a href="/product/123">
+              <img src="/img/main_banner.jpg" alt="Main banner description" />
             </a>
-          </div>
-          <h3>웹 개발 추천 도서</h3>
-          <div class="b-list" id="bookList"></div>
-        </div>
+          </figure>
+        </section>
+        <% if (recommendedProducts.length > 0) { %>
+        <section aria-label="웹 개발 추천 도서" class="recommand-books">
+          <h2 class="recommand-books__title">웹 개발 추천 도서</h2>
+          <ul class="recommand-books__list">
+            <% for (const product of recommendedProducts) { %>
+            <li class="product-item">
+              <a href="/product/<%= product._id %>">
+                <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+                <div class="product-item__info">
+                  <strong class="product-item__category">
+                    <%= product.subCategories.map(category =>
+                    category.name).join(', ') %>
+                  </strong>
+                  <h4 class="product-item__title"><%= product.title %></h4>
+                  <p class="product-item__price">
+                    <%= product.price.toLocaleString() %>원
+                  </p>
+                </div>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </section>
+        <% } %>
       </div>
-      <button class="top-btn"></button>
-    </div>
-  </main>
-  <%- include('./includes/scroll-top-btn.ejs') %>
-  <%- include('./includes/footer.ejs') %>
-</body>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+    <script></script>
+  </body>
 </html>

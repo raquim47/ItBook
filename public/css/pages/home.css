@@ -1,65 +1,20 @@
-.products__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1px solid #d1d1d1;
-  padding-bottom: 40px;
+/* .recommand-books */
+.recommand-books {
+  padding: 80px 25px 40px;
 }
 
-.products__title {
-  display: flex;
-  align-items: center;
-}
-
-.products__title h2 {
-  display: flex;
-  margin-right: 8px;
-  font-size: 55px;
+.recommand-books__title {
+  font-size: 32px;
   font-weight: 800;
+  text-align: center;
+  margin-bottom: 65px;
+
 }
 
-.products__subCategories {
-  margin-left: 30px;
-  margin-right: auto;
-  display: flex;
-  gap: 12px;
-}
-
-.products__subCategories li {
-  font-weight: 400;
-  padding: 8px;
-  font-size: 12px;
-  border: 1px dashed #d1d1d1;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.products__subCategories li.active {
-  background-color: #000;
-  border: 1px solid #000;
-  color: white;
-}
-
-.products__list {
-  padding: 10px 40px 40px;
-}
-
-.products__sort {
-  text-align: right;
-}
-
-.products__sort select {
-  padding: 4px;
-  border-radius: 5px;
-  outline: none;
-  margin-right: -40px;
-  margin-bottom: 40px;
-}
-
-.products__list ul {
+.recommand-books__list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 3rem 4rem;
+  gap: 3rem 4.5rem;
 }
 
 .product-item {

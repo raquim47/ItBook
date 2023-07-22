@@ -3,19 +3,18 @@ import Category from '../models/category';
 
 export const renderHomePage = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const recommendedProducts = await Product.find({ isRecommended: true }).populate('subCategories').sort({ createdAt: -1 });
 
     res.render('home.ejs', {
-      products,
+      recommendedProducts,
       pageTitle: '잇북',
     });
   } catch (err) {
     console.error(err);
-    // 에러 페이지 렌더링. 'error'는 해당 오류 페이지의 템플릿 이름이라 가정합니다.
-    // res.status(500).render('error', {
-    //   message: '서버 오류',
-    //   error: err,
-    // });
+    res.status(500).render('404.ejs', {
+      message: '서버 오류',
+      error: err,
+    });
   }
 };
 

@@ -16,6 +16,7 @@ const productSchema = new Schema(
     },
     subCategories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
     imageUrl: { type: String, required: true },
+    isRecommended: { type: Boolean, default: false }
   },
   {
     timestamps: true,
