@@ -2,34 +2,61 @@ import commonModule from '../common/index.js';
 
 commonModule();
 
-document.addEventListener('DOMContentLoaded', function () {
-  let slideIndex = 1; // 첫 번째 슬라이드부터 시작
+// 메인 슬라이드 - 슬라이드 이동
+const updateMainSlidePosition = (slideIndex, slides, list) => {
+  const offset = -(slides[0].clientWidth * (slideIndex - 1));
+  list.style.transform = `translateX(${offset}px)`;
+};
+
+// 메인 슬라이드 - Pagination 버튼 활성화
+const updateMainSlidePagination = (slideIndex, dots) => {
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === slideIndex - 1);
+  });
+};
+
+// 메인 슬라이드 - initialize
+const initializeMainSlide = () => {
   const slides = document.querySelectorAll('.main-slide__item');
   const list = document.querySelector('.main-slide__list');
-  const dots = document.querySelectorAll('.dot');
+  const dots = document.querySelectorAll('.main-slide__dot');
+  let slideIndex = 1;
 
-  function updateSlide() {
-    const offset = -(slides[0].clientWidth * (slideIndex - 1));
-    list.style.transition = 'transform 0.5s';
-    list.style.transform = `translateX(${offset}px)`;
-
-    dots.forEach((dot) => dot.classList.remove('active'));
-    dots[slideIndex - 1].classList.add('active');
-  }
+  updateMainSlidePosition(slideIndex, slides, list);
+  updateMainSlidePagination(slideIndex, dots);
 
   dots.forEach((dot, index) => {
-    dot.addEventListener('click', function () {
+    dot.addEventListener('click', () => {
       slideIndex = index + 1;
-      updateSlide();
+      updateMainSlidePosition(slideIndex, slides, list);
+      updateMainSlidePagination(slideIndex, dots);
     });
   });
 
-  updateSlide();
+  window.addEventListener('resize', () => {
+    updateMainSlidePosition(slideIndex, slides, list);
+    updateMainSlidePagination(slideIndex, dots);
+  });
+};
 
-  window.addEventListener('resize', updateSlide);
-});
+// Product 슬라이드 - 슬라이드 이동
+const updateProductSlidePosition = (sliderList, offset) => {
+  sliderList.style.transform = `translateX(${offset}px)`;
+};
 
-document.addEventListener('DOMContentLoaded', function () {
+// Product 슬라이드 - 네비게이션 버튼 업데이트
+const updateProductNavigationBtns = (
+  slideIndex,
+  maxIndex,
+  prevButton,
+  nextButton
+) => {
+  prevButton.classList.toggle('hidden', slideIndex === 0);
+  nextButton.classList.toggle('hidden', slideIndex >= maxIndex);
+};
+
+// Product 슬라이드 - 초기화
+const initializeProductSlide = () => {
   const sliderList = document.querySelector('.product-slider__list');
   const prevButton = document.querySelector('.product-slider__btn.prev');
   const nextButton = document.querySelector('.product-slider__btn.next');
@@ -39,50 +66,45 @@ document.addEventListener('DOMContentLoaded', function () {
   let slideWidth =
     sliderList.querySelector('.product-item').clientWidth + slideGap;
   const slideCount = sliderList.querySelectorAll('.product-item').length;
-  const maxIndex = slideCount - 3; // 최대로 움직일 수 있는 인덱스
+  const maxIndex = slideCount - 3;
 
-  function updateNavigationButtons() {
-    if (slideIndex === 0) {
-      prevButton.style.display = 'none';
-    } else {
-      prevButton.style.display = 'block';
-    }
+  updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
+  updateProductNavigationBtns(slideIndex, maxIndex, prevButton, nextButton);
 
-    if (slideIndex >= maxIndex) {
-      nextButton.style.display = 'none';
-    } else {
-      nextButton.style.display = 'block';
-    }
-  }
-
-  prevButton.addEventListener('click', function () {
+  prevButton.addEventListener('click', () => {
     if (slideIndex > 0) {
       slideIndex--;
-      updateSlidePosition();
-      updateNavigationButtons();
+      updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
+      updateProductNavigationBtns(
+        slideIndex,
+        maxIndex,
+        prevButton,
+        nextButton
+      );
     }
   });
 
-  nextButton.addEventListener('click', function () {
+  nextButton.addEventListener('click', () => {
     if (slideIndex < maxIndex) {
       slideIndex++;
-      updateSlidePosition();
-      updateNavigationButtons();
+      updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
+      updateProductNavigationBtns(
+        slideIndex,
+        maxIndex,
+        prevButton,
+        nextButton
+      );
     }
   });
 
-  function updateSlidePosition() {
-    const offset = -slideWidth * slideIndex;
-    sliderList.style.transform = `translateX(${offset}px)`;
-  }
-
-  // 브라우저 크기 조절시 슬라이드 너비와 위치 조정
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', () => {
     slideWidth =
-      sliderList.querySelector('.product-item').clientWidth + slideGap; // 슬라이드 너비 재계산
-    updateSlidePosition();
+      sliderList.querySelector('.product-item').clientWidth + slideGap;
+    updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
   });
+};
 
-  // 처음 로드시 버튼 상태 초기화
-  updateNavigationButtons();
+document.addEventListener('DOMContentLoaded', () => {
+  initializeMainSlide();
+  initializeProductSlide();
 });

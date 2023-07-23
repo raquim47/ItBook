@@ -7,8 +7,8 @@
 
 .main-slide__list {
   display: flex;
-  width: 300%; /* 슬라이드 항목이 3개이므로 300% */
-  transition: transform 1s ease-out; /* Modified transition for slide animation */
+  width: 300%; 
+  transition: transform 0.5s ease-in-out; 
 }
 
 .main-slide__item {
@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-.dot {
+.main-slide__dot {
   height: 10px;
   width: 10px;
   margin: 0 5px;
@@ -34,7 +34,7 @@
   cursor: pointer;
 }
 
-.dot.active {
+.main-slide__dot.active {
   background-color: #6236ff; 
 }
 /* .new-books */
