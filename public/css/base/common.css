@@ -213,11 +213,19 @@ header.onScroll {
   display: flex;
   flex-direction: column;
   gap: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .modal-form__item {
   position: relative;
+}
+
+.modal-form__item.error input {
+  border: 1px solid #f45452;
+}
+
+.modal-form__item.error label {
+  color: #f45452;
 }
 
 .modal-form__item input {
@@ -249,7 +257,7 @@ header.onScroll {
 }
 
 .modal-form__item input:focus {
-  border: 1px solid #7156ed;
+  border: 1px solid #999;
 }
 
 .modal-form__item input:focus + label,
@@ -257,9 +265,12 @@ header.onScroll {
   top: 14px;
   font-size: 11px;
   line-height: 13px;
-  color: #7156ed;
+  color: #999;
 }
 
+.modal-form__item.error input:not(:placeholder-shown) + label {
+  color: #f45452;
+}
 .modal-form__submit-btn {
   width: 100%;
   height: 62px;

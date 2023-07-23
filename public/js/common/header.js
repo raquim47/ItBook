@@ -1,3 +1,81 @@
+// 유효성 검사
+const validateForm = (mode, form) => {
+  const formData = new FormData(form);
+
+  const fieldsToValidate = ['email', 'password'];
+  if (mode === 'join') {
+    fieldsToValidate.push('username', 'passwordConfirm');
+  }
+
+  let isValid = true;
+  fieldsToValidate.forEach((field) => {
+    const value = formData.get(field);
+    const errorElement = form.querySelector(`#${field}Error`);
+
+    if (!value.trim()) {
+      const fieldMap = {
+        'email': '이메일을',
+        'password': '비밀번호를',
+        'username': '이름을',
+        'passwordConfirm': '비밀번호확인을'
+      };
+      errorElement.textContent = `${fieldMap[field]} 입력해주세요.`;
+      errorElement.parentElement.classList.add('error');
+      isValid = false;
+    } else if (field === 'email' && !/\S+@\S+\.\S+/.test(value)) {
+      errorElement.textContent = '유효한 이메일을 입력해주세요.';
+      errorElement.parentElement.classList.add('error');
+      isValid = false;
+    } else if (field === 'password' && value.length < 6) {
+      errorElement.textContent = '비밀번호는 6자 이상이어야 합니다.';
+      errorElement.parentElement.classList.add('error');
+      isValid = false;
+    } else if (field === 'passwordConfirm' && value !== formData.get('password')) {
+      errorElement.textContent = '비밀번호가 일치하지 않습니다.';
+      errorElement.parentElement.classList.add('error');
+      isValid = false;
+    } else {
+      errorElement.textContent = '';
+    }
+  });
+
+  return isValid;
+};
+
+// 모달 이벤트 바인딩 - 모달 닫기
+const bindModalCloseEvent = (modal) => {
+  const closeModal = () => {
+    modal.classList.remove('show');
+    setTimeout(() => modal.remove(), 250);
+  };
+
+  modal.querySelector('.modal__backdrop').addEventListener('click', closeModal);
+  modal.querySelector('.modal__closeBtn').addEventListener('click', closeModal);
+};
+
+// 모달 이벤트 바인딩
+const bindModalEvents = (modal, mode) => {
+  bindModalCloseEvent(modal);
+
+  const form = modal.querySelector('.modal-form');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (validateForm(mode, form)) {
+      alert('Form submission is valid!');
+    }
+  });
+
+  form.addEventListener('input', (e) => {
+    if (e.target.tagName === 'INPUT') {
+      const errorElement = e.target.nextElementSibling.nextElementSibling;
+      errorElement.textContent = '';
+      e.target.closest('.modal-form__item').classList.remove('error');
+    }
+  });
+};
+
+// 모달 내부 템플릿(로그인/회원가입) 생성
 const createModalTemplate = (mode) => {
   const isJoinMode = mode === 'join';
   return `
@@ -10,28 +88,28 @@ const createModalTemplate = (mode) => {
         <li class="modal-form__item">
           <input type="text" name="email" id="emailInput" placeholder=" "/>
           <label for="emailInput">이메일</label>
-          <span class="modal-form__error" aria-label="에러 메시지">에러메시지</span>
+          <span class="modal-form__error" aria-label="에러 메시지" id="emailError"></span>
         </li>
         ${
           isJoinMode
             ? `<li class="modal-form__item">
           <input type="text" name="username" id="usernameInput" placeholder=" "/>
           <label for="usernameInput">이름</label>
-          <span class="modal-form__error" aria-label="에러 메시지"></span>
+          <span class="modal-form__error" aria-label="에러 메시지" id="usernameError"></span>
         </li>`
             : ''
         }
         <li class="modal-form__item">
-          <input type="password" name="password" id="passwordInput" placeholder=" "/>
+          <input type="password" name="password" id="passwordInput" placeholder=" " autocomplete="new-password"/>
           <label for="usernameInput">비밀번호</label>
-          <span class="modal-form__error" aria-label="에러 메시지"></span>
+          <span class="modal-form__error" aria-label="에러 메시지" id="passwordError"></span>
         </li>
         ${
           isJoinMode
             ? `<li class="modal-form__item">
-          <input type="password" name="username" id="passwordConfirmInput" placeholder=" "/>
+          <input type="password" name="passwordConfirm" id="passwordConfirmInput" placeholder=" " autocomplete="new-password"/>
           <label for="passwordConfirmInput">비밀번호 확인</label>
-          <span class="modal-form__error" aria-label="에러 메시지"></span>
+          <span class="modal-form__error" aria-label="에러 메시지" id="passwordConfirmError"></span>
         </li>`
             : ''
         }
@@ -46,27 +124,13 @@ const createModalTemplate = (mode) => {
 `;
 };
 
-// 모달 닫기
-const bindModalCloseEvent = (modal) => {
-  // backdrop 클릭 시 모달 제거
-  modal.querySelector('.modal__backdrop').addEventListener('click', () => {
-    modal.classList.remove('show');
-    setTimeout(() => modal.remove(), 250);
-  });
-
-  // 닫기 버튼 클릭 시 모달 제거
-  modal.querySelector('.modal__closeBtn').addEventListener('click', () => {
-    modal.classList.remove('show');
-    setTimeout(() => modal.remove(), 250);
-  });
-};
-
-// 모달 레이아웃 생성/열기
+// 모달 컨테이너 생성/열기
 const openModal = (mode) => {
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.innerHTML = createModalTemplate(mode);
 
+  bindModalEvents(modal, mode);
   bindModalCloseEvent(modal);
 
   document.body.prepend(modal);
