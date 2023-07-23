@@ -12,8 +12,8 @@
 }
 
 .main-slide__item {
-  width: 33.33%; /* 전체 너비 대비 항목의 너비 (100 / 3) */
-  flex-shrink: 0; /* Prevent flex items from shrinking */
+  width: 33.33%; 
+  flex-shrink: 0;
 }
 
 .main-slide__pagination {
@@ -37,9 +37,10 @@
 .main-slide__dot.active {
   background-color: #6236ff; 
 }
+
 /* .new-books */
 .new-books {
-  padding: 50px 25px;
+  padding: 80px 25px 40px;
 }
 
 .new-books__title {
