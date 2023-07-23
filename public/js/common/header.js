@@ -1,3 +1,63 @@
+const renderToastMessage = (message, type) => {
+  const existingToast = document.querySelector('.toast-message');
+  if (existingToast) return;
+
+  const toastMessage = document.createElement('div');
+  toastMessage.className = 'toast-message';
+  toastMessage.textContent = message;
+  document.body.prepend(toastMessage);
+  
+  if(type === 'WARNING'){
+    toastMessage.style.backgroundColor = '#f45452';
+  } else {
+    toastMessage.style.backgroundColor = '#7156ed';
+  }
+
+  setTimeout(() => {
+    toastMessage.classList.add('show');
+  }, 10); 
+  
+  setTimeout(() => {
+    toastMessage.classList.remove('show');
+
+    setTimeout(() => {
+      toastMessage.remove(); 
+    }, 300); 
+  }, 1000);
+}
+
+const submitJoinRequest = async (requestData) => {
+  try {
+    const response = await fetch('/api/join', {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.status === 200) {
+      const modal = document.querySelector('.modal');
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.remove();
+        renderToastMessage(data.message);
+      }, 250);
+    } else if (data.error === 'DUPLICATE_EMAIL') {
+      const emailErrorElement = document.querySelector('#emailError');
+      emailErrorElement.textContent = data.message;
+      emailErrorElement.parentElement.classList.add('error');
+    } else {
+      renderToastMessage(data.message, 'WARNING');
+    }
+  } catch (error) {
+    console.error(error);
+    renderToastMessage('요청에 실패했습니다. 다시 시도해주세요.', 'WARNING');
+  }
+};
+
 // 유효성 검사
 const validateForm = (mode, form) => {
   const formData = new FormData(form);
@@ -14,10 +74,10 @@ const validateForm = (mode, form) => {
 
     if (!value.trim()) {
       const fieldMap = {
-        'email': '이메일을',
-        'password': '비밀번호를',
-        'username': '이름을',
-        'passwordConfirm': '비밀번호확인을'
+        email: '이메일을',
+        password: '비밀번호를',
+        username: '이름을',
+        passwordConfirm: '비밀번호 확인을',
       };
       errorElement.textContent = `${fieldMap[field]} 입력해주세요.`;
       errorElement.parentElement.classList.add('error');
@@ -30,7 +90,10 @@ const validateForm = (mode, form) => {
       errorElement.textContent = '비밀번호는 6자 이상이어야 합니다.';
       errorElement.parentElement.classList.add('error');
       isValid = false;
-    } else if (field === 'passwordConfirm' && value !== formData.get('password')) {
+    } else if (
+      field === 'passwordConfirm' &&
+      value !== formData.get('password')
+    ) {
       errorElement.textContent = '비밀번호가 일치하지 않습니다.';
       errorElement.parentElement.classList.add('error');
       isValid = false;
@@ -59,10 +122,16 @@ const bindModalEvents = (modal, mode) => {
 
   const form = modal.querySelector('.modal-form');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (validateForm(mode, form)) {
-      alert('Form submission is valid!');
+    if (!validateForm(mode, form)) return;
+
+    const formData = new FormData(form);
+    const parsedFormData = Object.fromEntries(formData);
+    if(mode === 'join'){
+      await submitJoinRequest(parsedFormData);
+    } else {
+
     }
   });
 

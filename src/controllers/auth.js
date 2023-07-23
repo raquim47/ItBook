@@ -13,22 +13,32 @@ export const postLogin = (req, res) => {
 
 export const postJoin = async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, username, password } = req.body;
     const existingUser = await User.findOne({ email });
     const hashedPassword = hashPassword(password);
 
-    if (!existingUser) {
-      const user = await User.create({
-        email,
-        name,
-        password: hashedPassword,
-      });
-      return res.json({ message: '회원가입이 완료되었습니다.' });
-    } else {
-      return res.status(400).json('이미 존재하는 email 입니다.');
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({
+          error: 'DUPLICATE_EMAIL',
+          message: '이미 존재하는 이메일입니다.',
+        });
     }
+
+    await User.create({
+      email,
+      username,
+      password: hashedPassword,
+    });
+    return res.json({ message: '회원가입이 완료되었습니다.' });
   } catch (err) {
     console.log(err);
-    res.status(500).send('회원가입 중 오류가 발생했습니다.');
+    res
+      .status(500)
+      .json({
+        error: 'INTERNAL_ERROR',
+        message: '회원가입 중 오류가 발생했습니다.',
+      });
   }
 };

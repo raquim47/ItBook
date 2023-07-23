@@ -36,6 +36,28 @@ a {
   display: none;
 }
 
+.toast-message {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  width: 350px;
+  height: 50px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 4px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%) translateY(100px);
+  transition: transform 0.3s ease-in-out;
+  z-index: 200;
+}
+
+.toast-message.show {
+  transform: translateX(-50%) translateY(0);
+}
+
 /* header */
 .header {
   position: fixed;
