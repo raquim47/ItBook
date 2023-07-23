@@ -3,9 +3,17 @@ import Category from '../models/category';
 
 export const renderHomePage = async (req, res) => {
   try {
-    const recommendedProducts = await Product.find({ isRecommended: true }).populate('subCategories').sort({ createdAt: -1 });
+    const newProducts = await Product.find()
+      .sort({ createdAt: -1 })
+      .limit(6)
+      .populate('subCategories');
+
+    const recommendedProducts = await Product.find({ isRecommended: true })
+      .populate('subCategories')
+      .sort({ createdAt: -1 });
 
     res.render('home.ejs', {
+      newProducts,
       recommendedProducts,
       pageTitle: '잇북',
     });
@@ -28,7 +36,7 @@ export const renderProductsPage = async (req, res) => {
   }
 
   const productFilter = mainCategory !== 'all' ? { mainCategory } : {};
-  const categoryFilter = mainCategory !== 'all' ? { type: mainCategory } : {}; 
+  const categoryFilter = mainCategory !== 'all' ? { type: mainCategory } : {};
   const categoryMap = {
     all: '전체',
     frontend: '프론트엔드',

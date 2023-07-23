@@ -1,3 +1,115 @@
+/* main-slide */
+.main-slide {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-slide__list {
+  display: flex;
+  width: 300%; /* 슬라이드 항목이 3개이므로 300% */
+  transition: transform 1s ease-out; /* Modified transition for slide animation */
+}
+
+.main-slide__item {
+  width: 33.33%; /* 전체 너비 대비 항목의 너비 (100 / 3) */
+  flex-shrink: 0; /* Prevent flex items from shrinking */
+}
+
+.main-slide__pagination {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #6236ff; 
+}
+/* .new-books */
+.new-books {
+  padding: 50px 25px;
+}
+
+.new-books__title {
+  font-size: 32px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 65px;
+}
+
+.product-slider {
+  position: relative;
+  padding: 0 60px; /* 좌우 패딩 추가 */
+}
+
+.product-slider__wrap {
+  overflow: hidden;
+}
+
+.product-slider__list {
+  display: grid;
+  gap: 9rem;
+  grid-template-columns: repeat(6, calc((100% - 18rem) / 3)); /* 수정 */
+  transition: all 0.3s;
+}
+
+.product-slider__btn {
+  position: absolute;
+  top: 40%;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.product-slider__btn:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.product-slider__btn.prev {
+  left: -15px;
+}
+
+.product-slider__btn.next {
+  right: -15px;
+}
+
+.product-slider__btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+}
+
+.product-slider__btn.prev::before {
+  transform: translate(-35%, -50%) rotate(-135deg);
+  border-width: 2px 2px 0 0;
+  border-color: white;
+}
+
+.product-slider__btn.next::before {
+  transform: translate(-65%, -50%) rotate(45deg);
+  border-width: 2px 2px 0 0;
+  border-color: white;
+}
+
 /* .recommand-books */
 .recommand-books {
   padding: 80px 25px 40px;
@@ -8,7 +120,6 @@
   font-weight: 800;
   text-align: center;
   margin-bottom: 65px;
-
 }
 
 .recommand-books__list {
@@ -17,9 +128,10 @@
   gap: 3rem 4.5rem;
 }
 
+/* product-item */
 .product-item {
   position: relative;
-  padding-bottom: 200%; 
+  padding-bottom: 200%;
   overflow: hidden;
 }
 
@@ -44,7 +156,7 @@
 .product-item__info {
   text-align: center;
   padding-top: 20px;
-  flex-grow: 1; 
+  flex-grow: 1;
 }
 
 .product-item__category {
@@ -68,7 +180,7 @@
 }
 
 .product-item a:hover img {
-  filter: brightness(0.8); 
+  filter: brightness(0.8);
 }
 
 .product-item a:hover .product-item__title {
