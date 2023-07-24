@@ -1,30 +1,68 @@
-const renderToastMessage = (message, type) => {
+const TOAST_TYPES = {
+  DEFAULT: 'DEFAULT',
+  WARNING: 'WARNING',
+};
+
+const renderToastMessage = (message, type = TOAST_TYPES.DEFAULT) => {
   const existingToast = document.querySelector('.toast-message');
   if (existingToast) return;
 
   const toastMessage = document.createElement('div');
-  toastMessage.className = 'toast-message';
+  toastMessage.className = `toast-message toast-message--${type.toLowerCase()}`;
   toastMessage.textContent = message;
   document.body.prepend(toastMessage);
-  
-  if(type === 'WARNING'){
-    toastMessage.style.backgroundColor = '#f45452';
-  } else {
-    toastMessage.style.backgroundColor = '#7156ed';
-  }
 
   setTimeout(() => {
     toastMessage.classList.add('show');
-  }, 10); 
-  
+  }, 10);
+
   setTimeout(() => {
     toastMessage.classList.remove('show');
 
     setTimeout(() => {
-      toastMessage.remove(); 
-    }, 300); 
+      toastMessage.remove();
+    }, 300);
   }, 1000);
-}
+};
+
+const submitLoginRequest = async (requestData) => {
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify(requestData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+
+    if (response.status === 200) {
+      const modal = document.querySelector('.modal'); 
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.remove();
+        renderToastMessage('로그인에 성공했습니다.', TOAST_TYPES.SUCCESS);
+      }, 250);
+    } else if (data.error === 'EMAIL_NOT_FOUND'){
+      const emailErrorElement = document.querySelector('#emailError');
+      emailErrorElement.textContent = data.message;
+      emailErrorElement.parentElement.classList.add('error');
+    } else if (data.error === 'INVALID_PASSWORD') {
+      const passwordErrorElement = document.querySelector('#passwordError');
+      passwordErrorElement.textContent = data.message;
+      passwordErrorElement.parentElement.classList.add('error');
+    } else {
+      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+    }
+  } catch (error) {
+    console.error(error);
+    renderToastMessage(
+      '로그인 요청에 실패했습니다. 다시 시도해주세요.',
+      TOAST_TYPES.WARNING
+    );
+  }
+};
 
 const submitJoinRequest = async (requestData) => {
   try {
@@ -50,15 +88,29 @@ const submitJoinRequest = async (requestData) => {
       emailErrorElement.textContent = data.message;
       emailErrorElement.parentElement.classList.add('error');
     } else {
-      renderToastMessage(data.message, 'WARNING');
+      renderToastMessage(data.message, TOAST_TYPES.WARNING);
     }
   } catch (error) {
     console.error(error);
-    renderToastMessage('요청에 실패했습니다. 다시 시도해주세요.', 'WARNING');
+    renderToastMessage(
+      '요청에 실패했습니다. 다시 시도해주세요.',
+      TOAST_TYPES.WARNING
+    );
   }
 };
 
-// 유효성 검사
+// 에러 동작 실행
+const setError = (field, message) => {
+  const errorElement = document.querySelector(`#${field}Error`);
+  errorElement.textContent = message;
+  errorElement.parentElement.classList.add('error');
+  errorElement.classList.add('shake');
+  errorElement.addEventListener('animationend', () => {
+    errorElement.classList.remove('shake');
+  });
+};
+
+// 클라이언트 사이드 유효성 검사
 const validateForm = (mode, form) => {
   const formData = new FormData(form);
 
@@ -70,7 +122,6 @@ const validateForm = (mode, form) => {
   let isValid = true;
   fieldsToValidate.forEach((field) => {
     const value = formData.get(field);
-    const errorElement = form.querySelector(`#${field}Error`);
 
     if (!value.trim()) {
       const fieldMap = {
@@ -79,25 +130,28 @@ const validateForm = (mode, form) => {
         username: '이름을',
         passwordConfirm: '비밀번호 확인을',
       };
-      errorElement.textContent = `${fieldMap[field]} 입력해주세요.`;
-      errorElement.parentElement.classList.add('error');
+      setError(field, `${fieldMap[field]} 입력해주세요.`);
       isValid = false;
-    } else if (field === 'email' && !/\S+@\S+\.\S+/.test(value)) {
-      errorElement.textContent = '유효한 이메일을 입력해주세요.';
-      errorElement.parentElement.classList.add('error');
+    } else if (
+      field === 'email' &&
+      !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value)
+    ) {
+      setError(field, '유효한 이메일(영문, 숫자)을 입력해주세요.');
+      isValid = false;
+    } else if (field === 'username' && !/^[\uAC00-\uD7A3]+$/.test(value)) {
+      setError(field, '한글로만 이름을 입력해주세요.');
       isValid = false;
     } else if (field === 'password' && value.length < 6) {
-      errorElement.textContent = '비밀번호는 6자 이상이어야 합니다.';
-      errorElement.parentElement.classList.add('error');
+      setError(field, '비밀번호는 6자 이상이어야 합니다.');
       isValid = false;
     } else if (
       field === 'passwordConfirm' &&
       value !== formData.get('password')
     ) {
-      errorElement.textContent = '비밀번호가 일치하지 않습니다.';
-      errorElement.parentElement.classList.add('error');
+      setError(field, '비밀번호가 일치하지 않습니다.');
       isValid = false;
     } else {
+      const errorElement = form.querySelector(`#${field}Error`);
       errorElement.textContent = '';
     }
   });
@@ -128,10 +182,10 @@ const bindModalEvents = (modal, mode) => {
 
     const formData = new FormData(form);
     const parsedFormData = Object.fromEntries(formData);
-    if(mode === 'join'){
+    if (mode === 'join') {
       await submitJoinRequest(parsedFormData);
     } else {
-
+      await submitLoginRequest(parsedFormData);
     }
   });
 

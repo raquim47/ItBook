@@ -1,21 +1,46 @@
 import setUserToken from '../utils/set-user-token';
 import hashPassword from '../utils/hash-password';
 import User from '../models/user';
+import bcrypt from 'bcrypt';
 
-export const postLogin = (req, res) => {
+export const postLogin = async (req, res) => {
   try {
-    setUserToken(res, req.user);
+    const { email, password } = req.body;
+    console.log(email, password);
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        error: 'EMAIL_NOT_FOUND',
+        message: '등록되지 않은 이메일입니다.',
+      });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).json({
+        error: 'INVALID_PASSWORD',
+        message: '비밀번호가 올바르지 않습니다.',
+      });
+    }
+
+    setUserToken(res, user);
+    return res.json({ message: '로그인에 성공했습니다.' });
   } catch (err) {
-    res.status(500).send('로그인에 실패했습니다.');
+    console.log(err);
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: '로그인에 실패했습니다.',
+    });
   }
-  res.redirect('/');
 };
 
 export const postJoin = async (req, res) => {
   try {
     const { email, username, password } = req.body;
     const existingUser = await User.findOne({ email });
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password); 
 
     if (existingUser) {
       return res

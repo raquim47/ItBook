@@ -58,6 +58,13 @@ a {
   transform: translateX(-50%) translateY(0);
 }
 
+.toast-message--warning {
+  background-color: #f45452;
+}
+
+.toast-message--default {
+  background-color: #7156ed;
+}
 /* header */
 .header {
   position: fixed;
@@ -276,6 +283,16 @@ header.onScroll {
   bottom: -16px;
   font-size: 11px;
   color: #f45452;
+}
+
+.modal-form__error.shake {
+  animation: shake 0.2s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
 }
 
 .modal-form__item input:focus {
