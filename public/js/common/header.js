@@ -3,13 +3,17 @@ const TOAST_TYPES = {
   WARNING: 'WARNING',
 };
 
-const renderToastMessage = (message, type = TOAST_TYPES.DEFAULT) => {
+const renderToastMessage = (
+  content,
+  type = TOAST_TYPES.DEFAULT,
+  duration = 2000
+) => {
   const existingToast = document.querySelector('.toast-message');
   if (existingToast) return;
 
   const toastMessage = document.createElement('div');
   toastMessage.className = `toast-message toast-message--${type.toLowerCase()}`;
-  toastMessage.textContent = message;
+  toastMessage.innerHTML = content;
   document.body.prepend(toastMessage);
 
   setTimeout(() => {
@@ -21,10 +25,11 @@ const renderToastMessage = (message, type = TOAST_TYPES.DEFAULT) => {
 
     setTimeout(() => {
       toastMessage.remove();
-    }, 300);
-  }, 1000);
+    }, 250);
+  }, duration);
 };
 
+renderToastMessage('안녕하세요!');
 const submitLoginRequest = async (requestData) => {
   try {
     const response = await fetch('/api/login', {
@@ -38,13 +43,13 @@ const submitLoginRequest = async (requestData) => {
     console.log(data);
 
     if (response.status === 200) {
-      const modal = document.querySelector('.modal'); 
+      const modal = document.querySelector('.modal');
       modal.classList.remove('show');
       setTimeout(() => {
         modal.remove();
         renderToastMessage('로그인에 성공했습니다.', TOAST_TYPES.SUCCESS);
       }, 250);
-    } else if (data.error === 'EMAIL_NOT_FOUND'){
+    } else if (data.error === 'EMAIL_NOT_FOUND') {
       const emailErrorElement = document.querySelector('#emailError');
       emailErrorElement.textContent = data.message;
       emailErrorElement.parentElement.classList.add('error');

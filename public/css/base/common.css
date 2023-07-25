@@ -40,30 +40,33 @@ a {
   position: fixed;
   bottom: 50px;
   left: 50%;
-  width: 350px;
-  height: 50px;
+  transform: translateX(-50%);
+  width: 300px;
+  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 14px;
   font-weight: 400;
   color: #fff;
-  text-align: center;
-  line-height: 50px;
+  border-radius: 4px;
+  opacity: 0;
   border-radius: 4px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
-  transform: translateX(-50%) translateY(100px);
-  transition: transform 0.3s ease-in-out;
+  transition: opacity 0.25s ease-out;
   z-index: 200;
 }
 
 .toast-message.show {
-  transform: translateX(-50%) translateY(0);
+  opacity: 1;
 }
 
 .toast-message--warning {
-  background-color: #f45452;
+  background-color: rgba(244, 85, 82, 0.9);
 }
 
 .toast-message--default {
-  background-color: #7156ed;
+  background-color: rgba(114, 86, 237, 0.9);
 }
 /* header */
 .header {
