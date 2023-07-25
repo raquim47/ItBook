@@ -6,7 +6,6 @@ const TOAST_TYPES = {
 const renderToastMessage = (
   content,
   type = TOAST_TYPES.DEFAULT,
-  duration = 2000
 ) => {
   const existingToast = document.querySelector('.toast-message');
   if (existingToast) return;
@@ -26,7 +25,7 @@ const renderToastMessage = (
     setTimeout(() => {
       toastMessage.remove();
     }, 250);
-  }, duration);
+  }, 3000);
 };
 
 renderToastMessage('안녕하세요!');

@@ -65,5 +65,17 @@ export const renderProductListPage = async (req, res) => {
 };
 
 export const renderProductDetailPage = async (req, res) => {
-  
-}
+  const { productId } = req.params;
+  try {
+    const productData = await Product.findById(productId);
+    res.render('product-detail.ejs', {
+      productData,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('404.ejs', {
+      message: '서버 오류',
+      error: err,
+    });
+  }
+};

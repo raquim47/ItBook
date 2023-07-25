@@ -12,4 +12,5 @@ router.get('/', renderHomePage);
 router.get('/products/:mainCategory', renderProductListPage);
 
 router.get('/product/:productId', renderProductDetailPage);
+
 export default router;
