@@ -26,7 +26,7 @@ export const renderHomePage = async (req, res) => {
   }
 };
 
-export const renderProductsPage = async (req, res) => {
+export const renderProductListPage = async (req, res) => {
   const { mainCategory } = req.params;
 
   if (!['all', 'frontend', 'backend', 'cs'].includes(mainCategory)) {
@@ -48,7 +48,7 @@ export const renderProductsPage = async (req, res) => {
       .populate('subCategories')
       .sort({ createdAt: -1 });
     const subCategories = await Category.find(categoryFilter);
-    res.render('products.ejs', {
+    res.render('product-list.ejs', {
       products,
       title: categoryMap[mainCategory],
       pageTitle: `${categoryMap[mainCategory]} - 잇북`,
@@ -63,3 +63,7 @@ export const renderProductsPage = async (req, res) => {
     });
   }
 };
+
+export const renderProductDetailPage = async (req, res) => {
+  
+}
