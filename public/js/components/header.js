@@ -1,5 +1,13 @@
 import renderModal from './modal.js';
 
+// 로그아웃 (쿠키삭제 후 새로고침)
+const logoutAndRefresh = () => {
+  document.cookie = `${encodeURIComponent(
+    'token'
+  )}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  location.href = '/';
+};
+
 // (로그인했을 때 새로고침 없이) 로그인 메뉴 업데이트
 export const updateUserMenu = (authStatus) => {
   const userMenu = document.getElementById('userMenu');
@@ -27,16 +35,10 @@ export const updateUserMenu = (authStatus) => {
     `;
   }
   userMenu.innerHTML = menuItems;
+  
+  const logoutBtn = userMenu.querySelector('#logoutBtn');
+  logoutBtn.addEventListener('click', logoutAndRefresh)
 };
-
-// 로그아웃 (쿠키삭제 후 새로고침)
-const logoutAndRefresh = () => {
-  document.cookie = `${encodeURIComponent(
-    'token'
-  )}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  location.href = '/';
-};
-
 // 스크롤 시 헤더 그림자 효과
 const toggleShadowOnScroll = (target) => {
   const windowScroll = window.pageYOffset || document.documentElement.scrollTop;
