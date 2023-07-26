@@ -1,6 +1,36 @@
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
-import { updateUserMenu } from './header.js';
+import { updateUserMenu, updateCartbadge } from './header.js';
+
+const mergeLocalCartWithServer = async () => {
+  const localCartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+  if (localCartItems.length === 0) return;
+
+  try {
+    const response = await fetch('/api/cart/merge', {
+      method: 'POST',
+      body: JSON.stringify(localCartItems),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const { message } = await response.json();
+      renderToastMessage(message, TOAST_TYPES.WARNING);
+    }
+
+    // 로컬스토리지의 장바구니 아이템 제거
+    localStorage.removeItem('cart');
+  } catch (error) {
+    console.error(error);
+    renderToastMessage(
+      '요청을 처리하는 도중 문제가 발생했습니다.',
+      TOAST_TYPES.WARNING
+    );
+  }
+};
 
 // 로그인 요청
 const submitLoginRequest = async (requestData) => {
@@ -25,10 +55,6 @@ const submitLoginRequest = async (requestData) => {
 
       updateUserMenu(authStatus);
 
-      // 장바구니 배지
-      const cartBadge = document.getElementById('cartBadge');
-      cartBadge.dataset.isAuth = 'true';
-
       // 상세페이지 장바구니버튼
       const isProductPage = location.pathname.startsWith('/product/');
       if (isProductPage) {
@@ -39,7 +65,9 @@ const submitLoginRequest = async (requestData) => {
           btn.dataset.isAuth = 'true';
         });
       }
-
+      
+      await mergeLocalCartWithServer();
+      await updateCartbadge()
       return;
     }
 

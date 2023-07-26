@@ -82,3 +82,57 @@ export const postJoin = async (req, res) => {
     });
   }
 };
+
+export const getCart = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.json(user.cart.items);
+};
+
+export const mergeCarts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const localCartItems = req.body;
+    console.log(user, localCartItems)
+    for (const localItem of localCartItems.reverse()) { 
+      const cartItemIndex = user.cart.items.findIndex((item) => item.productId == localItem.productId);
+      if (cartItemIndex >= 0) {
+        user.cart.items[cartItemIndex].quantity += localItem.quantity;
+      } else {
+        user.cart.items.unshift(localItem); 
+      }
+    }
+
+    await user.save();
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: '요청을 처리하는 도중 문제가 발생했습니다.' });
+  }
+};
+
+export const addToCart = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const { productId, quantity } = req.body;
+
+  const cartProductIndex = user.cart.items.findIndex((cp) => {
+    return cp.productId.toString() === productId.toString();
+  });
+
+  let newQuantity = quantity;
+  const updatedCartItems = [...user.cart.items];
+
+  if (cartProductIndex >= 0) {
+    newQuantity = user.cart.items[cartProductIndex].quantity + quantity;
+    updatedCartItems.splice(cartProductIndex, 1); 
+    updatedCartItems.unshift({ productId, quantity: newQuantity });
+  } else {
+    updatedCartItems.unshift({ productId, quantity: newQuantity });
+  }
+
+  user.cart = {
+    items: updatedCartItems,
+  };
+
+  await user.save();
+  res.json(user);
+};

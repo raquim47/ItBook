@@ -42,7 +42,7 @@
         <ul class="nav-user__list" id="userMenu">
           <li>
             <a href="/cart" class="nav-user__cart-btn" aria-label="장바구니 버튼">
-              <span data-is-auth="<%= authStatus ? 'true' : 'false' %>" id="cartBadge" aria-label="장바구니 개수"></span>
+              <span data-is-auth="<%= authStatus ? 'true' : 'false' %>" id="cartBadge" aria-label="장바구니 개수" class="cart-badge"></span>
             </a>
           </li>
           <% if (!authStatus) { %>
