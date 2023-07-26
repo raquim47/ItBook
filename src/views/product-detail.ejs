@@ -17,7 +17,7 @@
           <section class="product-detail__info">
             <small class="product-detail__category"
               ><% product.subCategories.forEach(category => { %>
-                <span>#<%= category.name %></span> 
+              <span>#<%= category.name %></span>
               <% }) %></small
             >
             <h2 class="product-detail__title"><%= product.title %></h2>
@@ -25,7 +25,10 @@
             <p class="product-detail__desc">
               <%= product.author %> / <%= product.pages %>쪽
             </p>
-            <strong class="product-detail__price"
+            <strong
+              class="product-detail__price"
+              id="productPrice"
+              data-price="<%= product.price %>"
               ><%= product.price.toLocaleString() %>원</strong
             >
             <div class="product-detail__delivery">
@@ -35,17 +38,33 @@
             <div class="product-detail__count">
               <h4>수량</h4>
               <div class="count-control">
-                <button class="count-control__btn">-</button>
-                <div class="count-control__result">1</div>
-                <button class="count-control__btn">+</button>
+                <button
+                  class="count-control__btn"
+                  id="decreaseBtn"
+                  aria-label="수량 감소 버튼"
+                >
+                  -
+                </button>
+                <div class="count-control__result" id="quantity">1</div>
+                <button
+                  class="count-control__btn"
+                  id="increaseBtn"
+                  data-action="increase"
+                  aria-label="수량 증가 버튼"
+                >
+                  +
+                </button>
               </div>
             </div>
             <div class="product-detail__total-price">
               <h4>총 금액</h4>
-              <strong>0원</strong>
+              <strong id="totalPrice"></strong>
             </div>
             <div class="product-detail__btns">
-              <button class="product-detail__cart-btn"></button>
+              <button
+                class="product-detail__cart-btn"
+                aria-label="장바구니 담기"
+              ></button>
               <button class="product-detail__buy-btn">바로 구매하기</button>
             </div>
           </section>
