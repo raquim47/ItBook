@@ -24,6 +24,18 @@ const submitLoginRequest = async (requestData) => {
       }, 250);
 
       updateUserMenu(authStatus);
+
+      const isProductPage = location.pathname.startsWith('/product/');
+      if (isProductPage) {
+        const cartBtns = document.querySelectorAll('product-detail__btns button');
+        cartBtns.forEach((btn) => {
+          btn.setAttribute('data-isLoggedIn', 'true');
+        });
+      }
+      const cartBtns = document.querySelectorAll('[data-isLoggedIn]');
+      cartBtns.forEach((btn) => {
+        btn.setAttribute('data-isLoggedIn', 'true');
+      });
       return;
     }
 
