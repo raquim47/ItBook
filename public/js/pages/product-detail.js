@@ -1,3 +1,2 @@
-import commonModule from '../common/index.js';
-
-commonModule();
+import setupHeader from '../components/header.js';
+setupHeader();

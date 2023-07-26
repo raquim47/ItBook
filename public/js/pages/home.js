@@ -1,6 +1,5 @@
-import commonModule from '../common/index.js';
-
-commonModule();
+import renderScrollTopBtn from '../components/scroll-top-btn.js';
+import setupHeader from '../components/header.js';
 
 // 메인 슬라이드 - 슬라이드 이동
 const updateMainSlidePosition = (slideIndex, slides, list) => {
@@ -105,6 +104,8 @@ const initializeProductSlide = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupHeader();
+  renderScrollTopBtn();
   initializeMainSlide();
   initializeProductSlide();
 });

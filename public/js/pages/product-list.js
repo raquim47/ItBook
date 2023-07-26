@@ -1,7 +1,7 @@
-import commonModule from '../common/index.js';
+import renderScrollTopBtn from '../components/scroll-top-btn.js';
+import setupHeader from '../components/header.js';
 
-commonModule();
-
+// 상품 정렬
 const sortProducts = (productItems, sortValue) => {
   return productItems.slice().sort((a, b) => {
     switch (sortValue) {
@@ -53,6 +53,9 @@ const updateDisplay = (productItems, activeCategories) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupHeader();
+  renderScrollTopBtn();
+
   const productItems = Array.from(document.querySelectorAll('.product-item'));
   const categoryBtns = Array.from(
     document.querySelectorAll('.products__subCategories li')

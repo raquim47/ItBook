@@ -1,6 +1,7 @@
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
-renderToastMessage('안녕하세요!');
+
+// 로그인 요청
 const submitLoginRequest = async (requestData) => {
   try {
     const response = await fetch('/api/login', {
@@ -40,6 +41,7 @@ const submitLoginRequest = async (requestData) => {
   }
 };
 
+// 회원 가입 요청
 const submitJoinRequest = async (requestData) => {
   try {
     const response = await fetch('/api/join', {
