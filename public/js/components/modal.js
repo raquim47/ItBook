@@ -1,6 +1,6 @@
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
-import { updateAuthMenu } from './header.js';
+import { updateUserMenu } from './header.js';
 
 // 로그인 요청
 const submitLoginRequest = async (requestData) => {
@@ -23,7 +23,7 @@ const submitLoginRequest = async (requestData) => {
         renderToastMessage(message, TOAST_TYPES.SUCCESS);
       }, 250);
 
-      updateAuthMenu(authStatus);
+      updateUserMenu(authStatus);
       return;
     }
 

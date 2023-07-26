@@ -128,26 +128,28 @@ header.onScroll {
 }
 
 .nav-user {
-  display: flex;
-  gap: 25px;
   margin-right: -10px;
   margin-left: auto;
   margin-top: 8px;
 }
 
-.nav-user__auth-menu {
+.nav-user__list {
   display: flex;
-  gap: 25px;
   align-items: center;
 }
 
-.nav-user__auth-menu a,
-.nav-user__auth-menu button {
+.nav-user__list li {
+  padding: 0 14px;
+}
+
+.nav-user__list button{
   font-weight: 600;
 }
-.nav-user__auth-menu a {
-  margin-top: 2px;
+
+.nav-user__list li button {
+  margin-bottom: 1px;
 }
+
 /* header .header-btn ul li a span {
   position: absolute;
   top: -11px;
@@ -177,7 +179,7 @@ header.onScroll {
   height: 100vh;
   z-index: 100;
   opacity: 0;
-  transition: opacity 0.25s ease-in-out;
+  transition: opacity .25s ease-in-out;
 }
 
 .modal.show {
@@ -212,7 +214,7 @@ header.onScroll {
 }
 
 .modal__closeBtn::before,
-.modal__closeBtn::after {
+.modal__closeBtn::after  {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -220,7 +222,7 @@ header.onScroll {
   height: 2px;
   background-color: rgb(68, 68, 68);
   display: block;
-  content: '';
+  content: "";
 }
 
 .modal__closeBtn::before {
@@ -232,6 +234,7 @@ header.onScroll {
 }
 
 .modal-form {
+
 }
 
 .modal-form__title {
@@ -291,15 +294,9 @@ header.onScroll {
 }
 
 @keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-4px);
-  }
-  100% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
 }
 
 .modal-form__item input:focus {
@@ -326,7 +323,7 @@ header.onScroll {
 }
 
 .modal-form__submit-btn:hover {
-  color: white;
+  color :white;
   background-color: #7156ed;
 }
 

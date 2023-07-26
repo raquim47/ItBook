@@ -39,10 +39,23 @@
         </ul>
       </nav>
       <nav class="nav-user">
-        <a href="/cart" class="nav-user__cart-btn" aria-label="장바구니 버튼">
-          <span id="cartCount"></span>
-        </a>
-        <div class="nav-user__auth-menu" id="authMenu"></div>
+        <ul class="nav-user__list" id="userMenu">
+          <li>
+            <a href="/cart" class="nav-user__cart-btn" aria-label="장바구니 버튼">
+              <span id="cartCount"></span>
+            </a>
+          </li>
+          <% if (!authStatus) { %>
+            <li><button id="loginBtn">로그인</button></li>
+            <li><button id="joinBtn">회원가입</button></li>
+          <% } else { %>
+            <li><a href="/mypage">마이페이지</a></li>
+            <% if (authStatus.isAdmin) { %>
+              <li><a href="/admin">관리자페이지</a></li>
+            <% } %>
+            <li><button id="logoutBtn">로그아웃</button></li>
+          <% } %>
+        </ul>
       </nav>
     </div>
   </div>

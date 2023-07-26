@@ -1,6 +1,6 @@
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import setupHeader from '../components/header.js';
-import checkAuthStatus from '../utils/checkAuthStatus.js';
+
 // 상품 정렬
 const sortProducts = (productItems, sortValue) => {
   return productItems.slice().sort((a, b) => {
@@ -52,7 +52,8 @@ const updateDisplay = (productItems, activeCategories) => {
   });
 };
 
-const setupCategoryEventListeners = (categoryBtns, productItems) => {
+// 카테고리 버튼 이벤트 바인딩
+const bindCateBtnEvents = (categoryBtns, productItems) => {
   categoryBtns.forEach((button) => {
     button.addEventListener('click', () => {
       button.classList.toggle('active');
@@ -62,7 +63,8 @@ const setupCategoryEventListeners = (categoryBtns, productItems) => {
   });
 };
 
-const setupSortMenuEventListener = (productItems) => {
+// 메뉴 정렬 이벤트 바인딩
+const bindSortMenuEvents = (productItems) => {
   const sortMenu = document.getElementById('sortMenu');
   sortMenu.addEventListener('change', () => {
     const sortedItems = sortProducts(productItems, sortMenu.value);
@@ -73,16 +75,14 @@ const setupSortMenuEventListener = (productItems) => {
 };
 
 const initializeModule = async () => {
-  const authStatus = await checkAuthStatus();
-  
-  setupHeader(authStatus);
+  setupHeader();
   renderScrollTopBtn();
 
   const productItems = Array.from(document.querySelectorAll('.product-item'));
   const categoryBtns = Array.from(document.querySelectorAll('.products__subCategories li'));
 
-  setupCategoryEventListeners(categoryBtns, productItems);
-  setupSortMenuEventListener(productItems);
+  bindCateBtnEvents(categoryBtns, productItems);
+  bindSortMenuEvents(productItems);
 }
 
 initializeModule();

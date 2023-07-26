@@ -13,6 +13,7 @@ export const renderHomePage = async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.render('home.ejs', {
+      authStatus : req.user,
       newProducts,
       recommendedProducts,
       pageTitle: '잇북',
@@ -49,6 +50,7 @@ export const renderProductListPage = async (req, res) => {
       .sort({ createdAt: -1 });
     const subCategories = await Category.find(categoryFilter);
     res.render('product-list.ejs', {
+      authStatus : req.user,
       products,
       title: categoryMap[mainCategory],
       pageTitle: `${categoryMap[mainCategory]} - 잇북`,
@@ -69,6 +71,7 @@ export const renderProductDetailPage = async (req, res) => {
   try {
     const product = await Product.findById(productId).populate('subCategories');
     res.render('product-detail.ejs', {
+      authStatus : req.user,
       product,
       pageTitle: `${product.title} - 잇북`,
     });
