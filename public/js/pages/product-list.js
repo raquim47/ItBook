@@ -1,6 +1,6 @@
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import setupHeader from '../components/header.js';
-
+import checkAuthStatus from '../utils/checkAuthStatus.js';
 // 상품 정렬
 const sortProducts = (productItems, sortValue) => {
   return productItems.slice().sort((a, b) => {
@@ -52,25 +52,17 @@ const updateDisplay = (productItems, activeCategories) => {
   });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  setupHeader();
-  renderScrollTopBtn();
-
-  const productItems = Array.from(document.querySelectorAll('.product-item'));
-  const categoryBtns = Array.from(
-    document.querySelectorAll('.products__subCategories li')
-  );
-
+const setupCategoryEventListeners = (categoryBtns, productItems) => {
   categoryBtns.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const categoryBtn = event.currentTarget;
-      categoryBtn.classList.toggle('active');
-
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
       const activeCategories = getActiveCategories(categoryBtns);
       updateDisplay(productItems, activeCategories);
     });
   });
+};
 
+const setupSortMenuEventListener = (productItems) => {
   const sortMenu = document.getElementById('sortMenu');
   sortMenu.addEventListener('change', () => {
     const sortedItems = sortProducts(productItems, sortMenu.value);
@@ -78,4 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
     productList.innerHTML = '';
     sortedItems.forEach((item) => productList.appendChild(item));
   });
-});
+};
+
+const initializeModule = async () => {
+  const authStatus = await checkAuthStatus();
+  
+  setupHeader(authStatus);
+  renderScrollTopBtn();
+
+  const productItems = Array.from(document.querySelectorAll('.product-item'));
+  const categoryBtns = Array.from(document.querySelectorAll('.products__subCategories li'));
+
+  setupCategoryEventListeners(categoryBtns, productItems);
+  setupSortMenuEventListener(productItems);
+}
+
+initializeModule();

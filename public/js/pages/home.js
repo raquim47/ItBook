@@ -107,7 +107,6 @@ const setUpProductSlide = () => {
 const initializeModule = async () => {
   const authStatus = await checkAuthStatus();
   
-  console.log('In Home', authStatus)
   setupHeader(authStatus);
   renderScrollTopBtn();
   setUpMainSlide();
