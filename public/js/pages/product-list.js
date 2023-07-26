@@ -6,25 +6,13 @@ const sortProducts = (productItems, sortValue) => {
   return productItems.slice().sort((a, b) => {
     switch (sortValue) {
       case 'newest':
-        return (
-          new Date(b.getAttribute('data-createdAt')) -
-          new Date(a.getAttribute('data-createdAt'))
-        );
+        return new Date(b.dataset.createdAt) - new Date(a.dataset.createdAt);
       case 'oldest':
-        return (
-          new Date(a.getAttribute('data-createdAt')) -
-          new Date(b.getAttribute('data-createdAt'))
-        );
+        return new Date(a.dataset.createdAt) - new Date(b.dataset.createdAt);
       case 'highPrice':
-        return (
-          Number(b.getAttribute('data-price')) -
-          Number(a.getAttribute('data-price'))
-        );
+        return Number(b.dataset.price) - Number(a.dataset.price);
       case 'lowPrice':
-        return (
-          Number(a.getAttribute('data-price')) -
-          Number(b.getAttribute('data-price'))
-        );
+        return Number(a.dataset.price) - Number(b.dataset.price);
       default:
         return 0;
     }
@@ -40,7 +28,7 @@ const getActiveCategories = (buttons) => {
 // 상품리스트 UI 업데이트
 const updateDisplay = (productItems, activeCategories) => {
   productItems.forEach((item) => {
-    const itemCategories = item.getAttribute('data-category').split(', ');
+    const itemCategories = item.dataset.categories.split(', ');
     const matchesCategories = activeCategories.some((cat) =>
       itemCategories.includes(cat)
     );

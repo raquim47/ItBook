@@ -25,17 +25,21 @@ const submitLoginRequest = async (requestData) => {
 
       updateUserMenu(authStatus);
 
+      // 장바구니 배지
+      const cartBadge = document.getElementById('cartBadge');
+      cartBadge.dataset.isAuth = 'true';
+
+      // 상세페이지 장바구니버튼
       const isProductPage = location.pathname.startsWith('/product/');
       if (isProductPage) {
-        const cartBtns = document.querySelectorAll('product-detail__btns button');
+        const cartBtns = document.querySelectorAll(
+          'product-detail__btns button'
+        );
         cartBtns.forEach((btn) => {
-          btn.setAttribute('data-isLoggedIn', 'true');
+          btn.dataset.isAuth = 'true';
         });
       }
-      const cartBtns = document.querySelectorAll('[data-isLoggedIn]');
-      cartBtns.forEach((btn) => {
-        btn.setAttribute('data-isLoggedIn', 'true');
-      });
+
       return;
     }
 

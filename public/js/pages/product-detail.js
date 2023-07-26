@@ -53,13 +53,13 @@ const saveToLocalStorage = (item) => {
 };
 
 const onclickCartBtn = (e) => {
-  const isLoggedIn = e.target.getAttribute('data-isLoggedIn') === 'true';
+  const isAuth = e.target.dataset.isAuth === 'true';
   
   const pathParts = window.location.pathname.split('/');
   const productId = pathParts[pathParts.length - 1];
   const quantity = Number(document.getElementById('quantity').textContent);
 
-  if (isLoggedIn) {
+  if (isAuth) {
     saveToServer({ productId, quantity });
   } else {
     saveToLocalStorage({ productId, quantity });

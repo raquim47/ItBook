@@ -37,8 +37,8 @@
               <li
                 class="product-item"
                 data-price="<%= product.price %>"
-                data-createdAt="<%= product.createdAt %>"
-                data-category="<%= product.subCategories.map(category => category.name).join(', ') %>"
+                data-created-at="<%= product.createdAt %>"
+                data-categories="<%= product.subCategories.map(category => category.name).join(', ') %>"
               >
                 <a href="/product/<%= product._id %>">
                   <img
