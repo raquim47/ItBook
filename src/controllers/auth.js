@@ -3,10 +3,22 @@ import hashPassword from '../utils/hash-password';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
 
+export const getAuthStatus = (req, res) => {
+  try {
+    if (req.user) {
+      res.json({ authStatus: { isAuth: true, isAdmin: !!req.user.isAdmin } });
+    } else {
+      res.json({ authStatus: { isAuth: false, isAdmin: false } });
+    }
+  } catch (error) {
+    console.error('인증 요청에 실패했습니다.', error.message);
+    res.status(500);
+  }
+};
+
 export const postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
 
     const user = await User.findOne({ email });
 
@@ -26,7 +38,10 @@ export const postLogin = async (req, res) => {
     }
 
     setUserToken(res, user);
-    return res.json({ message: '로그인에 성공했습니다.' });
+    return res.status(200).json({
+      message: '로그인에 성공했습니다.',
+      authStatus: { isAuth: true, isAdmin: !!user.isAdmin },
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -40,15 +55,13 @@ export const postJoin = async (req, res) => {
   try {
     const { email, username, password } = req.body;
     const existingUser = await User.findOne({ email });
-    const hashedPassword = await hashPassword(password); 
+    const hashedPassword = await hashPassword(password);
 
     if (existingUser) {
-      return res
-        .status(400)
-        .json({
-          error: 'DUPLICATE_EMAIL',
-          message: '이미 존재하는 이메일입니다.',
-        });
+      return res.status(400).json({
+        error: 'DUPLICATE_EMAIL',
+        message: '이미 존재하는 이메일입니다.',
+      });
     }
 
     await User.create({
@@ -56,14 +69,16 @@ export const postJoin = async (req, res) => {
       username,
       password: hashedPassword,
     });
-    return res.json({ message: '회원가입이 완료되었습니다.' });
+    
+    return res.json({ 
+      message: '회원가입이 완료되었습니다.' 
+    });
+
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        error: 'INTERNAL_ERROR',
-        message: '회원가입 중 오류가 발생했습니다.',
-      });
+    res.status(500).json({
+      error: 'INTERNAL_ERROR',
+      message: '회원가입 중 오류가 발생했습니다.',
+    });
   }
 };

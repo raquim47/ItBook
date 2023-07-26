@@ -1,5 +1,6 @@
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import setupHeader from '../components/header.js';
+import checkAuthStatus from '../utils/checkAuthStatus.js';
 
 // 메인 슬라이드 - 슬라이드 이동
 const updateMainSlidePosition = (slideIndex, slides, list) => {
@@ -15,7 +16,7 @@ const updateMainSlidePagination = (slideIndex, dots) => {
 };
 
 // 메인 슬라이드 - initialize
-const initializeMainSlide = () => {
+const setUpMainSlide = () => {
   const slides = document.querySelectorAll('.main-slide__item');
   const list = document.querySelector('.main-slide__list');
   const dots = document.querySelectorAll('.main-slide__dot');
@@ -55,7 +56,7 @@ const updateProductNavigationBtns = (
 };
 
 // Product 슬라이드 - 초기화
-const initializeProductSlide = () => {
+const setUpProductSlide = () => {
   const sliderList = document.querySelector('.product-slider__list');
   const prevButton = document.querySelector('.product-slider__btn.prev');
   const nextButton = document.querySelector('.product-slider__btn.next');
@@ -103,9 +104,14 @@ const initializeProductSlide = () => {
   });
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  setupHeader();
+const initializeModule = async () => {
+  const authStatus = await checkAuthStatus();
+  
+  console.log('In Home', authStatus)
+  setupHeader(authStatus);
   renderScrollTopBtn();
-  initializeMainSlide();
-  initializeProductSlide();
-});
+  setUpMainSlide();
+  setUpProductSlide();
+}
+
+initializeModule();

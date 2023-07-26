@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { postLogin, postJoin } from '../controllers/auth';
+import { getAuthStatus, postLogin, postJoin } from '../controllers/auth';
 
 const router = Router();
 
-router.post('/api/login', postLogin);
+router.get('/api/auth/check', getAuthStatus);
 
-router.post('/api/join', postJoin);
+router.post('/api/auth/login', postLogin);
+
+router.post('/api/auth/join', postJoin);
 
 export default router;

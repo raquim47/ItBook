@@ -4,33 +4,38 @@ import renderToastMessage from './toast-message.js';
 // 로그인 요청
 const submitLoginRequest = async (requestData) => {
   try {
-    const response = await fetch('/api/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    const data = await response.json();
-    console.log(data);
 
-    if (response.status === 200) {
+    const { error, message, authStatus } = await response.json();
+    if (response.ok) {
       const modal = document.querySelector('.modal');
       modal.classList.remove('show');
+
       setTimeout(() => {
         modal.remove();
-        renderToastMessage('로그인에 성공했습니다.', TOAST_TYPES.SUCCESS);
+        renderToastMessage(message, TOAST_TYPES.SUCCESS);
       }, 250);
-    } else if (data.error === 'EMAIL_NOT_FOUND') {
+
+      setupHeader(authStatus);
+      return;
+    }
+
+    if (error === 'EMAIL_NOT_FOUND') {
       const emailErrorElement = document.querySelector('#emailError');
-      emailErrorElement.textContent = data.message;
+      emailErrorElement.textContent = message;
       emailErrorElement.parentElement.classList.add('error');
-    } else if (data.error === 'INVALID_PASSWORD') {
+    } else if (error === 'INVALID_PASSWORD') {
       const passwordErrorElement = document.querySelector('#passwordError');
-      passwordErrorElement.textContent = data.message;
+      passwordErrorElement.textContent = message;
       passwordErrorElement.parentElement.classList.add('error');
     } else {
-      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+      renderToastMessage(message, TOAST_TYPES.WARNING);
     }
   } catch (error) {
     console.error(error);
@@ -44,7 +49,7 @@ const submitLoginRequest = async (requestData) => {
 // 회원 가입 요청
 const submitJoinRequest = async (requestData) => {
   try {
-    const response = await fetch('/api/join', {
+    const response = await fetch('/api/auth/join', {
       method: 'POST',
       body: JSON.stringify(requestData),
       headers: {
@@ -52,21 +57,24 @@ const submitJoinRequest = async (requestData) => {
       },
     });
 
-    const data = await response.json();
+    const { error, message } = await response.json();
 
-    if (response.status === 200) {
+    if (response.ok) {
       const modal = document.querySelector('.modal');
       modal.classList.remove('show');
       setTimeout(() => {
         modal.remove();
-        renderToastMessage(data.message);
+        renderToastMessage(message, TOAST_TYPES.SUCCESS);
       }, 250);
-    } else if (data.error === 'DUPLICATE_EMAIL') {
+      return;
+    }
+
+    if (error === 'DUPLICATE_EMAIL') {
       const emailErrorElement = document.querySelector('#emailError');
-      emailErrorElement.textContent = data.message;
+      emailErrorElement.textContent = message;
       emailErrorElement.parentElement.classList.add('error');
     } else {
-      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+      renderToastMessage(message, TOAST_TYPES.WARNING);
     }
   } catch (error) {
     console.error(error);
@@ -245,13 +253,63 @@ const toggleShadowOnScroll = (target) => {
   target.classList.toggle('shadow', target.offsetTop < windowScroll);
 };
 
-const setupHeader = () => {
+const setupHeader = (authStatus) => {
   const header = document.getElementById('header');
+  const navUserList = header.querySelector('#authMenu');
+  let menuItems = '';
 
-  const loginBtn = header.querySelector('#loginBtn');
-  const joinBtn = header.querySelector('#joinBtn');
-  loginBtn.addEventListener('click', () => openModal('login'));
-  joinBtn.addEventListener('click', () => openModal('join'));
+  if (!authStatus.isAuth) {
+    menuItems = `
+    <li>
+            <a
+              href="/cart"
+              class="nav-user__cart-btn"
+              aria-label="장바구니 버튼"
+            >
+              <span id="cartCount"></span>
+            </a>
+          </li>
+      <li><button id="loginBtn">로그인</button></li>
+      <li><button id="joinBtn">회원가입</button></li>
+    `;
+  } else if (authStatus.isAdmin) {
+    menuItems = `
+    <li>
+            <a
+              href="/cart"
+              class="nav-user__cart-btn"
+              aria-label="장바구니 버튼"
+            >
+              <span id="cartCount"></span>
+            </a>
+          </li>
+      <li><a href="/mypage">마이페이지</a></li>
+      <li><a href="/admin">관리자페이지</a></li>
+      <li><button id="logoutBtn">로그아웃</button></li>
+    `;
+  } else {
+    menuItems = `
+    <li>
+            <a
+              href="/cart"
+              class="nav-user__cart-btn"
+              aria-label="장바구니 버튼"
+            >
+              <span id="cartCount"></span>
+            </a>
+          </li>
+      <li><a href="/mypage">마이페이지</a></li>
+      <li><button id="logoutBtn">로그아웃</button></li>
+    `;
+  }
+  navUserList.innerHTML = menuItems;
+  const loginBtn = navUserList.querySelector('#loginBtn');
+  const joinBtn = navUserList.querySelector('#joinBtn');
+  const logoutBtn = navUserList.querySelector('#logoutBtn');
+
+  if (loginBtn) loginBtn.addEventListener('click', () => openModal('login'));
+  if (joinBtn) joinBtn.addEventListener('click', () => openModal('join'));
+  // if (logoutBtn) logoutBtn.addEventListener('click', logout);  // 로그아웃 함수 정의 필요
 
   window.addEventListener('scroll', () => toggleShadowOnScroll(header));
 };
