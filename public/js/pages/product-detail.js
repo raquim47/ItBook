@@ -37,16 +37,48 @@ const bindEventsCountBtns = () => {
   increaseBtn.addEventListener('click', adjustQuantity);
 };
 
-// 장바구니 버튼 이벤트 바인딩
+const saveToLocalStorage = (item) => {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingItem = cart.find(
+    (product) => product.productId === item.productId
+  );
 
-const bindEventsCartBtn = () => {
+  if (existingItem) {
+    existingItem.quantity += item.quantity;
+  } else {
+    cart.push(item);
+  }
 
-}
+  localStorage.setItem('cart', JSON.stringify(cart));
+};
+
+const onclickCartBtn = (e) => {
+  const isLoggedIn = e.target.getAttribute('data-isLoggedIn') === 'true';
+  
+  const pathParts = window.location.pathname.split('/');
+  const productId = pathParts[pathParts.length - 1];
+  const quantity = Number(document.getElementById('quantity').textContent);
+
+  if (isLoggedIn) {
+    saveToServer({ productId, quantity });
+  } else {
+    saveToLocalStorage({ productId, quantity });
+  }
+  const toastMessageContent = `
+    <div class="toastMessage__contentLinked">
+      <p>장바구니에 상품을 담았습니다.</p>
+      <a href="/cart">장바구니로 이동 &gt;</a>
+    </div>
+  ` 
+  renderToastMessage(toastMessageContent)
+};
+
 const initializeModule = () => {
   setupHeader();
   bindEventsCountBtns();
   updateTotalPrice();
-  bindEventsCartBtn();
+  const cartBtn = document.querySelector('.product-detail__cart-btn');
+  cartBtn.addEventListener('click', onclickCartBtn);
 };
 
 initializeModule();
