@@ -67,9 +67,10 @@ export const renderProductListPage = async (req, res) => {
 export const renderProductDetailPage = async (req, res) => {
   const { productId } = req.params;
   try {
-    const productData = await Product.findById(productId);
+    const product = await Product.findById(productId).populate('subCategories');
     res.render('product-detail.ejs', {
-      productData,
+      product,
+      pageTitle: `${product.title} - 잇북`,
     });
   } catch (err) {
     console.error(err);
