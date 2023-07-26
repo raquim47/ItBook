@@ -1,6 +1,5 @@
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import setupHeader from '../components/header.js';
-import checkAuthStatus from '../utils/checkAuthStatus.js';
 
 // 메인 슬라이드 - 슬라이드 이동
 const updateMainSlidePosition = (slideIndex, slides, list) => {
@@ -104,10 +103,8 @@ const setUpProductSlide = () => {
   });
 };
 
-const initializeModule = async () => {
-  const authStatus = await checkAuthStatus();
-  
-  setupHeader(authStatus);
+const initializeModule = () => {
+  setupHeader();
   renderScrollTopBtn();
   setUpMainSlide();
   setUpProductSlide();

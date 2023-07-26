@@ -74,15 +74,17 @@ const bindSortMenuEvents = (productItems) => {
   });
 };
 
-const initializeModule = async () => {
+const initializeModule = () => {
   setupHeader();
   renderScrollTopBtn();
 
   const productItems = Array.from(document.querySelectorAll('.product-item'));
-  const categoryBtns = Array.from(document.querySelectorAll('.products__subCategories li'));
+  const categoryBtns = Array.from(
+    document.querySelectorAll('.products__subCategories li')
+  );
 
   bindCateBtnEvents(categoryBtns, productItems);
   bindSortMenuEvents(productItems);
-}
+};
 
 initializeModule();

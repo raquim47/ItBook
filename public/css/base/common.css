@@ -4,8 +4,6 @@ body {
   padding-top: 90px;
   font-family: 'Pretendard';
   font-size: 16px;
-  font-weight: 600;
-  box-sizing: border-box;
 }
 
 a {
@@ -48,7 +46,6 @@ a {
   justify-content: center;
   align-items: center;
   font-size: 14px;
-  font-weight: 400;
   color: #fff;
   border-radius: 4px;
   opacity: 0;
@@ -140,10 +137,6 @@ header.onScroll {
 
 .nav-user__list li {
   padding: 0 14px;
-}
-
-.nav-user__list button{
-  font-weight: 600;
 }
 
 .nav-user__list li button {
@@ -351,7 +344,6 @@ header.onScroll {
 .footer__info li {
   padding: 6px 0;
   font-size: 14px;
-  font-weight: 400;
   color: #616161;
 }
 
