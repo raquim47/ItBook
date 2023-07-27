@@ -22,6 +22,35 @@ body {
   display: none;
 }
 
+
+/* x-btn */
+.x-btn {
+  position: relative;
+  display: block;
+  padding: 10px;
+}
+
+.x-btn::before,
+.x-btn::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 2px;
+  background-color: rgb(68, 68, 68);
+  display: block;
+  content: '';
+}
+
+.x-btn::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.x-btn::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* toast-message */
 .toast-message {
   position: fixed;
   bottom: 50px;
@@ -206,36 +235,10 @@ header.onScroll {
   border-radius: 5px;
 }
 
-.modal__closeBtn {
+.modal__close {
   position: absolute;
-  top: 24px;
-  right: 24px;
-  display: block;
-  width: 25px;
-  height: 25px;
-}
-
-.modal__closeBtn::before,
-.modal__closeBtn::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 15px;
-  height: 2px;
-  background-color: rgb(68, 68, 68);
-  display: block;
-  content: '';
-}
-
-.modal__closeBtn::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.modal__closeBtn::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.modal-form {
+  top: 30px;
+  right: 26px;
 }
 
 .modal-form__title {

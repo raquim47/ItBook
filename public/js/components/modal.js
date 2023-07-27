@@ -198,7 +198,7 @@ const bindModalCloseEvent = (modal) => {
   };
 
   modal.querySelector('.modal__backdrop').addEventListener('click', closeModal);
-  modal.querySelector('.modal__closeBtn').addEventListener('click', closeModal);
+  modal.querySelector('.modal__close button').addEventListener('click', closeModal);
 };
 
 // 모달 이벤트 바인딩
@@ -234,7 +234,9 @@ const createModalTemplate = (mode) => {
   return `
   <div class="modal__backdrop"></div>
   <div class="modal__content">
-    <button class="modal__closeBtn" aria-label="모달 닫기"></button>
+    <div class="modal__close">
+      <button class="x-btn" aria-label="모달 닫기"></button>
+    </div>
     <form class="modal-form">
       <h3 class="modal-form__title">${isJoinMode ? '회원가입' : '로그인'}</h3>
       <ul class="modal-form__list">
