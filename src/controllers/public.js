@@ -83,3 +83,18 @@ export const renderProductDetailPage = async (req, res) => {
     });
   }
 };
+
+export const renderCartPage = async (req, res) => {
+  try {
+    res.render('cart.ejs', {
+      authStatus : req.user,
+      pageTitle: `장바구니 - 잇북`,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).render('404.ejs', {
+      message: '서버 오류',
+      error: err,
+    });
+  }
+}

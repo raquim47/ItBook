@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/cart.css" />
+    <script src="/js/pages/cart.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="cart">
+          <h2 class="cart__title">장바구니</h2>
+          <div class="cart__sections">
+            <!-- 장바구니 상품  -->
+            <section class="cart__content">
+              <div class="cart__all-check">
+                <input type="checkbox" id="allCheck" class="cart-checkbox" />
+                <p><label for="allCheck">전체선택 </label><span id="check-status">(2/2)</span></p>
+              </div>
+              <form id="cartForm">
+                <ul class="cart__list">
+                  <li class="cart-item">
+                    <!-- 체크박스 -->
+                    <div class="cart-item__checkbox">
+                      <input type="checkbox" class="cart-checkbox" />
+                    </div>
+                    <!-- 상품 정보 -->
+                    <div class="cart-item__info">
+                      <a href="#">
+                        <img
+                        class="cart-item__img"
+                          src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791161757674.jpg"
+                          alt="도서 사진"
+                        />
+                        <div class="cart-item__text">
+                          <h3 class="cart-item__title">
+                            마스터링 팔로알토 네트웍스
+                          </h3>
+                          <p class="cart-item__author">톰 피엔스</p>
+                        </div>
+                      </a>
+                    </div>
+                    <!-- 옵션 (가격과 수량) -->
+                    <div class="cart-item__option">
+                      <div class="count-control">
+                        <button type="button" class="count-control__btn">
+                          -
+                        </button>
+                        <input
+                          class="count-control__status"
+                          id="quantity"
+                          value="1"
+                        />
+                        <button type="button" class="count-control__btn">
+                          +
+                        </button>
+                      </div>
+                      <strong class="item-price">20,000 원</strong>
+                    </div>
+                    <!-- 상품 삭제 -->
+                    <div class="cart-item__delete">
+                      <button
+                        type="button"
+                        class="x-btn"
+                        aria-label="상품 삭제"
+                      ></button>
+                    </div>
+                  </li>
+                  <li class="cart-item">
+                    <!-- 체크박스 -->
+                    <div class="cart-item__checkbox">
+                      <input type="checkbox" class="cart-checkbox" />
+                    </div>
+                    <!-- 상품 정보 -->
+                    <div class="cart-item__info">
+                      <a href="#">
+                        <img
+                        class="cart-item__img"
+                          src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791161757674.jpg"
+                          alt="도서 사진"
+                        />
+                        <div class="cart-item__text">
+                          <h3 class="cart-item__title">
+                            마스터링 팔로알토 네트웍스
+                          </h3>
+                          <p class="cart-item__author">톰 피엔스</p>
+                        </div>
+                      </a>
+                    </div>
+                    <!-- 옵션 (가격과 수량) -->
+                    <div class="cart-item__option">
+                      <div class="count-control">
+                        <button type="button" class="count-control__btn">
+                          -
+                        </button>
+                        <input
+                          class="count-control__status"
+                          id="quantity"
+                          value="1"
+                        />
+                        <button type="button" class="count-control__btn">
+                          +
+                        </button>
+                      </div>
+                      <strong class="cart-item__price">20,000 원</strong>
+                    </div>
+                    <!-- 상품 삭제 -->
+                    <div class="cart-item__delete">
+                      <button
+                        type="button"
+                        class="x-btn"
+                        aria-label="상품 삭제"
+                      ></button>
+                    </div>
+                  </li>
+                </ul>
+              </form>
+            </section>
+            <!-- 장바구니 주문  -->
+            <section class="cart__payment">
+              <div class="cart-amount">
+                <div class="cart-amount__row">
+                  <h4>총 상품 금액</h4>
+                  <strong>20,000원</strong>
+                </div>
+                <div class="cart-amount__row">
+                  <h4>배송비</h4>
+                  <strong>+0원</strong>
+                </div>
+              </div>
+              <div class="cart-total-price">
+                <h3>총 결제 금액</h3>
+                <p>10,000원</p>
+              </div>
+              <button id="orderBtn" class="cart__submit-btn">주문하기</button>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>
