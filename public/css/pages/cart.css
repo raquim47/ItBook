@@ -122,11 +122,10 @@
 }
 
 .cart__payment {
-  width: 260px;
+  width: 280px;
   margin-left: 50px;
   margin-right: 0;
   padding-top: 35px;
-  /* border: 1px solid red; */
 }
 
 .cart-amount {

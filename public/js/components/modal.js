@@ -65,9 +65,11 @@ const submitLoginRequest = async (requestData) => {
           btn.dataset.isAuth = 'true';
         });
       }
-      
+      const cartList = document.getElementById('cartList');
+      cartList.dataset.isAuth = 'true';
+
       await mergeLocalCartWithServer();
-      await updateCartbadge()
+      await updateCartbadge();
       return;
     }
 
@@ -198,7 +200,9 @@ const bindModalCloseEvent = (modal) => {
   };
 
   modal.querySelector('.modal__backdrop').addEventListener('click', closeModal);
-  modal.querySelector('.modal__close button').addEventListener('click', closeModal);
+  modal
+    .querySelector('.modal__close button')
+    .addEventListener('click', closeModal);
 };
 
 // 모달 이벤트 바인딩

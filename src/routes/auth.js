@@ -6,6 +6,7 @@ import {
   getCart,
   addToCart,
   mergeCarts,
+  getProduct,
 } from '../controllers/auth';
 
 const router = Router();
@@ -21,5 +22,7 @@ router.get('/api/cart', getCart);
 router.post('/api/cart', addToCart);
 
 router.post('/api/cart/merge', mergeCarts);
+
+router.get('/api/product/:productId', getProduct);
 
 export default router;

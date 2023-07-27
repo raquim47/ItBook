@@ -1,7 +1,9 @@
 import setUserToken from '../utils/set-user-token';
 import hashPassword from '../utils/hash-password';
 import User from '../models/user';
+import Product from '../models/product';
 import bcrypt from 'bcrypt';
+import product from '../models/product';
 
 export const getAuthStatus = (req, res) => {
   try {
@@ -92,7 +94,6 @@ export const mergeCarts = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const localCartItems = req.body;
-    console.log(user, localCartItems)
     for (const localItem of localCartItems.reverse()) { 
       const cartItemIndex = user.cart.items.findIndex((item) => item.productId == localItem.productId);
       if (cartItemIndex >= 0) {
@@ -136,3 +137,19 @@ export const addToCart = async (req, res) => {
   await user.save();
   res.json(user);
 };
+
+export const getProduct = async (req, res) => {
+  const productId = req.params.productId;
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.send(product);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
