@@ -3,7 +3,6 @@ import hashPassword from '../utils/hash-password';
 import User from '../models/user';
 import Product from '../models/product';
 import bcrypt from 'bcrypt';
-import product from '../models/product';
 
 export const getAuthStatus = (req, res) => {
   try {
@@ -104,7 +103,7 @@ export const mergeCarts = async (req, res) => {
     }
 
     await user.save();
-    res.status(204).end();
+    res.status(200).json(user.cart.items); // 합쳐진 cart 데이터 반환
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: '요청을 처리하는 도중 문제가 발생했습니다.' });

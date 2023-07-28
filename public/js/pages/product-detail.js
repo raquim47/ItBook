@@ -1,7 +1,6 @@
 import setupHeader from '../components/header.js';
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
-import { updateCartbadge } from '../components/header.js';
 
 // 총 금액 업데이트
 const updateTotalPrice = (quantity = 1) => {
@@ -95,7 +94,6 @@ const onclickCartBtn = async (e) => {
       </div>
     `;
 
-    await updateCartbadge();
     renderToastMessage(toastMessageContent);
   } catch (error) {
     renderToastMessage(

@@ -154,43 +154,61 @@ export const renderCartList = async () => {
   cartList.innerHTML = cartItemsHTMLArray.join('');
 };
 
-const handleQuantityChange = (target, productId) => {
+const adjustQuantity = async (productId, direction) => {
+  const isAuth = document.getElementById('cartList').dataset.isAuth === 'true';
   const cartItems = storage.getCartItems();
   const item = cartItems.find((i) => i.productId === productId);
 
   if (!item) return;
 
-  if (target.textContent === '+') {
-    item.quantity++;
-  } else if (target.textContent === '-' && item.quantity > 1) {
-    item.quantity--;
+  if (isAuth) {
+    // 로그인 상태인 경우에는 api를 통해 수량을 조정
+    const result = await requestAPI.adjustCartItemQuantity(productId, direction);
+    if (result.error) {
+      console.error(`상품 ID ${productId}의 수량을 조정하는데 실패했습니다.`);
+      return;
+    }
+    renderCartList();
+  } else {
+    // 비로그인 상태인 경우에는 로컬 스토리지의 수량을 조정
+    if (direction === '+') {
+      item.quantity++;
+    } else if (direction === '-' && item.quantity > 1) {
+      item.quantity--;
+    }
+    storage.setCartItem(cartItems);
+    renderCartList();
   }
-
-  storage.setCartItem(cartItems);
-  renderCartList();
 };
 
-const handleItemDeletion = (productId) => {
-  storage.removeItem(productId);
-  renderCartList();
+const removeItem = async (productId) => {
+  const isAuth = document.getElementById('cartList').dataset.isAuth === 'true';
+  if (isAuth) {
+    // 로그인 상태인 경우에는 api를 통해 항목을 삭제
+    const result = await requestAPI.removeCartItem(productId);
+    if (result.error) {
+      console.error(`상품 ID ${productId}을(를) 삭제하는데 실패했습니다.`);
+      return;
+    }
+    renderCartList();
+  } else {
+    // 비로그인 상태인 경우에는 로컬 스토리지의 항목을 삭제
+    storage.removeItem(productId);
+    renderCartList();
+  }
 };
 
 const cartEvents = () => {
   const cartList = document.getElementById('cartList');
-  const isAuth = cartList.dataset.isAuth === 'true';
-
-  cartList.addEventListener('click', (event) => {
-    if (!isAuth) {
-      const target = event.target;
-      const productId = target.closest('.cart-item').dataset.productId;
-
-      if (target.classList.contains('count-control__btn')) {
-        handleQuantityChange(target, productId);
-      }
-
-      if (target.classList.contains('x-btn')) {
-        handleItemDeletion(productId);
-      }
+  cartList.addEventListener('click', async (event) => {
+    const target = event.target;
+    const productId = target.closest('.cart-item').dataset.productId;
+    if (target.classList.contains('count-control__btn')) {
+      const direction = target.textContent;
+      await adjustQuantity(productId, direction);
+    }
+    if (target.classList.contains('x-btn')) {
+      await removeItem(productId);
     }
   });
 };

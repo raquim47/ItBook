@@ -1,140 +1,6 @@
+import authManager from '../utils/authManager.js';
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
-import { updateUserMenu, updateCartbadge } from './header.js';
-
-const mergeLocalCartWithServer = async () => {
-  const localCartItems = JSON.parse(localStorage.getItem('cart')) || [];
-
-  if (localCartItems.length === 0) return;
-
-  try {
-    const response = await fetch('/api/cart/merge', {
-      method: 'POST',
-      body: JSON.stringify(localCartItems),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      const { message } = await response.json();
-      renderToastMessage(message, TOAST_TYPES.WARNING);
-    }
-
-    // 로컬스토리지의 장바구니 아이템 제거
-    localStorage.removeItem('cart');
-  } catch (error) {
-    console.error(error);
-    renderToastMessage(
-      '요청을 처리하는 도중 문제가 발생했습니다.',
-      TOAST_TYPES.WARNING
-    );
-  }
-};
-
-// 로그인 요청
-const submitLoginRequest = async (requestData) => {
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(requestData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const { error, message, authStatus } = await response.json();
-    if (response.ok) {
-      const modal = document.querySelector('.modal');
-      modal.classList.remove('show');
-
-      setTimeout(() => {
-        modal.remove();
-        renderToastMessage(message, TOAST_TYPES.SUCCESS);
-      }, 250);
-
-      updateUserMenu(authStatus);
-
-      // 상세페이지 장바구니버튼
-      const isProductPage = location.pathname.startsWith('/product/');
-      if (isProductPage) {
-        const cartBtns = document.querySelectorAll(
-          'product-detail__btns button'
-        );
-        cartBtns.forEach((btn) => {
-          btn.dataset.isAuth = 'true';
-        });
-      }
-      const cartList = document.getElementById('cartList');
-      cartList.dataset.isAuth = 'true';
-      await mergeLocalCartWithServer();
-      await updateCartbadge();
-      
-      // 커스텀 이벤트 생성
-      const event = new Event('loginSuccess');
-      // 이벤트 발행
-      document.dispatchEvent(event);
-      return;
-    }
-
-    if (error === 'EMAIL_NOT_FOUND') {
-      const emailErrorElement = document.querySelector('#emailError');
-      emailErrorElement.textContent = message;
-      emailErrorElement.parentElement.classList.add('error');
-    } else if (error === 'INVALID_PASSWORD') {
-      const passwordErrorElement = document.querySelector('#passwordError');
-      passwordErrorElement.textContent = message;
-      passwordErrorElement.parentElement.classList.add('error');
-    } else {
-      renderToastMessage(message, TOAST_TYPES.WARNING);
-    }
-  } catch (error) {
-    console.error(error);
-    renderToastMessage(
-      '로그인 요청에 실패했습니다. 다시 시도해주세요.',
-      TOAST_TYPES.WARNING
-    );
-  }
-};
-
-// 회원 가입 요청
-const submitJoinRequest = async (requestData) => {
-  try {
-    const response = await fetch('/api/auth/join', {
-      method: 'POST',
-      body: JSON.stringify(requestData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const { error, message } = await response.json();
-
-    if (response.ok) {
-      const modal = document.querySelector('.modal');
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.remove();
-        renderToastMessage(message, TOAST_TYPES.SUCCESS);
-      }, 250);
-      return;
-    }
-
-    if (error === 'DUPLICATE_EMAIL') {
-      const emailErrorElement = document.querySelector('#emailError');
-      emailErrorElement.textContent = message;
-      emailErrorElement.parentElement.classList.add('error');
-    } else {
-      renderToastMessage(message, TOAST_TYPES.WARNING);
-    }
-  } catch (error) {
-    console.error(error);
-    renderToastMessage(
-      '요청에 실패했습니다. 다시 시도해주세요.',
-      TOAST_TYPES.WARNING
-    );
-  }
-};
 
 // 유효성 검사 에러 동작 실행
 const setError = (field, message) => {
@@ -145,6 +11,52 @@ const setError = (field, message) => {
   errorElement.addEventListener('animationend', () => {
     errorElement.classList.remove('shake');
   });
+};
+
+// 로그인 요청
+const submitLoginRequest = async (requestData) => {
+  const result = await authManager.handleLogin(requestData);
+
+  if (result.success) {
+    const modal = document.querySelector('.modal');
+    modal.classList.remove('show');
+
+    setTimeout(() => {
+      modal.remove();
+      renderToastMessage(result.message, TOAST_TYPES.SUCCESS);
+    }, 250);
+
+    return;
+  }
+
+  if (result.error === 'EMAIL_NOT_FOUND') {
+    setError('email', result.message)
+  } else if (result.error === 'INVALID_PASSWORD') {
+    setError('password', result.message)
+  } else {
+    renderToastMessage(result.message, TOAST_TYPES.WARNING);
+  }
+};
+
+// 회원 가입 요청
+const submitJoinRequest = async (requestData) => {
+  const result = await authManager.handleJoin(requestData);
+
+  if (result.success) {
+    const modal = document.querySelector('.modal');
+    modal.classList.remove('show');
+
+    setTimeout(() => {
+      modal.remove();
+      renderToastMessage(result.message, TOAST_TYPES.SUCCESS);
+    }, 250);
+  } else {
+    if (result.error === 'DUPLICATE_EMAIL') {
+      setError('password', result.message)
+    } else {
+      renderToastMessage(result.message, TOAST_TYPES.WARNING);
+    }
+  }
 };
 
 // 클라이언트 사이드 유효성 검사
