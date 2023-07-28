@@ -67,9 +67,13 @@ const submitLoginRequest = async (requestData) => {
       }
       const cartList = document.getElementById('cartList');
       cartList.dataset.isAuth = 'true';
-
       await mergeLocalCartWithServer();
       await updateCartbadge();
+      
+      // 커스텀 이벤트 생성
+      const event = new Event('loginSuccess');
+      // 이벤트 발행
+      document.dispatchEvent(event);
       return;
     }
 
@@ -232,6 +236,7 @@ const bindModalEvents = (modal, mode) => {
     }
   });
 };
+
 // 모달 내부 템플릿(로그인/회원가입) 생성
 const createModalTemplate = (mode) => {
   const isJoinMode = mode === 'join';

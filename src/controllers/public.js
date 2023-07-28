@@ -85,7 +85,6 @@ export const renderProductDetailPage = async (req, res) => {
 };
 
 export const renderCartPage = async (req, res) => {
-
   try {
     res.render('cart.ejs', {
       authStatus : !!req.user,

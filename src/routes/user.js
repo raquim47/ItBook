@@ -22,11 +22,11 @@ router.delete('/api/user/:id/', apiLoginRequired, deleteUser);
 
 router.get('/api/user/cart', apiLoginRequired, getCart);
 
-router.put('/api/user/cart/:id/:direction', apiLoginRequired, adjustQuantity);
 
 router.post('/api/user/cart/merge', apiLoginRequired, mergeCarts);
 
 router.delete('/api/user/cart/:id', apiLoginRequired, removeItem);
+router.put('/api/user/cart/:id/:direction', apiLoginRequired, adjustQuantity);
 
 router.post('/api/user/cart', apiLoginRequired, addToCart);
 

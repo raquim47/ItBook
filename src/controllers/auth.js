@@ -153,3 +153,46 @@ export const getProduct = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+export const removeItem = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { productId } = req.params;
+
+    const cartItemIndex = user.cart.items.findIndex((item) => item.productId == productId);
+
+    if (cartItemIndex === -1) {
+      return res.status(400).json({ message: '상품을 찾을 수 없습니다' });
+    }
+    
+    user.cart.items.splice(cartItemIndex, 1);
+    await user.save();
+    
+    res.json({ message: '상품이 장바구니에서 제거되었습니다.' });
+  } catch (error) {
+    res.status(500).json({ message: '서버 오류' });
+  }
+};
+
+export const adjustQuantity = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const { productId, direction } = req.params;
+    const cartItem = user.cart.items.find((item) => item.productId == productId);
+    if (!cartItem) {
+      return res.status(400).json({ message: '장바구니 정보를 찾을 수 없음' });
+    }
+    
+    let adjustment = direction === 'increase' ? 1 : -1;
+    if (cartItem.quantity + adjustment < 1) {
+      return res.status(400).json({ message: '1 이하로 감소시킬 수 없습니다.' });
+    }
+    
+    cartItem.quantity += adjustment;
+    await user.save();
+
+    res.json({ message: '장바구니 수량이 변경되었습니다.' });
+  } catch (error) {
+    res.status(500).json({ message: '서버 오류' });
+  }
+};

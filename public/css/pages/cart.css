@@ -107,6 +107,7 @@
 }
 
 .cart-item__price {
+  font-weight: 500;
 }
 
 .cart-item__delete {
