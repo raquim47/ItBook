@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  getAuthStatus,
+  getAuth,
   postLogin,
   postJoin,
   getCart,
@@ -13,11 +13,11 @@ import {
 
 const router = Router();
 
-router.get('/api/auth/check', getAuthStatus);
+router.get('/api/auth', getAuth);
 
-router.post('/api/auth/login', postLogin);
+router.post('/api/login', postLogin);
 
-router.post('/api/auth/join', postJoin);
+router.post('/api/join', postJoin);
 
 router.get('/api/cart', getCart);
 

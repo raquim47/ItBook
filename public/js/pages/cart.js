@@ -1,5 +1,8 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
+import cartService from '../services/cartService.js';
+import productService from '../services/productService.js';
+import { CUSTOM_EVENT } from '../utils/constants.js';
 
 const DELIVERY_FEE = 3000;
 const FREE_DELIVERY_THRESHOLD = 30000;
@@ -21,11 +24,11 @@ const createCartItemHTML = (item) => {
       </div>
       <div class="cart-item__option">
         <div class="count-control">
-          <button type="button" class="count-control__btn">-</button>
+          <button type="button" class="count-control__btn" data-direction="decrease">-</button>
           <input class="count-control__status" id="quantity" readonly value="${
             item.quantity
           }" />
-          <button type="button" class="count-control__btn">+</button>
+          <button type="button" class="count-control__btn"  data-direction="increase">+</button>
         </div>
         <strong class="cart-item__price">${(
           item.price * item.quantity
@@ -37,89 +40,8 @@ const createCartItemHTML = (item) => {
     </li>`;
 };
 
-// 로컬 스토래지 관련 메서드
-const storage = {
-  getCartItems: () => JSON.parse(localStorage.getItem('cart')) ?? [],
-
-  setCartItem: (cartItems) => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  },
-
-  removeItem: (productId) => {
-    const cartItems = storage.getCartItems();
-    const updatedItems = cartItems.filter(
-      (item) => item.productId !== productId
-    );
-    localStorage.setItem('cart', JSON.stringify(updatedItems));
-  },
-};
-
-// api 메서드
-const requestAPI = {
-  fetchProductById: async (productId) => {
-    try {
-      const response = await fetch(`/api/product/${productId}`);
-
-      if (response.status === 404) {
-        throw new Error('NOT_FOUND');
-      }
-
-      if (!response.ok) {
-        throw new Error('REQUEST_ERROR');
-      }
-      return { data: await response.json() };
-    } catch (err) {
-      console.error(err);
-      return { error: err.message };
-    }
-  },
-  fetchCart: async () => {
-    try {
-      const response = await fetch('/api/cart');
-
-      if (!response.ok) {
-        throw new Error('REQUEST_ERROR');
-      }
-      return { data: await response.json() };
-    } catch (err) {
-      console.error(err);
-      return { error: err.message };
-    }
-  },
-  adjustCartItemQuantity: async (productId, direction) => {
-    try {
-      const response = await fetch(`/api/cart/${productId}/${direction}`, {
-        method: 'PUT',
-      });
-
-      if (!response.ok) {
-        throw new Error('REQUEST_ERROR');
-      }
-      return { data: await response.json() };
-    } catch (err) {
-      console.error(err);
-      return { error: err.message };
-    }
-  },
-  removeCartItem: async (productId) => {
-    try {
-      const response = await fetch(`/api/cart/${productId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('REQUEST_ERROR');
-      }
-      return { data: await response.json() };
-    } catch (err) {
-      console.error(err);
-      return { error: err.message };
-    }
-  },
-};
-
 const renderCartItem = async (item) => {
-  const result = await requestAPI.fetchProductById(item.productId);
+  const result = await productService.getProductById(item.productId);
   if (result.error) {
     if (result.error === 'NOT_FOUND') {
       console.error(
@@ -133,6 +55,7 @@ const renderCartItem = async (item) => {
     }
     return '';
   }
+
   const cartItem = {
     ...result.data,
     quantity: item.quantity,
@@ -140,75 +63,32 @@ const renderCartItem = async (item) => {
   return createCartItemHTML(cartItem);
 };
 
-export const renderCartList = async () => {
+const renderCartList = async () => {
   const cartList = document.getElementById('cartList');
-  const isAuth = cartList.dataset.isAuth === 'true';
 
-  const cartData = isAuth
-    ? await requestAPI.fetchCart().data
-    : storage.getCartItems();
-
+  const cartData = cartService.cart;
   const cartItemsHTMLPromises = cartData.map((item) => renderCartItem(item));
   const cartItemsHTMLArray = await Promise.all(cartItemsHTMLPromises);
 
   cartList.innerHTML = cartItemsHTMLArray.join('');
 };
 
-const adjustQuantity = async (productId, direction) => {
-  const isAuth = document.getElementById('cartList').dataset.isAuth === 'true';
-  const cartItems = storage.getCartItems();
-  const item = cartItems.find((i) => i.productId === productId);
-
-  if (!item) return;
-
-  if (isAuth) {
-    // 로그인 상태인 경우에는 api를 통해 수량을 조정
-    const result = await requestAPI.adjustCartItemQuantity(productId, direction);
-    if (result.error) {
-      console.error(`상품 ID ${productId}의 수량을 조정하는데 실패했습니다.`);
-      return;
-    }
-    renderCartList();
-  } else {
-    // 비로그인 상태인 경우에는 로컬 스토리지의 수량을 조정
-    if (direction === '+') {
-      item.quantity++;
-    } else if (direction === '-' && item.quantity > 1) {
-      item.quantity--;
-    }
-    storage.setCartItem(cartItems);
-    renderCartList();
-  }
-};
-
-const removeItem = async (productId) => {
-  const isAuth = document.getElementById('cartList').dataset.isAuth === 'true';
-  if (isAuth) {
-    // 로그인 상태인 경우에는 api를 통해 항목을 삭제
-    const result = await requestAPI.removeCartItem(productId);
-    if (result.error) {
-      console.error(`상품 ID ${productId}을(를) 삭제하는데 실패했습니다.`);
-      return;
-    }
-    renderCartList();
-  } else {
-    // 비로그인 상태인 경우에는 로컬 스토리지의 항목을 삭제
-    storage.removeItem(productId);
-    renderCartList();
-  }
-};
-
-const cartEvents = () => {
+// 장바구니 품목 수량 변경 / 삭제
+const setUpcartItemEvents = () => {
   const cartList = document.getElementById('cartList');
   cartList.addEventListener('click', async (event) => {
-    const target = event.target;
-    const productId = target.closest('.cart-item').dataset.productId;
-    if (target.classList.contains('count-control__btn')) {
-      const direction = target.textContent;
-      await adjustQuantity(productId, direction);
-    }
-    if (target.classList.contains('x-btn')) {
-      await removeItem(productId);
+    try {
+      const target = event.target;
+      const productId = target.closest('.cart-item').dataset.productId;
+      if (target.classList.contains('count-control__btn')) {
+        const direction = target.dataset.direction;
+        await cartService.adjustQuantity(productId, direction);
+      }
+      if (target.classList.contains('x-btn')) {
+        await cartService.removeItemFromCart(productId);
+      }
+    } catch (error) {
+      console.error(`Error during handling event: ${error}`);
     }
   });
 };
@@ -225,12 +105,10 @@ const setUpCheckboxEvents = () => {
 const initializeCartPage = () => {
   setupHeader();
   renderScrollTopBtn();
-
   setUpCheckboxEvents();
-  renderCartList();
 
-  document.addEventListener('loginSuccess', renderCartList);
-  cartEvents();
+  document.addEventListener(CUSTOM_EVENT.CART_UPDATED, renderCartList);
+  setUpcartItemEvents();
 };
 
 initializeCartPage();

@@ -1,5 +1,6 @@
-import authManager from '../utils/authManager.js';
-import cartManager from '../utils/cartManager.js';
+import authService from '../services/authService.js';
+import cartService from '../services/cartService.js';
+import { CUSTOM_EVENT, MODAL_MODE } from '../utils/constants.js';
 import renderModal from './modal.js';
 
 // 로그아웃 (쿠키삭제 후 새로고침)
@@ -12,7 +13,7 @@ const logoutAndRedirect = () => {
 
 // 카트 수량 배지 업데이트
 const updateCartbadge = async () => {
-  const cart = cartManager.getCart();
+  const cart = cartService.getCart();
   
   const cartBadge = document.getElementById('cartBadge');
   cartBadge.textContent = cart.length > 0 ? cart.length : '';
@@ -29,7 +30,7 @@ const updateUserMenu = async () => {
         </a>
       </li>
       <li><a href="/mypage">마이페이지</a></li>
-      ${authManager.isAdmin ? '<li><a href="/admin">관리자페이지</a></li>' : ''}
+      ${authService.isAdmin ? '<li><a href="/admin">관리자페이지</a></li>' : ''}
       <li><button id="logoutBtn">로그아웃</button></li>
   `;
   userMenu.innerHTML = menuItems;
@@ -51,14 +52,16 @@ const setupHeader = () => {
   const loginBtn = header.querySelector('#loginBtn');
   const joinBtn = header.querySelector('#joinBtn');
   const logoutBtn = header.querySelector('#logoutBtn');
-
-  if (loginBtn) loginBtn.addEventListener('click', () => renderModal('login'));
-  if (joinBtn) joinBtn.addEventListener('click', () => renderModal('join'));
+  
+  if (loginBtn) loginBtn.addEventListener('click', () => renderModal(MODAL_MODE.LOGIN));
+  if (joinBtn) joinBtn.addEventListener('click', () => renderModal(MODAL_MODE.JOIN));
   if (logoutBtn) logoutBtn.addEventListener('click', logoutAndRedirect);
 
   window.addEventListener('scroll', () => toggleShadowOnScroll(header));
-  document.addEventListener('loginSuccess', updateUserMenu)
-  document.addEventListener('updateCart', updateCartbadge)
+  
+  document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, updateUserMenu)
+  document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, updateCartbadge)
+  document.addEventListener(CUSTOM_EVENT.CART_UPDATED, updateCartbadge)
 };
 
 export default setupHeader;

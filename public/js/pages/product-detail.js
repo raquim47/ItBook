@@ -1,6 +1,7 @@
 import setupHeader from '../components/header.js';
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
+import cartManager from '../services/cartService.js';
 
 // 총 금액 업데이트
 const updateTotalPrice = (quantity = 1) => {
@@ -37,55 +38,13 @@ const bindEventsCountBtns = () => {
   increaseBtn.addEventListener('click', adjustQuantity);
 };
 
-const addToServerCart = async (item) => {
-  try {
-    const response = await fetch('/api/cart', {
-      method: 'POST',
-      body: JSON.stringify(item),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('장바구니에 상품을 추가하는데 실패했습니다.');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-// 로컬 스토래지 장바구니에 추가
-const addToLocalStorageCart = (item) => {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const existingItem = cart.find(
-    (product) => product.productId === item.productId
-  );
-
-  if (existingItem) {
-    existingItem.quantity += item.quantity;
-  } else {
-    cart.unshift(item);
-  }
-
-  localStorage.setItem('cart', JSON.stringify(cart));
-};
-
-const onclickCartBtn = async (e) => {
-  const isAuth = e.target.dataset.isAuth === 'true';
+const onclickAddCartBtn = async (e) => {
   const pathParts = window.location.pathname.split('/');
   const productId = pathParts[pathParts.length - 1];
   const quantity = Number(document.getElementById('quantity').textContent);
 
   try {
-    if (isAuth) {
-      await addToServerCart({ productId, quantity });
-    } else {
-      addToLocalStorageCart({ productId, quantity });
-    }
+    await cartManager.addItemToCart({productId, quantity});
 
     const toastMessageContent = `
       <div class="toastMessage__contentLinked">
@@ -107,8 +66,8 @@ const initializeModule = () => {
   setupHeader();
   bindEventsCountBtns();
   updateTotalPrice();
-  const cartBtn = document.querySelector('.product-detail__cart-btn');
-  cartBtn.addEventListener('click', onclickCartBtn);
+  const addCartBtn = document.querySelector('.product-detail__cart-btn');
+  addCartBtn.addEventListener('click', onclickAddCartBtn);
 };
 
 initializeModule();
