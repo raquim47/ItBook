@@ -1,7 +1,7 @@
 import setupHeader from '../components/header.js';
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
-import cartManager from '../services/cartService.js';
+import cartManager from '../services/cart-service.js';
 
 // 총 금액 업데이트
 const updateTotalPrice = (quantity = 1) => {
@@ -62,7 +62,7 @@ const onclickAddCartBtn = async (e) => {
   }
 };
 
-const initializeModule = () => {
+const initPage = () => {
   setupHeader();
   bindEventsCountBtns();
   updateTotalPrice();
@@ -70,4 +70,4 @@ const initializeModule = () => {
   addCartBtn.addEventListener('click', onclickAddCartBtn);
 };
 
-initializeModule();
+initPage();

@@ -1,9 +1,9 @@
-import authService from './authService.js';
+import authService from './auth-service.js';
 import { CUSTOM_EVENT } from '../utils/constants.js';
 
 class CartManager {
   constructor() {
-    this.cart = [];
+    this._cart = [];
     this.initCart();
 
     document.addEventListener(
@@ -12,14 +12,14 @@ class CartManager {
     );
   }
 
-  getCart() {
-    return this.cart;
+  get cart() {
+    return this._cart;
   }
 
   // 장바구니 초기화
   async initCart() {
     await authService.fetchAuthStatus();
-    if (authService.isAuth) {
+    if (authService.isAuth()) {
       await this.fetchCartFromServer();
     } else {
       this.fetchCartFromLocalStorage();
@@ -35,7 +35,7 @@ class CartManager {
       if (!response.ok) {
         throw new Error('요청을 처리하는 도중 문제가 발생했습니다.');
       }
-      this.cart = await response.json();
+      this._cart = await response.json();
     } catch (error) {
       console.error('요청을 처리하는 도중 문제가 발생했습니다 :', error);
     }
@@ -44,17 +44,17 @@ class CartManager {
   // 장바구니 로컬스토래지에서 가져오기
   fetchCartFromLocalStorage() {
     const localStorageCart = localStorage.getItem('cart');
-    this.cart = localStorageCart ? JSON.parse(localStorageCart) : [];
+    this._cart = localStorageCart ? JSON.parse(localStorageCart) : [];
   }
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기
   async mergeLocalCartWithServer() {
-    if (this.cart.length === 0) return;
+    if (this._cart.length === 0) return;
 
     try {
       const response = await fetch('/api/cart/merge', {
         method: 'POST',
-        body: JSON.stringify(this.cart),
+        body: JSON.stringify(this._cart),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -65,7 +65,7 @@ class CartManager {
       }
 
       localStorage.removeItem('cart');
-      this.cart = await response.json();
+      this._cart = await response.json();
       this.dispatchCartUpdate();
     } catch (error) {
       console.error(error);
@@ -75,7 +75,7 @@ class CartManager {
   // 장바구니에 상품 추가
   async addItemToCart(item) {
     try {
-      if (authService.isAuth) {
+      if (authService.isAuth()) {
         const response = await fetch('/api/cart', {
           method: 'POST',
           body: JSON.stringify(item),
@@ -88,9 +88,9 @@ class CartManager {
           throw new Error('장바구니에 상품을 추가하는데 실패했습니다.');
         }
 
-        this.cart = await response.json();
+        this._cart = await response.json();
       } else {
-        const cart = this.cart;
+        const cart = this._cart;
         const existingItem = cart.find(
           (product) => product.productId === item.productId
         );
@@ -101,8 +101,8 @@ class CartManager {
           cart.unshift(item);
         }
 
-        this.cart = cart;
-        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this._cart = cart;
+        localStorage.setItem('cart', JSON.stringify(this._cart));
       }
 
       this.dispatchCartUpdate();
@@ -114,7 +114,7 @@ class CartManager {
   // 장바구니 상품 삭제
   async removeItemFromCart(productId) {
     try {
-      if (authService.isAuth) {
+      if (authService.isAuth()) {
         const response = await fetch(`/api/cart/${productId}`, {
           method: 'DELETE',
         });
@@ -123,10 +123,10 @@ class CartManager {
           throw new Error('장바구니에서 상품을 제거하는데 실패했습니다.');
         }
 
-        this.cart = await response.json();
+        this._cart = await response.json();
       } else {
-        this.cart = this.cart.filter((item) => item.productId !== productId);
-        localStorage.setItem('cart', JSON.stringify(this.cart));
+        this._cart = this._cart.filter((item) => item.productId !== productId);
+        localStorage.setItem('cart', JSON.stringify(this._cart));
       }
 
       this.dispatchCartUpdate();
@@ -138,7 +138,7 @@ class CartManager {
   // 장바구니 수량 변경
   async adjustQuantity(productId, direction) {
     try {
-      if (authService.isAuth) {
+      if (authService.isAuth()) {
         const response = await fetch(`/api/cart/${productId}/${direction}`, {
           method: 'PUT',
         });
@@ -147,16 +147,16 @@ class CartManager {
           throw new Error('요청을 처리하는 도중 문제가 발생했습니다.');
         }
 
-        this.cart = await response.json();
+        this._cart = await response.json();
       } else {
-        const item = this.cart.find((i) => i.productId === productId);
+        const item = this._cart.find((i) => i.productId === productId);
         if (item) {
           if (direction === 'increase') {
             item.quantity++;
           } else if (direction === 'decrease' && item.quantity > 1) {
             item.quantity--;
           }
-          localStorage.setItem('cart', JSON.stringify(this.cart));
+          localStorage.setItem('cart', JSON.stringify(this._cart));
         }
       }
 

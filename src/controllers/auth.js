@@ -5,7 +5,7 @@ import Product from '../models/product';
 import bcrypt from 'bcrypt';
 import { ERROR, SUCCESS } from '../../public/js/utils/constants';
 
-export const getAuth = (req, res) => {
+export const getAuthStatus = (req, res) => {
   try {
     if (req.user) {
       res.json({ isAuth: true, isAdmin: !!req.user.isAdmin });

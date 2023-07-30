@@ -1,4 +1,4 @@
-import authService from '../services/authService.js';
+import authService from '../services/auth-service.js';
 import { ERROR, SUCCESS, TOAST_TYPES, MODAL_MODE } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
 

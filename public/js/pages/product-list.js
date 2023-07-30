@@ -62,7 +62,7 @@ const bindSortMenuEvents = (productItems) => {
   });
 };
 
-const initializeModule = () => {
+const initPage = () => {
   setupHeader();
   renderScrollTopBtn();
 
@@ -75,4 +75,4 @@ const initializeModule = () => {
   bindSortMenuEvents(productItems);
 };
 
-initializeModule();
+initPage();

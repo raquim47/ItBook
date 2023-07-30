@@ -1,5 +1,5 @@
-import authService from '../services/authService.js';
-import cartService from '../services/cartService.js';
+import authService from '../services/auth-service.js';
+import cartService from '../services/cart-service.js';
 import { CUSTOM_EVENT, MODAL_MODE } from '../utils/constants.js';
 import renderModal from './modal.js';
 
@@ -30,7 +30,7 @@ const updateUserMenu = async () => {
         </a>
       </li>
       <li><a href="/mypage">마이페이지</a></li>
-      ${authService.isAdmin ? '<li><a href="/admin">관리자페이지</a></li>' : ''}
+      ${authService.isAdmin() ? '<li><a href="/admin">관리자페이지</a></li>' : ''}
       <li><button id="logoutBtn">로그아웃</button></li>
   `;
   userMenu.innerHTML = menuItems;

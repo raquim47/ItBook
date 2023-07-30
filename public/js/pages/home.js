@@ -103,11 +103,11 @@ const setUpProductSlide = () => {
   });
 };
 
-const initializeModule = () => {
+const initPage = () => {
   setupHeader();
   renderScrollTopBtn();
   setUpMainSlide();
   setUpProductSlide();
 }
 
-initializeModule();
+initPage();

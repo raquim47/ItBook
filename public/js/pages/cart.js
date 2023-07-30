@@ -1,7 +1,7 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import cartService from '../services/cartService.js';
-import productService from '../services/productService.js';
+import cartService from '../services/cart-service.js';
+import productService from '../services/product-service.js';
 import { CUSTOM_EVENT } from '../utils/constants.js';
 
 const DELIVERY_FEE = 3000;
