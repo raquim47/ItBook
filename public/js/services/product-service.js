@@ -1,22 +1,21 @@
+import { ERROR } from "../utils/constants.js";
+
 class ProductService {
   constructor() {}
 
-  async getProductById(productId) {
+  async requestGetProduct(productId) {
     try {
       const response = await fetch(`/api/product/${productId}`);
-
-      if (response.status === 404) {
-        throw new Error('NOT_FOUND');
-      }
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error('REQUEST_ERROR');
+        return data;
       }
 
-      return { data: await response.json() };
+      return { success: true, product: data.product };
     } catch (err) {
       console.error(err);
-      return { error: err.message };
+      return ERROR.REQUEST_FAILED;
     }
   }
 }

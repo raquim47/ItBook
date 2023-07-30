@@ -30,6 +30,11 @@ export const ERROR = {
     message: '이미 등록된 이메일입니다.',
   },
 
+  PRODUCT_NOT_FOUND : {
+    type: 'PRODUCT_NOT_FOUND',
+    message : '등록되지 않은 상품입니다.'
+  },
+
   INTERNAL_ERROR: {
     type: 'LOGIN_FAILED',
     message: '서버 오류가 발생했습니다.',

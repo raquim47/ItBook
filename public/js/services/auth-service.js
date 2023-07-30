@@ -14,23 +14,26 @@ class AuthService {
     return this._isAdmin;
   }
 
-  async fetchAuthStatus() {
+  async requestGetAuthStatus() {
     try {
       const response = await fetch('/api/auth');
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message);
+        return data;
       }
 
       this._isAuth = data.isAuth;
       this._isAdmin = data.isAdmin;
+
+      return { success: true };
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
+      return ERROR.REQUEST_FAILED;
     }
   }
 
-  async requestLogin(requestData) {
+  async requestPostLogin(requestData) {
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -60,7 +63,7 @@ class AuthService {
     }
   }
 
-  async requestJoin(requestData) {
+  async requestPostJoin(requestData) {
     try {
       const response = await fetch('/api/join', {
         method: 'POST',
@@ -69,8 +72,8 @@ class AuthService {
           'Content-Type': 'application/json',
         },
       });
-
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error(error);
       return ERROR.REQUEST_FAILED;

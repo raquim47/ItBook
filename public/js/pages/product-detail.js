@@ -1,7 +1,7 @@
 import setupHeader from '../components/header.js';
 import { TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
-import cartManager from '../services/cart-service.js';
+import cartService from '../services/cart-service.js';
 
 // 총 금액 업데이트
 const updateTotalPrice = (quantity = 1) => {
@@ -43,23 +43,19 @@ const onclickAddCartBtn = async (e) => {
   const productId = pathParts[pathParts.length - 1];
   const quantity = Number(document.getElementById('quantity').textContent);
 
-  try {
-    await cartManager.addItemToCart({productId, quantity});
-
-    const toastMessageContent = `
+  const data = await cartService.requestPostToCart({ productId, quantity });
+  if (!data.success) {
+    renderToastMessage(data.message, TOAST_TYPES.WARNING);
+    return;
+  }
+  const toastMessageContent = `
       <div class="toastMessage__contentLinked">
         <p>장바구니에 상품을 담았습니다.</p>
         <a href="/cart">장바구니로 이동 &gt;</a>
       </div>
     `;
 
-    renderToastMessage(toastMessageContent);
-  } catch (error) {
-    renderToastMessage(
-      '장바구니에 상품을 추가하는데 실패했습니다.',
-      TOAST_TYPES.WARNING
-    );
-  }
+  renderToastMessage(toastMessageContent);
 };
 
 const initPage = () => {

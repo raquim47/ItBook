@@ -25,42 +25,42 @@ const showErrorMessage = (field, message) => {
 
 // 로그인 요청
 const handleRequestLogin = async (requestData) => {
-  const result = await authService.requestLogin(requestData);
+  const data = await authService.requestPostLogin(requestData);
 
-  switch (result.type) {
+  switch (data.type) {
     case SUCCESS.LOGIN.type:
       closeModal();
       setTimeout(() => {
-        renderToastMessage(result.message, TOAST_TYPES.SUCCESS);
+        renderToastMessage(data.message, TOAST_TYPES.SUCCESS);
       }, 250);
       break;
     case ERROR.EMAIL_NOT_FOUND.type:
-      showErrorMessage('email', result.message);
+      showErrorMessage('email', data.message);
       break;
     case ERROR.PASSWORD_INVALID.type:
-      showErrorMessage('password', result.message);
+      showErrorMessage('password', data.message);
       break;
     default:
-      renderToastMessage(result.message, TOAST_TYPES.WARNING);
+      renderToastMessage(data.message, TOAST_TYPES.WARNING);
   }
 };
 
 // 회원 가입 요청
 const handleRequestJoin = async (requestData) => {
-  const result = await authService.requestJoin(requestData);
+  const data = await authService.requestPostJoin(requestData);
 
-  switch (result.type) {
+  switch (data.type) {
     case SUCCESS.JOIN.type:
       closeModal();
       setTimeout(() => {
-        renderToastMessage(result.message, TOAST_TYPES.SUCCESS);
+        renderToastMessage(data.message, TOAST_TYPES.SUCCESS);
       }, 250);
       break;
     case ERROR.EMAIL_DUPLICATE.type:
-      showErrorMessage('email', result.message);
+      showErrorMessage('email', data.message);
       break;
     default:
-      renderToastMessage(result.message, TOAST_TYPES.WARNING);
+      renderToastMessage(data.message, TOAST_TYPES.WARNING);
   }
 };
 

@@ -15,11 +15,11 @@
           <div class="cart__sections">
             <!-- 장바구니 상품  -->
             <section class="cart__content">
-              <div class="cart__all-check">
-                <input type="checkbox" id="allCheck" class="cart-checkbox" checked />
-                <p>상품 목록 <span id="check-status">(2/2)</span></p>
-              </div>
               <form id="cartForm">
+                <div class="cart__all-check">
+                  <input type="checkbox" id="allCheck" class="cart-checkbox" checked />
+                  <p>상품 목록 <span id="selectStatus" aria-label="선택된 상품"></span></p>
+                </div>
                 <!-- 장바구니 상품 리스트 - (비로그인)로컬스토래지 & (로그인)DB-->
                 <ul
                   class="cart__list"
@@ -41,7 +41,7 @@
                 </div>
                 <div class="cart-amount__row">
                   <p class="cart-amount-desc">
-                    30,000원 이상 구매시 배송비 무료
+                    50,000원 이상 구매시 배송비 무료
                   </p>
                 </div>
               </div>

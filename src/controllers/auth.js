@@ -8,7 +8,7 @@ import { ERROR, SUCCESS } from '../../public/js/utils/constants';
 export const getAuthStatus = (req, res) => {
   try {
     if (req.user) {
-      res.json({ isAuth: true, isAdmin: !!req.user.isAdmin });
+      res.json({ isAuth: true, isAdmin: req.user.isAdmin });
     } else {
       res.json({ isAuth: false, isAdmin: false });
     }
@@ -34,7 +34,7 @@ export const postLogin = async (req, res) => {
     }
 
     setUserToken(res, user);
-    return res.status(200).json({
+    return res.json({
       ...SUCCESS.LOGIN,
       isAuth: true,
       isAdmin: user.isAdmin,
@@ -69,11 +69,16 @@ export const postJoin = async (req, res) => {
 };
 
 export const getCart = async (req, res) => {
-  const user = await User.findById(req.user._id);
-  res.json(user.cart.items);
+  try {
+    const user = await User.findById(req.user._id);
+    res.json({ cart: user.cart.items });
+  } catch (error) {
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
+  }
 };
 
-export const mergeCarts = async (req, res) => {
+export const postMergeCarts = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const localCartItems = req.body;
@@ -89,16 +94,14 @@ export const mergeCarts = async (req, res) => {
     }
 
     await user.save();
-    res.status(200).json(user.cart.items); // 합쳐진 cart 데이터 반환
+    res.json({ cart: user.cart.items });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: '요청을 처리하는 도중 문제가 발생했습니다.' });
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
   }
 };
 
-export const addToCart = async (req, res) => {
+export const postToCart = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const { productId, quantity } = req.body;
@@ -123,32 +126,14 @@ export const addToCart = async (req, res) => {
     };
 
     await user.save();
-    res.json(user.cart.items);
+    res.json({ cart: user.cart.items });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: '상품을 장바구니에 추가하는데 실패했습니다.' });
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
   }
 };
 
-export const getProduct = async (req, res) => {
-  const productId = req.params.productId;
-  try {
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.send(product);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-export const removeItem = async (req, res) => {
+export const deleteFromCart = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const { productId } = req.params;
@@ -158,19 +143,20 @@ export const removeItem = async (req, res) => {
     );
 
     if (cartItemIndex === -1) {
-      return res.status(400).json({ message: '상품을 찾을 수 없습니다' });
+      return res.status(400).json(ERROR.PRODUCT_NOT_FOUND);
     }
 
     user.cart.items.splice(cartItemIndex, 1);
     await user.save();
 
-    res.json(user.cart.items);
+    res.json({cart: user.cart.items});
   } catch (error) {
-    res.status(500).json({ message: '서버 오류' });
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
   }
 };
 
-export const adjustQuantity = async (req, res) => {
+export const putCartItemQuantity = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const { productId, direction } = req.params;
@@ -179,7 +165,7 @@ export const adjustQuantity = async (req, res) => {
       (item) => item.productId == productId
     );
     if (!cartItem) {
-      return res.status(400).json({ message: '장바구니 정보를 찾을 수 없음' });
+      return res.status(400).json(ERROR.PRODUCT_NOT_FOUND);
     }
 
     let adjustment = direction === 'increase' ? 1 : -1;
@@ -187,8 +173,25 @@ export const adjustQuantity = async (req, res) => {
     cartItem.quantity += adjustment;
     await user.save();
 
-    res.json(user.cart.items);
+    res.json({ cart : user.cart.items});
   } catch (error) {
-    res.status(500).json({ message: '서버 오류' });
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
+  }
+};
+
+export const getProduct = async (req, res) => {
+  const productId = req.params.productId;
+  try {
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json(ERROR.PRODUCT_NOT_FOUND);
+    }
+
+    res.json({ product });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(ERROR.INTERNAL_ERROR);
   }
 };

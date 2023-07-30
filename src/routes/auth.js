@@ -4,11 +4,11 @@ import {
   postLogin,
   postJoin,
   getCart,
-  addToCart,
-  mergeCarts,
+  postToCart,
+  postMergeCarts,
   getProduct,
-  removeItem,
-  adjustQuantity
+  deleteFromCart,
+  putCartItemQuantity
 } from '../controllers/auth';
 
 const router = Router();
@@ -21,14 +21,14 @@ router.post('/api/join', postJoin);
 
 router.get('/api/cart', getCart);
 
-router.post('/api/cart', addToCart);
+router.post('/api/cart', postToCart);
 
-router.post('/api/cart/merge', mergeCarts);
+router.post('/api/cart/merge', postMergeCarts);
 
 router.get('/api/product/:productId', getProduct);
 
-router.delete('/api/cart/:productId', removeItem);
+router.delete('/api/cart/:productId', deleteFromCart);
 
-router.put('/api/cart/:productId/:direction', adjustQuantity);
+router.put('/api/cart/:productId/:direction', putCartItemQuantity);
 
 export default router;
