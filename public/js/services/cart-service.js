@@ -1,12 +1,10 @@
 import authService from './auth-service.js';
-import { CUSTOM_EVENT, ERROR } from '../utils/constants.js';
+import { CUSTOM_EVENT, ERROR, LOCAL_STORAGE_KEYS } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
 
 class CartService {
   constructor() {
     this._cart = [];
-    this.initCart();
-    this.bindLoginSuccessEvent();
   }
 
   get cart() {
@@ -14,14 +12,7 @@ class CartService {
   }
 
   // 장바구니 초기화
-  async initCart() {
-    const authData = await authService.requestGetAuthStatus();
-
-    if (!authData.success) {
-      renderToastMessage(authData.message, TOAST_TYPES.WANING);
-      return;
-    }
-
+  async initializeCart() {
     const cartData = await this.requestGetCart();
 
     if (!cartData.success) {
@@ -84,7 +75,10 @@ class CartService {
         }
 
         this._cart = cart;
-        localStorage.setItem('cart', JSON.stringify(this._cart));
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.CART_ITEMS,
+          JSON.stringify(this._cart)
+        );
       }
 
       this.dispatchCartUpdate();
@@ -111,7 +105,10 @@ class CartService {
         this._cart = data.cart;
       } else {
         this._cart = this._cart.filter((item) => item.productId !== productId);
-        localStorage.setItem('cart', JSON.stringify(this._cart));
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.CART_ITEMS,
+          JSON.stringify(this._cart)
+        );
       }
 
       this.dispatchCartUpdate();
@@ -130,11 +127,11 @@ class CartService {
           method: 'PUT',
         });
         const data = await response.json();
-  
+
         if (!response.ok) {
           return data;
         }
-  
+
         this._cart = data.cart;
       } else {
         const item = this._cart.find((i) => i.productId === productId);
@@ -144,26 +141,19 @@ class CartService {
           } else if (direction === 'decrease') {
             item.quantity--;
           }
-          localStorage.setItem('cart', JSON.stringify(this._cart));
+          localStorage.setItem(
+            LOCAL_STORAGE_KEYS.CART_ITEMS,
+            JSON.stringify(this._cart)
+          );
         }
       }
-  
+
       this.dispatchCartUpdate();
       return { success: true };
     } catch (error) {
       console.error(error);
       return ERROR.REQUEST_FAILED;
     }
-  }
-
-  // 로그인 이벤트 바인딩 - merge
-  async bindLoginSuccessEvent() {
-    document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, async () => {
-      const data = await this.requestPostMergeCarts();
-      if (!data.success) {
-        renderToastMessage(data.message, TOAST_TYPES.WANING);
-      }
-    });
   }
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기

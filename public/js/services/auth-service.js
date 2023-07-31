@@ -1,3 +1,4 @@
+import renderToastMessage from '../components/toast-message.js';
 import { ERROR, CUSTOM_EVENT } from '../utils/constants.js';
 
 class AuthService {
@@ -12,6 +13,14 @@ class AuthService {
 
   get isAdmin() {
     return this._isAdmin;
+  }
+
+  async initializeAuth() {
+    const authData = await this.requestGetAuthStatus();
+
+    if (!authData.success) {
+      renderToastMessage(authData.message, TOAST_TYPES.WANING);
+    }
   }
 
   async requestGetAuthStatus() {

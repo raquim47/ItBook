@@ -15,6 +15,11 @@ export const SUCCESS = {
 };
 
 export const ERROR = {
+  AUTH_REQUIRED: {
+    type: 'AUTH_REQUIRED',
+    message: '로그인이 필요합니다',
+  },
+
   PASSWORD_INVALID: {
     type: 'PASSWORD_INVALID',
     message: '비밀번호가 올바르지 않습니다.',
@@ -55,3 +60,13 @@ export const CUSTOM_EVENT = {
   LOGIN_SUCCESS : 'LOGIN_SUCCESS',
   CART_UPDATED : 'CART_UPDATED'
 }
+
+export const DELIVERY = {
+  FEE: 3000,
+  FREE_THRESHOLD: 50000,
+};
+
+export const LOCAL_STORAGE_KEYS = {
+  ORDER_ITEMS: 'orderItems',
+  CART_ITEMS: 'cartItems',
+};

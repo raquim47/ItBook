@@ -14,7 +14,7 @@ const logoutAndRedirect = () => {
 // 카트 수량 배지 업데이트
 const updateCartbadge = async () => {
   const cart = cartService.cart;
-  
+
   const cartBadge = document.getElementById('cartBadge');
   cartBadge.textContent = cart.length > 0 ? cart.length : '';
   cartBadge.classList.toggle('visible', cart.length > 0);
@@ -48,20 +48,22 @@ const toggleShadowOnScroll = (target) => {
 
 const setupHeader = () => {
   const header = document.getElementById('header');
-
   const loginBtn = header.querySelector('#loginBtn');
   const joinBtn = header.querySelector('#joinBtn');
   const logoutBtn = header.querySelector('#logoutBtn');
-  
-  if (loginBtn) loginBtn.addEventListener('click', () => renderModal(MODAL_MODE.LOGIN));
-  if (joinBtn) joinBtn.addEventListener('click', () => renderModal(MODAL_MODE.JOIN));
+
+  if (loginBtn)
+    loginBtn.addEventListener('click', () => renderModal(MODAL_MODE.LOGIN));
+  if (joinBtn)
+    joinBtn.addEventListener('click', () => renderModal(MODAL_MODE.JOIN));
   if (logoutBtn) logoutBtn.addEventListener('click', logoutAndRedirect);
 
   window.addEventListener('scroll', () => toggleShadowOnScroll(header));
   
-  document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, updateUserMenu)
-  document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, updateCartbadge)
-  document.addEventListener(CUSTOM_EVENT.CART_UPDATED, updateCartbadge)
+  updateCartbadge();
+  
+  document.addEventListener(CUSTOM_EVENT.LOGIN_SUCCESS, updateUserMenu);
+  document.addEventListener(CUSTOM_EVENT.CART_UPDATED, updateCartbadge);
 };
 
 export default setupHeader;

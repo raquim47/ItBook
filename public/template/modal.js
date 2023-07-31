@@ -1,8 +1,8 @@
 // 모달창
 const showModal = (mode) => {
-  const loginModalContent = document.querySelector("#loginModalContent");
-  const joinModalContent = document.querySelector("#joinModalContent");
-  const bg = document.querySelector(".modal-bg");
+  const loginModalContent = document.querySelector('#loginModalContent');
+  const joinModalContent = document.querySelector('#joinModalContent');
+  const bg = document.querySelector('.modal-bg');
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // 유효성 검사 오류 메시지 추가
@@ -11,9 +11,9 @@ const showModal = (mode) => {
     if (errorMessage) {
       errorMessage.remove();
     }
-    field.closest(".input-box").classList.add("error");
+    field.closest('.input-box').classList.add('error');
     field.insertAdjacentHTML(
-      "afterend",
+      'afterend',
       `<p class="text-valid show">${message}</p>`
     );
   };
@@ -23,93 +23,100 @@ const showModal = (mode) => {
     if (errorMessage) {
       errorMessage.remove();
     }
-    field.closest(".input-box").classList.remove("error");
+    field.closest('.input-box').classList.remove('error');
   };
 
-  if (mode === "login") {
-    bg.classList.add("show");
-    loginModalContent.classList.add("show");
+  if (mode === 'login') {
+    bg.classList.add('show');
+    loginModalContent.classList.add('show');
 
-    const loginEmail = document.querySelector("#loginEmail");
-    const loginPassword = document.querySelector("#loginPassword");
-    const loginForm = document.querySelector("#loginForm");
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const loginEmail = document.querySelector('#loginEmail');
+    const loginPassword = document.querySelector('#loginPassword');
+    const loginForm = document.querySelector('#loginForm');
+    loginForm.addEventListener(
+      'submit',
+      async (e) => {
+        e.preventDefault();
 
-      // 유효성 검사
-      if (!emailRegex.test(loginEmail.value) || !loginPassword.value) {
-        if (!emailRegex.test(loginEmail.value)) {
-          loginEmail.closest(".input-box").classList.add("error");
-          addErrorMessage(
-            loginEmail,
-            "유효한 이메일을 입력해주세요. (예: user@itbook.com)"
-          );
-        } else {
-          removeErrorMessage(loginEmail);
-        }
-
-        if (!loginPassword.value) {
-          loginPassword.closest(".input-box").classList.add("error");
-          addErrorMessage(loginPassword, "비밀번호을 입력해주세요.");
-        } else {
-          removeErrorMessage(loginPassword);
-        }
-
-        return false;
-      }
-
-      //fetch
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: loginEmail.value,
-          password: loginPassword.value,
-        }),
-      });
-
-      if (response.ok) {
-        alert("로그인 성공");
-        // 로그인 후 장바구니 데이터 병합
-        const localCarts = JSON.parse(localStorage.getItem("carts"));
-        if (localCarts && localCarts.length > 0) {
-          localStorage.setItem("carts", JSON.stringify([]));
-          try {
-            const response = await fetch("/api/user/cart/merge", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(localCarts),
-            });
-
-            if (!response.ok) {
-              throw new Error("서버 응답 오류");
-            }
-
-            const result = await response.json();
-          } catch (error) {
-            console.error("요청을 실패했습니다", error);
+        // 유효성 검사
+        if (!emailRegex.test(loginEmail.value) || !loginPassword.value) {
+          if (!emailRegex.test(loginEmail.value)) {
+            loginEmail.closest('.input-box').classList.add('error');
+            addErrorMessage(
+              loginEmail,
+              '유효한 이메일을 입력해주세요. (예: user@itbook.com)'
+            );
+          } else {
+            removeErrorMessage(loginEmail);
           }
+
+          if (!loginPassword.value) {
+            loginPassword.closest('.input-box').classList.add('error');
+            addErrorMessage(loginPassword, '비밀번호을 입력해주세요.');
+          } else {
+            removeErrorMessage(loginPassword);
+          }
+
+          return false;
         }
-        window.location.reload();
-      } else {
-        alert(`로그인 실패`);
-      }
-    }, { once: true});
-  } else if (mode === "join") {
-    bg.classList.add("show");
-    joinModalContent.classList.add("show");
 
-    const joinUserName = document.querySelector("#joinUserName");
-    const joinEmail = document.querySelector("#joinEmail");
-    const joinPassword = document.querySelector("#joinPassword");
-    const passwordCheck = document.querySelector("#passwordCheck");
-    const joinForm = document.querySelector("#joinForm");
+        //fetch
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: loginEmail.value,
+            password: loginPassword.value,
+          }),
+        });
 
-    joinForm.addEventListener("submit", async (e) => {
+        if (response.ok) {
+          alert('로그인 성공');
+          // 로그인 후 장바구니 데이터 병합
+          const localCarts = JSON.parse(localStorage.getItem('carts'));
+          if (localCarts && localCarts.length > 0) {
+            localStorage.setItem(
+              LOCAL_STORAGE_KEYS.CART_ITEMS,
+              JSON.stringify([])
+            );
+            try {
+              const response = await fetch('/api/user/cart/merge', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(localCarts),
+              });
+
+              if (!response.ok) {
+                throw new Error('서버 응답 오류');
+              }
+
+              const result = await response.json();
+            } catch (error) {
+              console.error('요청을 실패했습니다', error);
+            }
+          }
+          window.location.reload();
+        } else {
+          alert(`로그인 실패`);
+        }
+      },
+      { once: true }
+    );
+  } else if (mode === 'join') {
+    bg.classList.add('show');
+    joinModalContent.classList.add('show');
+
+    const joinUserName = document.querySelector('#joinUserName');
+    const joinEmail = document.querySelector('#joinEmail');
+    const joinPassword = document.querySelector('#joinPassword');
+    const passwordCheck = document.querySelector('#passwordCheck');
+    const joinForm = document.querySelector('#joinForm');
+
+    joinForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       // 유효성 검사
@@ -120,34 +127,34 @@ const showModal = (mode) => {
         joinPassword.value !== passwordCheck.value
       ) {
         if (!joinUserName.value) {
-          joinUserName.closest(".input-box").classList.add("error");
-          addErrorMessage(joinUserName, "이름을 입력해주세요.");
+          joinUserName.closest('.input-box').classList.add('error');
+          addErrorMessage(joinUserName, '이름을 입력해주세요.');
         } else {
           removeErrorMessage(joinUserName);
         }
 
         if (!emailRegex.test(joinEmail.value)) {
-          joinEmail.closest(".input-box").classList.add("error");
+          joinEmail.closest('.input-box').classList.add('error');
           addErrorMessage(
             joinEmail,
-            "유효한 이메일을 입력해주세요. (예: user@itbook.com)"
+            '유효한 이메일을 입력해주세요. (예: user@itbook.com)'
           );
         } else {
           removeErrorMessage(joinEmail);
         }
 
         if (joinPassword.value !== passwordCheck.value) {
-          joinPassword.closest(".input-box").classList.add("error");
-          passwordCheck.closest(".input-box").classList.add("error");
-          addErrorMessage(passwordCheck, "비밀번호가 맞지 않습니다.");
+          joinPassword.closest('.input-box').classList.add('error');
+          passwordCheck.closest('.input-box').classList.add('error');
+          addErrorMessage(passwordCheck, '비밀번호가 맞지 않습니다.');
         } else {
           removeErrorMessage(joinPassword);
           removeErrorMessage(passwordCheck);
         }
 
         if (!joinPassword.value) {
-          joinPassword.closest(".input-box").classList.add("error");
-          addErrorMessage(joinPassword, "비밀번호을 입력해주세요.");
+          joinPassword.closest('.input-box').classList.add('error');
+          addErrorMessage(joinPassword, '비밀번호을 입력해주세요.');
         } else {
           removeErrorMessage(joinPassword);
         }
@@ -155,10 +162,10 @@ const showModal = (mode) => {
       }
 
       //fetch
-      const response = await fetch("/api/join", {
-        method: "POST",
+      const response = await fetch('/api/join', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: joinUserName.value,
@@ -168,86 +175,86 @@ const showModal = (mode) => {
       });
 
       if (response.ok) {
-        alert("회원가입 성공");
+        alert('회원가입 성공');
         // 회원가입 성공 시 메인페이지로 이동
-        window.location.href = "/";
+        window.location.href = '/';
       } else {
         const errorText = await response.json();
         alert(errorText);
       }
     });
   }
-  const inputs = document.querySelectorAll("input");
+  const inputs = document.querySelectorAll('input');
   inputs.forEach((input) => {
-    input.addEventListener("input", function () {
-      this.closest(".input-box").classList.remove("error");
+    input.addEventListener('input', function () {
+      this.closest('.input-box').classList.remove('error');
       removeErrorMessage(input);
     });
   });
 
   // 인풋창 포커스in-out
-  const inputBoxes = document.querySelectorAll(".input-box");
+  const inputBoxes = document.querySelectorAll('.input-box');
   const inputBoxFocusIn = (e) => {
-    e.currentTarget.classList.add("focus");
+    e.currentTarget.classList.add('focus');
     if (e.target.value) {
-      e.currentTarget.classList.remove("active");
+      e.currentTarget.classList.remove('active');
     }
   };
   const inputFocusIn = (e) => {
     e.stopPropagation();
   };
   const inputBoxFocusOut = (e) => {
-    e.currentTarget.classList.remove("focus");
+    e.currentTarget.classList.remove('focus');
     if (e.target.value) {
-      e.currentTarget.classList.add("active");
+      e.currentTarget.classList.add('active');
     }
   };
   const inputFocusOut = (e) => {
     e.stopPropagation();
   };
   inputBoxes.forEach((inputBox) => {
-    inputBox.addEventListener("focusin", inputBoxFocusIn, { capture: true });
-    inputBox.addEventListener("focusout", inputBoxFocusOut, {
+    inputBox.addEventListener('focusin', inputBoxFocusIn, { capture: true });
+    inputBox.addEventListener('focusout', inputBoxFocusOut, {
       capture: true,
     });
   });
   inputs.forEach((input) => {
-    input.addEventListener("focusin", inputFocusIn);
-    input.addEventListener("focusout", inputFocusOut);
+    input.addEventListener('focusin', inputFocusIn);
+    input.addEventListener('focusout', inputFocusOut);
   });
 
   // 닫기
-  const closeBtn = document.querySelectorAll(".btn-close");
+  const closeBtn = document.querySelectorAll('.btn-close');
   const modalClose = () => {
-    bg.classList.remove("show");
-    loginModalContent.classList.remove("show");
-    joinModalContent.classList.remove("show");
+    bg.classList.remove('show');
+    loginModalContent.classList.remove('show');
+    joinModalContent.classList.remove('show');
 
     // 인풋값 비우기
     inputs.forEach((input) => {
-      input.value = "";
+      input.value = '';
     });
 
     // 에러 메시지 요소 제거
-    const errorMessages = document.querySelectorAll(".text-valid");
+    const errorMessages = document.querySelectorAll('.text-valid');
     errorMessages.forEach((errorMessage) => {
       errorMessage.remove();
     });
 
     // inputbox 클래스 제거
     inputBoxes.forEach((inputBox) => {
-      inputBox.classList.remove("error", "active");
+      inputBox.classList.remove('error', 'active');
     });
   };
 
   closeBtn.forEach((btn) => {
-    btn.addEventListener("click", modalClose);
+    btn.addEventListener('click', modalClose);
   });
-  document.querySelector(".modal-bg").addEventListener("click", modalClose);
+  document.querySelector('.modal-bg').addEventListener('click', modalClose);
 };
 
 const modal = async () => {
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   document.body.prepend(div);
   const loginModalContent = `
     <div class="modal fade" id="loginModalContent">
@@ -316,13 +323,13 @@ const modal = async () => {
 </div>
       `;
 
-  const modalBg = document.createElement("div");
-  modalBg.classList.add("modal-bg", "fade");
+  const modalBg = document.createElement('div');
+  modalBg.classList.add('modal-bg', 'fade');
   div.append(modalBg);
 
   document.body.prepend(div);
-  div.insertAdjacentHTML("afterbegin", joinModalContent);
-  div.insertAdjacentHTML("afterbegin", loginModalContent);
+  div.insertAdjacentHTML('afterbegin', joinModalContent);
+  div.insertAdjacentHTML('afterbegin', loginModalContent);
 };
 
 export { modal, showModal };

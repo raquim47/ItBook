@@ -1,3 +1,5 @@
+import authService from '../services/auth-service.js';
+import cartService from '../services/cart-service.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import setupHeader from '../components/header.js';
 
@@ -62,7 +64,10 @@ const bindSortMenuEvents = (productItems) => {
   });
 };
 
-const initPage = () => {
+const initPage = async () => {
+  await authService.initializeAuth();
+  await cartService.initializeCart();
+
   setupHeader();
   renderScrollTopBtn();
 

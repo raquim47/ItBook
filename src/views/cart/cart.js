@@ -1,3 +1,5 @@
+import { LOCAL_STORAGE_KEYS } from '../../../public/js/utils/constants';
+
 // 체크박스 전체 선택
 const checkBoxOnOff = (books) => {
   const allCheckBox = document.querySelector('#allCheck');
@@ -114,7 +116,8 @@ const paymentResult = (total) => {
   const totalPrice = document.querySelector('.total-price');
   const orderBtn = document.querySelector('.btn-order');
   const delivery = document.querySelector('.delivery');
-  const addCommas = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const addCommas = (number) =>
+    number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   if (total == 0) {
     orderBtn.innerHTML = `주문하기`;
@@ -136,7 +139,8 @@ const paymentResult = (total) => {
 
 // html 템플릿
 const itemTemplate = (book) => {
-  const addCommas = (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const addCommas = (number) =>
+    number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return `
   <input type="checkbox" class="selectCheck" data-id="${
     book._id
@@ -217,7 +221,7 @@ window.addEventListener('load', async () => {
           throw new Error(`DB에 해당 상품이 없습니다. id: ${book.id}`);
         }
         const bookData = await response.json();
-        
+
         totalPrice += parseInt(bookData.price) * book.quantity;
         bookData.quantity = book.quantity;
         li.innerHTML = itemTemplate(bookData);
@@ -263,7 +267,10 @@ orderBtn.addEventListener('click', () => {
       quantity: checkbox.dataset.quantity,
     }));
     // localStorage에 저장
-    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    localStorage.setItem(
+      LOCAL_STORAGE_KEYS.ORDER_ITEMS,
+      JSON.stringify(selectedItems)
+    );
     // 주문 페이지로 이동
     window.location.href = '/order';
   }

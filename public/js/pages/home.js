@@ -1,4 +1,6 @@
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
+import authService from '../services/auth-service.js';
+import cartService from '../services/cart-service.js';
 import setupHeader from '../components/header.js';
 
 // 메인 슬라이드 - 슬라이드 이동
@@ -103,7 +105,10 @@ const setUpProductSlide = () => {
   });
 };
 
-const initPage = () => {
+const initPage = async () => {
+  await authService.initializeAuth();
+  await cartService.initializeCart();
+
   setupHeader();
   renderScrollTopBtn();
   setUpMainSlide();

@@ -1,28 +1,38 @@
+import authService from '../services/auth-service.js';
+import cartService from '../services/cart-service.js';
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import renderToastMessage from '../components/toast-message.js';
-import cartService from '../services/cart-service.js';
 import productService from '../services/product-service.js';
-import { CUSTOM_EVENT, TOAST_TYPES } from '../utils/constants.js';
-
-const DELIVERY_FEE = 3000;
-const FREE_DELIVERY_THRESHOLD = 30000;
+import {
+  CUSTOM_EVENT,
+  TOAST_TYPES,
+  DELIVERY,
+  ERROR,
+  LOCAL_STORAGE_KEYS,
+} from '../utils/constants.js';
 
 let savedCheckedProductIds = [];
 let isInitialRender = true;
 
+// 체크 박스 상태 저장
 const saveCheckedState = () => {
-  const checkedItems = document.querySelectorAll('.cart-checkbox:checked:not(#allCheck)');
-  return Array.from(checkedItems).map(checkbox => checkbox.closest('.cart-item').dataset.productId);
+  const checkedItems = document.querySelectorAll(
+    '.cart-checkbox:checked:not(#allCheck)'
+  );
+  return Array.from(checkedItems).map(
+    (checkbox) => checkbox.closest('.cart-item').dataset.productId
+  );
 };
 
+// renderCartList 이후 체크 박스 재설정
 const restoreCheckedState = (productIds) => {
   const allCartItems = document.querySelectorAll('.cart-item');
 
-  allCartItems.forEach(cartItem => {
+  allCartItems.forEach((cartItem) => {
     const productId = cartItem.dataset.productId;
     const checkBox = cartItem.querySelector('.cart-checkbox');
-    
+
     if (productIds.includes(productId)) {
       checkBox.checked = true;
     } else {
@@ -49,12 +59,12 @@ const createCartItemHTML = (item) => {
       <div class="cart-item__option">
         <div class="count-control">
           <button type="button" class="count-control__btn" data-direction="decrease">-</button>
-          <input class="count-control__status" readonly value="${
+          <input class="count-control__status" id="itemQuantity" readonly value="${
             item.quantity
           }" />
           <button type="button" class="count-control__btn"  data-direction="increase">+</button>
         </div>
-        <strong class="cart-item__price">${(
+        <strong class="cart-item__price" id="itemPrice">${(
           item.price * item.quantity
         ).toLocaleString()} 원</strong>
       </div>
@@ -80,6 +90,7 @@ const renderCartItem = async (item) => {
   return createCartItemHTML(cartItem);
 };
 
+// 장바구니 리스트 렌더링 (초기 & 데이터가 업데이트 될 때 마다)
 const renderCartList = async () => {
   const cartList = document.getElementById('cartList');
   const cartData = cartService.cart;
@@ -88,7 +99,7 @@ const renderCartList = async () => {
 
   cartList.innerHTML = cartItemsHTMLArray.join('');
 
-  if(isInitialRender){
+  if (isInitialRender) {
     isInitialRender = false;
     return;
   }
@@ -96,6 +107,7 @@ const renderCartList = async () => {
   restoreCheckedState(savedCheckedProductIds);
 };
 
+// 수량 변경/품목 삭제
 const onClickCartForm = async (e) => {
   const target = e.target;
   if (target.classList.contains('count-control__btn')) {
@@ -134,28 +146,37 @@ const onClickCartForm = async (e) => {
 
 // 주문 금액 계산
 const renderTotalPrice = () => {
-  const checkedItems = document.querySelectorAll('.cart-checkbox:checked:not(#allCheck)');
-  
+  const checkedItems = document.querySelectorAll(
+    '.cart-checkbox:checked:not(#allCheck)'
+  );
+
   let totalPrice = 0;
 
-  checkedItems.forEach(checkbox => {
+  checkedItems.forEach((checkbox) => {
     const cartItem = checkbox.closest('.cart-item');
-    const quantity = Number(cartItem.querySelector('.count-control__status').value);
-    const itemPrice = Number(cartItem.querySelector('.cart-item__price').textContent.replace(/[,\s원]/g, '')) / quantity;
+    const quantity = Number(cartItem.querySelector('#itemQuantity').value);
+    const itemPrice =
+      Number(
+        cartItem.querySelector('#itemPrice').textContent.replace(/[,\s원]/g, '')
+      ) / quantity;
     totalPrice += itemPrice * quantity;
   });
 
-  const deliveryCharge = totalPrice === 0 ? 0 : (totalPrice >= 50000 ? 0 : 3000);
-  
-  const totalAmountElem = document.querySelector('.cart-total-price p');
-  const productAmountElem = document.querySelector('.cart-amount strong');
-  const deliveryAmountElem = document.querySelector('.cart-amount__row:nth-child(2) strong');
+  const { FEE, FREE_THRESHOLD } = DELIVERY;
+  const deliveryCharge =
+    totalPrice === 0 ? 0 : totalPrice >= FREE_THRESHOLD ? 0 : FEE;
+  const productAmountEl = document.getElementById('productAmount');
+  const deliveryFeeEl = document.getElementById('deliveryFee');
+  const totalAmountEl = document.getElementById('totalPrice');
 
-  productAmountElem.textContent = `${totalPrice.toLocaleString()}원`;
-  deliveryAmountElem.textContent = `+${deliveryCharge.toLocaleString()}원`;
-  totalAmountElem.textContent = `${(totalPrice + deliveryCharge).toLocaleString()}원`;
+  productAmountEl.textContent = `${totalPrice.toLocaleString()}원`;
+  deliveryFeeEl.textContent = `+${deliveryCharge.toLocaleString()}원`;
+  totalAmountEl.textContent = `${(
+    totalPrice + deliveryCharge
+  ).toLocaleString()}원`;
 };
 
+// 선택한 품목 갯수 표시
 const renderSelectStatus = () => {
   const checkBoxes = document.querySelectorAll('.cart-checkbox:not(#allCheck)');
   const checkedBoxes = document.querySelectorAll(
@@ -165,6 +186,7 @@ const renderSelectStatus = () => {
   selectStatus.textContent = `${checkedBoxes.length}/${checkBoxes.length}`;
 };
 
+// 체크박스 이벤트
 const onChangeCheckBox = (e) => {
   const target = e.target;
 
@@ -188,9 +210,45 @@ const onChangeCheckBox = (e) => {
   renderTotalPrice();
 };
 
+// 주문시 선택한 상품 배열로 가져오기
+const getSelectedItems = () => {
+  const selectedItems = [];
+  const checkedBoxes = document.querySelectorAll(
+    '.cart-checkbox:checked:not(#allCheck)'
+  );
 
+  checkedBoxes.forEach((checkbox) => {
+    const cartItem = checkbox.closest('.cart-item');
+    const productId = cartItem.dataset.productId;
+    const quantity = cartItem.querySelector('.count-control__status').value;
 
-const initPage = () => {
+    selectedItems.push({ productId, quantity });
+  });
+
+  return selectedItems;
+};
+
+// 주문하기
+const onSubmitOrder = (e) => {
+  e.preventDefault();
+  if (!authService.isAuth) {
+    renderToastMessage(ERROR.AUTH_REQUIRED.message, TOAST_TYPES.WARNING);
+    return;
+  }
+  const itemsToOrder = getSelectedItems();
+  // localStorage에 저장
+  localStorage.setItem(
+    LOCAL_STORAGE_KEYS.ORDER_ITEMS,
+    JSON.stringify(itemsToOrder)
+  );
+  // 주문 페이지로 이동
+  window.location.href = '/order';
+};
+
+const initPage = async () => {
+  await authService.initializeAuth();
+  await cartService.initializeCart();
+
   setupHeader();
   renderScrollTopBtn();
 
@@ -198,11 +256,18 @@ const initPage = () => {
   cartForm.addEventListener('click', onClickCartForm);
   cartForm.addEventListener('change', onChangeCheckBox);
 
+  await renderCartList();
+  renderSelectStatus();
+  renderTotalPrice();
+
   document.addEventListener(CUSTOM_EVENT.CART_UPDATED, async () => {
     await renderCartList();
     renderSelectStatus();
     renderTotalPrice();
   });
+
+  const orderBtn = document.getElementById('orderBtn');
+  orderBtn.addEventListener('click', onSubmitOrder);
 };
 
 initPage();

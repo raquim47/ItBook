@@ -25,14 +25,17 @@ const showErrorMessage = (field, message) => {
 
 // 로그인 요청
 const handleRequestLogin = async (requestData) => {
-  const data = await authService.requestPostLogin(requestData);
+  const authData = await authService.requestPostLogin(requestData);
 
-  switch (data.type) {
+  switch (authData.type) {
     case SUCCESS.LOGIN.type:
       closeModal();
-      setTimeout(() => {
-        renderToastMessage(data.message, TOAST_TYPES.SUCCESS);
-      }, 250);
+      setTimeout(() => renderToastMessage(data.message), 250);
+
+      const cartData = await this.requestPostMergeCarts();
+      if (!cartData.success) {
+        renderToastMessage(data.message, TOAST_TYPES.WARNING);
+      }
       break;
     case ERROR.EMAIL_NOT_FOUND.type:
       showErrorMessage('email', data.message);
@@ -64,20 +67,20 @@ const handleRequestJoin = async (requestData) => {
   }
 };
 
-
 const validationRules = {
   email: {
-    test: value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value),
+    test: (value) =>
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value),
     message: '유효한 이메일(영문, 숫자)을 입력해주세요.',
     required: '이메일을 입력해주세요.',
   },
   password: {
-    test: value => value.length >= 6,
+    test: (value) => value.length >= 6,
     message: '비밀번호는 6자 이상이어야 합니다.',
     required: '비밀번호를 입력해주세요.',
   },
   username: {
-    test: value => /^[\uAC00-\uD7A3]+$/.test(value),
+    test: (value) => /^[\uAC00-\uD7A3]+$/.test(value),
     message: '한글로 이름을 입력해주세요.',
     required: '이름을 입력해주세요.',
   },
@@ -90,11 +93,13 @@ const validationRules = {
 
 // 클라이언트 사이드 폼 유효성 검사
 const validateForm = (isJoinMode, data) => {
-  const fieldsToValidate = isJoinMode ? ['email', 'password', 'username', 'passwordConfirm'] : ['email', 'password'];
+  const fieldsToValidate = isJoinMode
+    ? ['email', 'password', 'username', 'passwordConfirm']
+    : ['email', 'password'];
   const errors = {};
 
   for (const field of fieldsToValidate) {
-    const value = data[field] || "";
+    const value = data[field] || '';
     const rule = validationRules[field];
 
     if (!value.trim()) {
@@ -124,7 +129,6 @@ const onSubmitForm = async (e, isJoinMode) => {
   const parsedFormData = Object.fromEntries(formData);
 
   if (!validateForm(isJoinMode, parsedFormData)) return;
-
 
   if (isJoinMode) {
     await handleRequestJoin(parsedFormData);
