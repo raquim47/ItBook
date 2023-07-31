@@ -1,6 +1,7 @@
 import authService from './auth-service.js';
 import { CUSTOM_EVENT, ERROR, LOCAL_STORAGE_KEYS } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
+import buildResponse from '../utils/build-response.js';
 
 class CartService {
   constructor() {
@@ -13,9 +14,9 @@ class CartService {
 
   // 장바구니 초기화
   async initializeCart() {
-    const cartData = await this.requestGetCart();
+    const cartResult = await this.requestGetCart();
 
-    if (!cartData.success) {
+    if (cartResult.error) {
       renderToastMessage(cartData.message, TOAST_TYPES.WANING);
     }
   }
@@ -25,22 +26,24 @@ class CartService {
     try {
       if (authService.isAuth) {
         const response = await fetch('/api/cart');
-        const data = await response.json();
-
+        const result = await response.json();
         if (!response.ok) {
-          return data;
+          return buildResponse(null, result.error);
         }
-        this._cart = data.cart;
+
+        this._cart = result.data.cart;
       } else {
-        const localStorageCart = localStorage.getItem('cart');
+        const localStorageCart = localStorage.getItem(
+          LOCAL_STORAGE_KEYS.CART_ITEMS
+        );
         this._cart = localStorageCart ? JSON.parse(localStorageCart) : [];
       }
 
       this.dispatchCartUpdate();
-      return { success: true };
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestGetCart', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
@@ -56,36 +59,34 @@ class CartService {
           },
         });
 
-        const data = await response.json();
+        const result = await response.json();
         if (!response.ok) {
-          return data;
+          return buildResponse(null, result.error);
         }
 
-        this._cart = data.cart;
+        this._cart = result.data.cart;
       } else {
-        const cart = this._cart;
-        const existingItem = cart.find(
+        const existingItem = this.cart.find(
           (product) => product.productId === item.productId
         );
 
         if (existingItem) {
           existingItem.quantity += item.quantity;
         } else {
-          cart.unshift(item);
+          this.cart.unshift(item);
         }
 
-        this._cart = cart;
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.CART_ITEMS,
-          JSON.stringify(this._cart)
+          JSON.stringify(this.cart)
         );
       }
 
       this.dispatchCartUpdate();
-      return { success: true };
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestPostToCart', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
@@ -97,12 +98,12 @@ class CartService {
           method: 'DELETE',
         });
 
-        const data = await response.json();
+        const result = await response.json();
         if (!response.ok) {
-          return data;
+          return buildResponse(null, result.error);
         }
 
-        this._cart = data.cart;
+        this._cart = result.data.cart;
       } else {
         this._cart = this._cart.filter((item) => item.productId !== productId);
         localStorage.setItem(
@@ -112,10 +113,10 @@ class CartService {
       }
 
       this.dispatchCartUpdate();
-      return { success: true };
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestDeleteFromCart', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
@@ -126,13 +127,13 @@ class CartService {
         const response = await fetch(`/api/cart/${productId}/${direction}`, {
           method: 'PUT',
         });
-        const data = await response.json();
 
+        const result = await response.json();
         if (!response.ok) {
-          return data;
+          return buildResponse(null, result.error);
         }
 
-        this._cart = data.cart;
+        this._cart = result.data.cart;
       } else {
         const item = this._cart.find((i) => i.productId === productId);
         if (item) {
@@ -149,18 +150,21 @@ class CartService {
       }
 
       this.dispatchCartUpdate();
-      return { success: true };
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestPutCartItemQuantity', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기
   async requestPostMergeCarts() {
-    if (this._cart.length === 0) return;
-
     try {
+      if (this.cart.length === 0) {
+        this.dispatchCartUpdate();
+        buildResponse();
+      }
+
       const response = await fetch('/api/cart/merge', {
         method: 'POST',
         body: JSON.stringify(this._cart),
@@ -168,16 +172,16 @@ class CartService {
           'Content-Type': 'application/json',
         },
       });
-      const data = await response.json();
+      const result = await response.json();
       if (!response.ok) {
-        return data;
+        return buildResponse(null, result.error);
       }
 
-      localStorage.removeItem('cart');
-      this._cart = data.cart;
-      this.dispatchCartUpdate();
+      this._cart = result.data.cart;
 
-      return { success: true };
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.CART_ITEMS);
+      this.dispatchCartUpdate();
+      return buildResponse();
     } catch (error) {
       console.error(error);
       return ERROR.REQUEST_FAILED;
@@ -186,6 +190,7 @@ class CartService {
 
   // updateCart 이벤트 발행
   dispatchCartUpdate() {
+    console.log('dispatch');
     const event = new CustomEvent(CUSTOM_EVENT.CART_UPDATED);
     document.dispatchEvent(event);
   }

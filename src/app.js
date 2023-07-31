@@ -5,14 +5,13 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import getUserFromJWT from './middlewares/get-user-from-jwt';
 import dotenv from 'dotenv';
-// import viewsRoutes from './routes/views.js';
-// import productRoutes from './routes/product.js';
-// import userRoutes from './routes/user.js';
-import authRoutes from './routes/auth';
-// import categoryRoutes from './routes/category';
-// import orderRoutes from './routes/order';
 import initPassport from './passport';
-import publicRoutes from './routes/public'
+
+import publicApiRoutes from './routes/publicApiRoutes'
+import userApiRoutes from './routes/userApiRoutes'
+import publicViewRoutes from './routes/publicViewRoutes'
+import userViewRoutes from './routes/userViewRoutes'
+
 
 dotenv.config();
 initPassport();
@@ -32,8 +31,11 @@ app.use(getUserFromJWT);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(authRoutes);
-app.use(publicRoutes);
+app.use(publicApiRoutes);
+app.use(userApiRoutes);
+
+app.use(publicViewRoutes);
+app.use(userViewRoutes);
 
 // 404
 app.use((req, res) => {

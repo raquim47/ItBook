@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/order.css" />
+    <script src="/js/pages/cart.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="cart">
+          <h2 class="cart__title">장바구니</h2>
+          <div class="cart__sections">
+            <!-- 장바구니 상품  -->
+            <section class="cart__content">
+              <form id="cartForm">
+                <div class="cart__all-check">
+                  <input type="checkbox" id="allCheck" class="cart-checkbox" checked />
+                  <p>상품 목록 <span id="selectStatus" aria-label="선택된 상품"></span></p>
+                </div>
+                <!-- 장바구니 상품 리스트 - (비로그인)로컬스토래지 & (로그인)DB-->
+                <ul
+                  class="cart__list"
+                  id="cartList"
+                  data-is-auth="<%= authStatus %>"
+                ></ul>
+              </form>
+            </section>
+            <!-- 장바구니 주문  -->
+            <section class="cart__payment">
+              <div class="cart-amount">
+                <div class="cart-amount__row">
+                  <h4>총 상품 금액</h4>
+                  <strong id="productAmount">0원</strong>
+                </div>
+                <div class="cart-amount__row">
+                  <h4>배송비</h4>
+                  <strong id="deliveryFee">+0원</strong>
+                </div>
+                <div class="cart-amount__row">
+                  <p class="cart-amount-desc">
+                    50,000원 이상 구매시 배송비 무료
+                  </p>
+                </div>
+              </div>
+              <div class="cart-total-price">
+                <h3>총 결제 금액</h3>
+                <p id="totalPrice">0원</p>
+              </div>
+              <button id="orderBtn" class="cart__submit-btn">주문하기</button>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

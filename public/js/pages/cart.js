@@ -15,12 +15,12 @@ import {
 let savedCheckedProductIds = [];
 let isInitialRender = true;
 
-// 체크 박스 상태 저장
-const saveCheckedState = () => {
-  const checkedItems = document.querySelectorAll(
-    '.cart-checkbox:checked:not(#allCheck)'
+// 체크 안 한 상품 저장
+const saveUncheckedState = () => {
+  const uncheckedItems = document.querySelectorAll(
+    '.cart-checkbox:not(:checked):not(#allCheck)'
   );
-  return Array.from(checkedItems).map(
+  return Array.from(uncheckedItems).map(
     (checkbox) => checkbox.closest('.cart-item').dataset.productId
   );
 };
@@ -33,10 +33,11 @@ const restoreCheckedState = (productIds) => {
     const productId = cartItem.dataset.productId;
     const checkBox = cartItem.querySelector('.cart-checkbox');
 
+    // 저장된 상품이라면 체크 해제
     if (productIds.includes(productId)) {
-      checkBox.checked = true;
-    } else {
       checkBox.checked = false;
+    } else {
+      checkBox.checked = true;
     }
   });
 };
@@ -59,12 +60,12 @@ const createCartItemHTML = (item) => {
       <div class="cart-item__option">
         <div class="count-control">
           <button type="button" class="count-control__btn" data-direction="decrease">-</button>
-          <input class="count-control__status" id="itemQuantity" readonly value="${
+          <input class="count-control__status" readonly value="${
             item.quantity
           }" />
           <button type="button" class="count-control__btn"  data-direction="increase">+</button>
         </div>
-        <strong class="cart-item__price" id="itemPrice">${(
+        <strong class="cart-item__price">${(
           item.price * item.quantity
         ).toLocaleString()} 원</strong>
       </div>
@@ -75,15 +76,14 @@ const createCartItemHTML = (item) => {
 };
 
 const renderCartItem = async (item) => {
-  const data = await productService.requestGetProduct(item.productId);
-
-  if (!data.success) {
-    renderToastMessage(data.message, TOAST_TYPES.WARNING);
+  const result = await productService.requestGetProduct(item.productId);
+  if (result.error) {
+    renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
     return;
   }
 
   const cartItem = {
-    ...data.product,
+    ...result.data,
     quantity: item.quantity,
   };
 
@@ -93,8 +93,8 @@ const renderCartItem = async (item) => {
 // 장바구니 리스트 렌더링 (초기 & 데이터가 업데이트 될 때 마다)
 const renderCartList = async () => {
   const cartList = document.getElementById('cartList');
-  const cartData = cartService.cart;
-  const cartItemsHTMLPromises = cartData.map((item) => renderCartItem(item));
+  const cart = cartService.cart;
+  const cartItemsHTMLPromises = cart.map((item) => renderCartItem(item));
   const cartItemsHTMLArray = await Promise.all(cartItemsHTMLPromises);
 
   cartList.innerHTML = cartItemsHTMLArray.join('');
@@ -105,13 +105,18 @@ const renderCartList = async () => {
   }
   // 첫 렌더링이 아닐 땐 체크 박스 상태 복구
   restoreCheckedState(savedCheckedProductIds);
+
+  const allCheckBox = document.getElementById('allCheck');
+  const itemCheckBoxes = document.querySelectorAll('.cart-checkbox:not(#allCheck)');
+  const isAllChecked = Array.from(itemCheckBoxes).every((checkbox) => checkbox.checked);
+  allCheckBox.checked = isAllChecked;
 };
 
 // 수량 변경/품목 삭제
 const onClickCartForm = async (e) => {
   const target = e.target;
   if (target.classList.contains('count-control__btn')) {
-    savedCheckedProductIds = saveCheckedState();
+    savedCheckedProductIds = saveUncheckedState();
     const productId = target.closest('.cart-item').dataset.productId;
     const direction = target.dataset.direction;
 
@@ -124,22 +129,22 @@ const onClickCartForm = async (e) => {
       }
     }
 
-    const data = await cartService.requestPutCartItemQuantity(
+    const result = await cartService.requestPutCartItemQuantity(
       productId,
       direction
     );
-    if (!data.success) {
-      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+    if (result.error) {
+      renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
     }
   }
 
   if (target.classList.contains('x-btn')) {
-    savedCheckedProductIds = saveCheckedState();
+    savedCheckedProductIds = saveUncheckedState();
     const productId = target.closest('.cart-item').dataset.productId;
-    const data = await cartService.requestDeleteFromCart(productId);
+    const result = await cartService.requestDeleteFromCart(productId);
 
-    if (!data.success) {
-      renderToastMessage(data.messge, TOAST_TYPES.WARNING);
+    if (result.error) {
+      renderToastMessage(result.error.messge, TOAST_TYPES.WARNING);
     }
   }
 };
@@ -154,10 +159,14 @@ const renderTotalPrice = () => {
 
   checkedItems.forEach((checkbox) => {
     const cartItem = checkbox.closest('.cart-item');
-    const quantity = Number(cartItem.querySelector('#itemQuantity').value);
+    const quantity = Number(
+      cartItem.querySelector('.count-control__status').value
+    );
     const itemPrice =
       Number(
-        cartItem.querySelector('#itemPrice').textContent.replace(/[,\s원]/g, '')
+        cartItem
+          .querySelector('.cart-item__price')
+          .textContent.replace(/[,\s원]/g, '')
       ) / quantity;
     totalPrice += itemPrice * quantity;
   });

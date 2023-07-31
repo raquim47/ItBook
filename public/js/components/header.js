@@ -14,7 +14,6 @@ const logoutAndRedirect = () => {
 // 카트 수량 배지 업데이트
 const updateCartbadge = async () => {
   const cart = cartService.cart;
-
   const cartBadge = document.getElementById('cartBadge');
   cartBadge.textContent = cart.length > 0 ? cart.length : '';
   cartBadge.classList.toggle('visible', cart.length > 0);

@@ -1,73 +1,6 @@
-import setUserToken from '../utils/set-user-token';
-import hashPassword from '../utils/hash-password';
-import User from '../models/user';
-import Product from '../models/product';
-import bcrypt from 'bcrypt';
-import { ERROR, SUCCESS } from '../../public/js/utils/constants';
+import { ERROR } from '../../public/js/utils/constants';
 
-export const getAuthStatus = (req, res) => {
-  try {
-    if (req.user) {
-      res.json({ isAuth: true, isAdmin: req.user.isAdmin });
-    } else {
-      res.json({ isAuth: false, isAdmin: false });
-    }
-  } catch (error) {
-    console.error(ERROR.INTERNAL_ERROR.message, error.message);
-    res.status(500).json(ERROR.INTERNAL_ERROR);
-  }
-};
-
-export const postLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json(ERROR.EMAIL_NOT_FOUND);
-    }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      return res.status(400).json(ERROR.PASSWORD_INVALID);
-    }
-
-    setUserToken(res, user);
-    return res.json({
-      ...SUCCESS.LOGIN,
-      isAuth: true,
-      isAdmin: user.isAdmin,
-    });
-  } catch (error) {
-    console.error(ERROR.INTERNAL_ERROR.message, error.message);
-    res.status(500).json(ERROR.INTERNAL_ERROR);
-  }
-};
-
-export const postJoin = async (req, res) => {
-  try {
-    const { email, username, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    const hashedPassword = await hashPassword(password);
-
-    if (existingUser) {
-      return res.status(400).json(ERROR.EMAIL_DUPLICATE);
-    }
-
-    await User.create({
-      email,
-      username,
-      password: hashedPassword,
-    });
-
-    return res.json(SUCCESS.JOIN);
-  } catch (error) {
-    console.error(ERROR.INTERNAL_ERROR.message, error.message);
-    res.status(500).json(ERROR.INTERNAL_ERROR);
-  }
-};
-
+// data 
 export const getCart = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
@@ -149,7 +82,7 @@ export const deleteFromCart = async (req, res) => {
     user.cart.items.splice(cartItemIndex, 1);
     await user.save();
 
-    res.json({cart: user.cart.items});
+    res.json({ cart: user.cart.items });
   } catch (error) {
     console.error(ERROR.INTERNAL_ERROR.message, error.message);
     res.status(500).json(ERROR.INTERNAL_ERROR);
@@ -173,25 +106,22 @@ export const putCartItemQuantity = async (req, res) => {
     cartItem.quantity += adjustment;
     await user.save();
 
-    res.json({ cart : user.cart.items});
+    res.json({ cart: user.cart.items });
   } catch (error) {
     console.error(ERROR.INTERNAL_ERROR.message, error.message);
     res.status(500).json(ERROR.INTERNAL_ERROR);
   }
 };
 
-export const getProduct = async (req, res) => {
-  const productId = req.params.productId;
+// page
+export const renderOrderPage = (req, res) => {
   try {
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json(ERROR.PRODUCT_NOT_FOUND);
-    }
-
-    res.json({ product });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json(ERROR.INTERNAL_ERROR);
+    res.render('order.ejs', {
+      authStatus: req.user,
+      pageTitle: '주문서 - 잇북',
+    });
+  } catch (error) {
+    console.error(ERROR.INTERNAL_ERROR.message, error.message);
+    res.status(500).render('404.ejs', ERROR.INTERNAL_ERROR);
   }
 };

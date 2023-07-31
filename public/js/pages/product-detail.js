@@ -44,9 +44,9 @@ const onclickAddCartBtn = async (e) => {
   const productId = pathParts[pathParts.length - 1];
   const quantity = Number(document.getElementById('quantity').textContent);
 
-  const data = await cartService.requestPostToCart({ productId, quantity });
-  if (!data.success) {
-    renderToastMessage(data.message, TOAST_TYPES.WARNING);
+  const result = await cartService.requestPostToCart({ productId, quantity });
+  if (result.error) {
+    renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
     return;
   }
   const toastMessageContent = `

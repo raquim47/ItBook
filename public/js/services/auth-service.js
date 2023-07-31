@@ -1,4 +1,5 @@
 import renderToastMessage from '../components/toast-message.js';
+import buildResponse from '../utils/build-response.js';
 import { ERROR, CUSTOM_EVENT } from '../utils/constants.js';
 
 class AuthService {
@@ -16,29 +17,29 @@ class AuthService {
   }
 
   async initializeAuth() {
-    const authData = await this.requestGetAuthStatus();
+    const result = await this.requestGetAuthStatus();
 
-    if (!authData.success) {
-      renderToastMessage(authData.message, TOAST_TYPES.WANING);
+    if (result.error) {
+      renderToastMessage(result.error.message, TOAST_TYPES.WANING);
     }
   }
 
   async requestGetAuthStatus() {
     try {
       const response = await fetch('/api/auth');
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
-        return data;
+        return buildResponse(null, result.error);
       }
 
-      this._isAuth = data.isAuth;
-      this._isAdmin = data.isAdmin;
+      this._isAuth = result.data.isAuth;
+      this._isAdmin = result.data.isAuth;
 
-      return { success: true };
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestGetAuthStatus', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
@@ -52,23 +53,20 @@ class AuthService {
         },
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
-        return data;
+        return buildResponse(null, result.error);
       }
 
-      this._isAuth = data.isAuth;
-      this._isAdmin = data.isAdmin;
+      this._isAuth = result.data.isAuth;
+      this._isAdmin = result.data.isAdmin;
 
-      // 로그인 이벤트 발행
-      const event = new Event(CUSTOM_EVENT.LOGIN_SUCCESS);
-      document.dispatchEvent(event);
-
-      return { type: data.type, message: data.message };
+      document.dispatchEvent(new Event(CUSTOM_EVENT.LOGIN_SUCCESS));
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestPostLogin', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
@@ -81,11 +79,15 @@ class AuthService {
           'Content-Type': 'application/json',
         },
       });
-      const data = await response.json();
-      return data;
+      const result = await response.json();
+      if (!response.ok) {
+        return buildResponse(null, result.error);
+      }
+
+      return buildResponse();
     } catch (error) {
-      console.error(error);
-      return ERROR.REQUEST_FAILED;
+      console.error('In requestPostJoin', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 }

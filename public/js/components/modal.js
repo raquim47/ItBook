@@ -1,4 +1,5 @@
 import authService from '../services/auth-service.js';
+import cartService from '../services/cart-service.js';
 import { ERROR, SUCCESS, TOAST_TYPES, MODAL_MODE } from '../utils/constants.js';
 import renderToastMessage from './toast-message.js';
 
@@ -25,45 +26,49 @@ const showErrorMessage = (field, message) => {
 
 // 로그인 요청
 const handleRequestLogin = async (requestData) => {
-  const authData = await authService.requestPostLogin(requestData);
+  const authResult = await authService.requestPostLogin(requestData);
 
-  switch (authData.type) {
-    case SUCCESS.LOGIN.type:
-      closeModal();
-      setTimeout(() => renderToastMessage(data.message), 250);
+  if (!authResult.error) {
+    closeModal();
+    setTimeout(() => renderToastMessage(SUCCESS.LOGIN.message), 250);
 
-      const cartData = await this.requestPostMergeCarts();
-      if (!cartData.success) {
-        renderToastMessage(data.message, TOAST_TYPES.WARNING);
-      }
-      break;
+    const cartResult = await cartService.requestPostMergeCarts();
+    console.log(cartResult)
+    if (cartResult.error) {
+      renderToastMessage(cartResult.error.message, TOAST_TYPES.WARNING);
+    }
+
+    return;
+  }
+
+  switch (authResult.error.type) {
     case ERROR.EMAIL_NOT_FOUND.type:
-      showErrorMessage('email', data.message);
+      showErrorMessage('email', authResult.error.message);
       break;
     case ERROR.PASSWORD_INVALID.type:
-      showErrorMessage('password', data.message);
+      showErrorMessage('password', authResult.error.message);
       break;
     default:
-      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+      renderToastMessage(authResult.error.message, TOAST_TYPES.WARNING);
   }
 };
 
 // 회원 가입 요청
 const handleRequestJoin = async (requestData) => {
-  const data = await authService.requestPostJoin(requestData);
+  const result = await authService.requestPostJoin(requestData);
 
-  switch (data.type) {
-    case SUCCESS.JOIN.type:
-      closeModal();
-      setTimeout(() => {
-        renderToastMessage(data.message, TOAST_TYPES.SUCCESS);
-      }, 250);
-      break;
+  if (!result.error) {
+    closeModal();
+    setTimeout(() => renderToastMessage(SUCCESS.JOIN.message), 250);
+    return;
+  }
+
+  switch (result.error.type) {
     case ERROR.EMAIL_DUPLICATE.type:
-      showErrorMessage('email', data.message);
+      showErrorMessage('email', result.error.message);
       break;
     default:
-      renderToastMessage(data.message, TOAST_TYPES.WARNING);
+      renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
   }
 };
 

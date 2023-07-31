@@ -1,3 +1,4 @@
+import buildResponse from "../utils/build-response.js";
 import { ERROR } from "../utils/constants.js";
 
 class ProductService {
@@ -6,16 +7,16 @@ class ProductService {
   async requestGetProduct(productId) {
     try {
       const response = await fetch(`/api/product/${productId}`);
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
-        return data;
+        return buildResponse(null, result.error);
       }
 
-      return { success: true, product: data.product };
-    } catch (err) {
-      console.error(err);
-      return ERROR.REQUEST_FAILED;
+      return buildResponse(result.data);
+    } catch (error) {
+      console.error('In requestGetProduct', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 }
