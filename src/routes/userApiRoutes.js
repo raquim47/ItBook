@@ -9,7 +9,7 @@ router.get(
   '/api/cart',
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-    res.json(buildResponse({ cart: user.cart.items }));
+    res.json(buildResponse({ cart: user.cart }));
   })
 );
 
@@ -19,27 +19,25 @@ router.post(
     const user = await User.findById(req.user._id);
     const { productId, quantity } = req.body;
 
-    const cartProductIndex = user.cart.items.findIndex((cp) => {
+    const cartProductIndex = user.cart.findIndex((cp) => {
       return cp.productId.toString() === productId.toString();
     });
 
     let newQuantity = quantity;
-    const updatedCartItems = [...user.cart.items];
+    const updatedCartItems = [...user.cart];
 
     if (cartProductIndex >= 0) {
-      newQuantity = user.cart.items[cartProductIndex].quantity + quantity;
+      newQuantity = user.cart[cartProductIndex].quantity + quantity;
       updatedCartItems.splice(cartProductIndex, 1);
       updatedCartItems.unshift({ productId, quantity: newQuantity });
     } else {
       updatedCartItems.unshift({ productId, quantity: newQuantity });
     }
 
-    user.cart = {
-      items: updatedCartItems,
-    };
+    user.cart = updatedCartItems;
 
     await user.save();
-    res.json(buildResponse({ cart: user.cart.items }));
+    res.json(buildResponse({ cart: user.cart }));
   })
 );
 
@@ -48,20 +46,20 @@ router.post(
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const localCartItems = req.body;
-    
+
     for (const localItem of localCartItems.reverse()) {
-      const cartItemIndex = user.cart.items.findIndex(
+      const cartItemIndex = user.cart.findIndex(
         (item) => item.productId == localItem.productId
       );
       if (cartItemIndex >= 0) {
-        user.cart.items[cartItemIndex].quantity += localItem.quantity;
+        user.cart[cartItemIndex].quantity += localItem.quantity;
       } else {
-        user.cart.items.unshift(localItem);
+        user.cart.unshift(localItem);
       }
     }
 
     await user.save();
-    res.json(buildResponse({ cart: user.cart.items }));
+    res.json(buildResponse({ cart: user.cart }));
   })
 );
 
@@ -71,9 +69,7 @@ router.put(
     const user = await User.findById(req.user._id);
     const { productId, direction } = req.params;
 
-    const cartItem = user.cart.items.find(
-      (item) => item.productId == productId
-    );
+    const cartItem = user.cart.find((item) => item.productId == productId);
     if (!cartItem) {
       return res.status(400).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
     }
@@ -83,7 +79,7 @@ router.put(
     cartItem.quantity += adjustment;
     await user.save();
 
-    res.json(buildResponse({ cart: user.cart.items }));
+    res.json(buildResponse({ cart: user.cart }));
   })
 );
 
@@ -93,7 +89,7 @@ router.delete(
     const user = await User.findById(req.user._id);
     const { productId } = req.params;
 
-    const cartItemIndex = user.cart.items.findIndex(
+    const cartItemIndex = user.cart.findIndex(
       (item) => item.productId == productId
     );
 
@@ -101,10 +97,10 @@ router.delete(
       return res.status(400).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
     }
 
-    user.cart.items.splice(cartItemIndex, 1);
+    user.cart.splice(cartItemIndex, 1);
     await user.save();
 
-    res.json(buildResponse({ cart: user.cart.items }));
+    res.json(buildResponse({ cart: user.cart }));
   })
 );
 

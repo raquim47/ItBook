@@ -33,7 +33,6 @@ const handleRequestLogin = async (requestData) => {
     setTimeout(() => renderToastMessage(SUCCESS.LOGIN.message), 250);
 
     const cartResult = await cartService.requestPostMergeCarts();
-    console.log(cartResult)
     if (cartResult.error) {
       renderToastMessage(cartResult.error.message, TOAST_TYPES.WARNING);
     }
