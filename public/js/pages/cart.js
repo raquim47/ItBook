@@ -78,7 +78,7 @@ const createCartItemHTML = (item) => {
 const renderCartItem = async (item) => {
   const result = await productService.requestGetProduct(item.productId);
   if (result.error) {
-    renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+    renderToastMessage(result.error.message);
     return;
   }
 
@@ -107,8 +107,12 @@ const renderCartList = async () => {
   restoreCheckedState(savedCheckedProductIds);
 
   const allCheckBox = document.getElementById('allCheck');
-  const itemCheckBoxes = document.querySelectorAll('.cart-checkbox:not(#allCheck)');
-  const isAllChecked = Array.from(itemCheckBoxes).every((checkbox) => checkbox.checked);
+  const itemCheckBoxes = document.querySelectorAll(
+    '.cart-checkbox:not(#allCheck)'
+  );
+  const isAllChecked = Array.from(itemCheckBoxes).every(
+    (checkbox) => checkbox.checked
+  );
   allCheckBox.checked = isAllChecked;
 };
 
@@ -134,7 +138,7 @@ const onClickCartForm = async (e) => {
       direction
     );
     if (result.error) {
-      renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+      renderToastMessage(result.error.message);
     }
   }
 
@@ -144,7 +148,7 @@ const onClickCartForm = async (e) => {
     const result = await cartService.requestDeleteFromCart(productId);
 
     if (result.error) {
-      renderToastMessage(result.error.messge, TOAST_TYPES.WARNING);
+      renderToastMessage(result.error.messge);
     }
   }
 };
@@ -241,20 +245,19 @@ const getSelectedItems = () => {
 const onSubmitForm = (e) => {
   e.preventDefault();
   if (!authService.isAuth) {
-    renderToastMessage(ERROR.AUTH_REQUIRED.message, TOAST_TYPES.WARNING);
+    renderToastMessage(ERROR.AUTH_REQUIRED.message);
     return;
   }
   const itemsToOrder = getSelectedItems();
-  const productAmount = document.querySelector('#productAmount').textContent.replace(/[,\s원]/g, '')
+  const productAmount = document
+    .querySelector('#productAmount')
+    .textContent.replace(/[,\s원]/g, '');
   // localStorage에 저장
   const data = {
-    products : itemsToOrder,
-    productAmount
-  }
-  localStorage.setItem(
-    LOCAL_STORAGE_KEYS.ORDER_ITEMS,
-    JSON.stringify(data)
-  );
+    products: itemsToOrder,
+    productAmount,
+  };
+  localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
   // 주문 페이지로 이동
   location.href = '/order';
 };

@@ -1,5 +1,5 @@
 export const TOAST_TYPES = {
-  DEFAULT: 'DEFAULT',
+  SUCCESS: 'SUCCESS',
   WARNING: 'WARNING',
 };
 

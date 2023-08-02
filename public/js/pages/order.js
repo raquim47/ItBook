@@ -43,7 +43,7 @@ const renderOrderItems = async (products) => {
     );
 
     if (result.error) {
-      renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+      renderToastMessage(result.error.message);
       continue;
     }
 
@@ -88,7 +88,7 @@ const handleInvalidAccess = () => {
         <p>잘못된 접근입니다.</p>
         <p>장바구니페이지로 이동합니다.</p>
       </div>`;
-  renderToastMessage(toastContent, TOAST_TYPES.WARNING);
+  renderToastMessage(toastContent);
   setTimeout(() => (window.location.href = '/cart'), 2000);
 };
 
@@ -98,16 +98,13 @@ const validateForm = () => {
   const phone = document.querySelector('#phone').value.trim();
 
   if (!address || !phone) {
-    renderToastMessage(
-      ERROR.ADDREDD_PHONE_REQUIRED.message,
-      TOAST_TYPES.WARNING
-    );
+    renderToastMessage(ERROR.ADDREDD_PHONE_REQUIRED.message);
     return false;
   }
 
   const pattern = /^010-\d{4}-\d{4}$/;
   if (!pattern.test(phone)) {
-    renderToastMessage(ERROR.PHONE_INVALID.message, TOAST_TYPES.WARNING);
+    renderToastMessage(ERROR.PHONE_INVALID.message);
     return false;
   }
 
@@ -116,7 +113,7 @@ const validateForm = () => {
     document.querySelector('#agreePaymentInfo').checked;
   const isAgreePrivacy = document.querySelector('#agreePrivacy').checked;
   if (!isAgreePaymentInfo || !isAgreePrivacy) {
-    renderToastMessage(ERROR.AGREEMENT_REQUIRED.message, TOAST_TYPES.WARNING);
+    renderToastMessage(ERROR.AGREEMENT_REQUIRED.message);
     return false;
   }
 
@@ -138,8 +135,7 @@ const constructOrderData = (orderData) => {
 
 const updateUserInfo = async (address, phone) => {
   const result = await userService.requestPutUserInfo({ address, phone });
-  if (result.error)
-    return renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+  if (result.error) return renderToastMessage(result.error.message);
 };
 
 const deleteCartItems = async (products) => {
@@ -147,14 +143,14 @@ const deleteCartItems = async (products) => {
   const result = await cartService.requestDeleteMultipleFromCart(productIds);
 
   if (result.error) {
-    return renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+    return renderToastMessage(result.error.message);
   }
 };
 
 const postOrder = async (data) => {
   const result = await orderService.requestPostOrder(data);
   if (result.error) {
-    return renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+    return renderToastMessage(result.error.message);
   }
 
   location.href = '/user/info';

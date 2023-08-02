@@ -17,7 +17,7 @@ class CartService {
     const cartResult = await this.requestGetCart();
 
     if (cartResult.error) {
-      renderToastMessage(cartData.message, TOAST_TYPES.WANING);
+      renderToastMessage(cartData.message);
     }
   }
 

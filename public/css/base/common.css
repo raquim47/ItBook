@@ -78,7 +78,7 @@ body {
   background-color: rgba(244, 85, 82, 0.9);
 }
 
-.toast-message--default {
+.toast-message--success {
   background-color: rgba(114, 86, 237, 0.9);
 }
 

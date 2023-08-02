@@ -20,7 +20,7 @@ class AuthService {
     const result = await this.requestGetAuthStatus();
 
     if (result.error) {
-      renderToastMessage(result.error.message, TOAST_TYPES.WANING);
+      renderToastMessage(result.error.message);
     }
   }
 

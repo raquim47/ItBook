@@ -30,11 +30,11 @@ const handleRequestLogin = async (requestData) => {
 
   if (!authResult.error) {
     closeModal();
-    setTimeout(() => renderToastMessage(SUCCESS.LOGIN.message), 250);
+    setTimeout(() => renderToastMessage(SUCCESS.LOGIN.message, TOAST_TYPES.SUCCESS), 250);
 
     const cartResult = await cartService.requestPostMergeCarts();
     if (cartResult.error) {
-      renderToastMessage(cartResult.error.message, TOAST_TYPES.WARNING);
+      renderToastMessage(cartResult.error.message);
     }
 
     return;
@@ -48,7 +48,7 @@ const handleRequestLogin = async (requestData) => {
       showErrorMessage('password', authResult.error.message);
       break;
     default:
-      renderToastMessage(authResult.error.message, TOAST_TYPES.WARNING);
+      renderToastMessage(authResult.error.message);
   }
 };
 
@@ -58,7 +58,10 @@ const handleRequestJoin = async (requestData) => {
 
   if (!result.error) {
     closeModal();
-    setTimeout(() => renderToastMessage(SUCCESS.JOIN.message), 250);
+    setTimeout(
+      () => renderToastMessage(SUCCESS.JOIN.message, TOAST_TYPES.SUCCESS),
+      250
+    );
     return;
   }
 
@@ -67,7 +70,7 @@ const handleRequestJoin = async (requestData) => {
       showErrorMessage('email', result.error.message);
       break;
     default:
-      renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+      renderToastMessage(result.error.message);
   }
 };
 

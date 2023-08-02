@@ -46,7 +46,7 @@ const onclickAddCartBtn = async (e) => {
 
   const result = await cartService.requestPostToCart({ productId, quantity });
   if (result.error) {
-    renderToastMessage(result.error.message, TOAST_TYPES.WARNING);
+    renderToastMessage(result.error.message);
     return;
   }
   const toastMessageContent = `
@@ -56,7 +56,7 @@ const onclickAddCartBtn = async (e) => {
       </div>
     `;
 
-  renderToastMessage(toastMessageContent);
+  renderToastMessage(toastMessageContent, TOAST_TYPES.SUCCESS);
 };
 
 const initPage = async () => {
