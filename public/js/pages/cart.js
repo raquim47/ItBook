@@ -49,7 +49,7 @@ const createCartItemHTML = (item) => {
         <input type="checkbox" class="cart-checkbox" checked />
       </div>
       <div class="cart-item__info">
-        <a href="#">
+        <a href="/product/${item._id}">
           <img class="cart-item__img" src="${item.imageUrl}" alt="도서 사진" />
           <div class="cart-item__text">
             <h3 class="cart-item__title">${item.title}</h3>
@@ -249,6 +249,10 @@ const onSubmitForm = (e) => {
     return;
   }
   const itemsToOrder = getSelectedItems();
+  if(itemsToOrder.length === 0){
+    renderToastMessage(ERROR.ORDER_ITEMS_REQUIRED.message)
+    return 
+  }
   const productAmount = document
     .querySelector('#productAmount')
     .textContent.replace(/[,\s원]/g, '');
@@ -256,6 +260,7 @@ const onSubmitForm = (e) => {
   const data = {
     products: itemsToOrder,
     productAmount,
+    fromCart : true,
   };
   localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
   // 주문 페이지로 이동

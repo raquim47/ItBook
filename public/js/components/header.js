@@ -28,7 +28,7 @@ const updateUserMenu = async () => {
           <span data-is-auth="true" id="cartBadge" aria-label="장바구니 개수" class="cart-badge"></span>
         </a>
       </li>
-      <li><a href="/mypage">마이페이지</a></li>
+      <li><a href="/user">마이페이지</a></li>
       ${authService.isAdmin ? '<li><a href="/admin">관리자페이지</a></li>' : ''}
       <li><button id="logoutBtn">로그아웃</button></li>
   `;

@@ -10,6 +10,7 @@ import {
   DELIVERY,
   ERROR,
   LOCAL_STORAGE_KEYS,
+  SUCCESS,
   TOAST_TYPES,
 } from '../utils/constants.js';
 
@@ -70,7 +71,7 @@ const bindAddressSearch = () => {
 // 주문 동의 체크박스 이벤트 바인딩
 const bindAgreeAll = () => {
   document.querySelector('#agreeAll').addEventListener('change', (e) => {
-    const isChecked = e.target;
+    const isChecked = e.target.checked;
     document.querySelector('#agreePaymentInfo').checked = isChecked;
     document.querySelector('#agreePrivacy').checked = isChecked;
   });
@@ -153,7 +154,9 @@ const postOrder = async (data) => {
     return renderToastMessage(result.error.message);
   }
 
-  location.href = '/user/info';
+  renderToastMessage(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
+
+  setTimeout(() => (location.href = '/user/info'), 2500);
 };
 
 // 주문 폼 제출
@@ -169,7 +172,10 @@ const bindOrderSubmitBtn = (orderData) => {
         await updateUserInfo(data.address, data.phone);
       }
 
-      await deleteCartItems(data.products);
+      if (orderData.fromCart) {
+        await deleteCartItems(data.products);
+      }
+
       await postOrder(data);
     });
 };

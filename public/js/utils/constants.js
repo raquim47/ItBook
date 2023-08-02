@@ -12,6 +12,10 @@ export const SUCCESS = {
     type: 'JOIN_SUCCESS',
     message: '회원가입이 완료되었습니다.',
   },
+  ORDER: {
+    type: 'ORDER_SUCCESS',
+    message: '주문이 완료되었습니다.',
+  },
 };
 
 export const ERROR = {
@@ -23,6 +27,11 @@ export const ERROR = {
   AGREEMENT_REQUIRED: {
     type: 'AGREEMENT_REQUIRED',
     message: '동의 사항에 체크해주세요',
+  },
+
+  ORDER_ITEMS_REQUIRED: {
+    type: 'ORDER_ITEMS_REQUIRED',
+    message: '선택된 주문 상품이 없습니다.',
   },
 
   PASSWORD_INVALID: {

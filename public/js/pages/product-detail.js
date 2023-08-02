@@ -1,5 +1,5 @@
 import setupHeader from '../components/header.js';
-import { TOAST_TYPES } from '../utils/constants.js';
+import { ERROR, LOCAL_STORAGE_KEYS, TOAST_TYPES } from '../utils/constants.js';
 import renderToastMessage from '../components/toast-message.js';
 import cartService from '../services/cart-service.js';
 import authService from '../services/auth-service.js';
@@ -59,6 +59,29 @@ const onclickAddCartBtn = async (e) => {
   renderToastMessage(toastMessageContent, TOAST_TYPES.SUCCESS);
 };
 
+const onClickBuyBtn = () => {
+  if(!authService.isAuth){
+    renderToastMessage(ERROR.AUTH_REQUIRED)
+    return;
+  }
+
+  const pathParts = window.location.pathname.split('/');
+  const productId = pathParts[pathParts.length - 1];
+  const quantity = Number(document.getElementById('quantity').textContent);
+
+  const productAmount = document
+    .querySelector('#totalPrice')
+    .textContent.replace(/[,\s원]/g, '');
+  
+  const data = {
+    products: [{productId, quantity}],
+    productAmount,
+    fromCart : false,
+  };
+  localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
+  location.href = '/order';
+}
+
 const initPage = async () => {
   await authService.initializeAuth();
   await cartService.initializeCart();
@@ -67,7 +90,9 @@ const initPage = async () => {
   bindEventsCountBtns();
   updateTotalPrice();
   const addCartBtn = document.querySelector('.product-detail__cart-btn');
+  const buyBtn = document.querySelector('.product-detail__buy-btn');
   addCartBtn.addEventListener('click', onclickAddCartBtn);
+  buyBtn.addEventListener('click', onClickBuyBtn)
 };
 
 initPage();
