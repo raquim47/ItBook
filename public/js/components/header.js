@@ -2,14 +2,7 @@ import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import { CUSTOM_EVENT, MODAL_MODE } from '../utils/constants.js';
 import renderModal from './modal.js';
-
-// 로그아웃 (쿠키삭제 후 새로고침)
-const logoutAndRedirect = () => {
-  document.cookie = `${encodeURIComponent(
-    'token'
-  )}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  location.href = '/';
-};
+import logoutAndRedirect from '../utils/logoutAndRedirect.js';
 
 // 카트 수량 배지 업데이트
 const updateCartbadge = async () => {

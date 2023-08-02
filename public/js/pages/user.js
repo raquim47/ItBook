@@ -6,6 +6,7 @@ import cartService from '../services/cart-service.js';
 import userService from '../services/user-service.js';
 import bindAddressSearch from '../utils/bindAddressSearch.js';
 import { ERROR, SUCCESS, TOAST_TYPES } from '../utils/constants.js';
+import logoutAndRedirect from '../utils/logoutAndRedirect.js';
 
 const validateForm = () => {
   const username = document.getElementById('username').value;
@@ -51,7 +52,8 @@ const bindSaveUser = () => {
       if (result.error) {
         renderToastMessage(result.error.message);
       } else {
-        document.getElementById('usernameTitle').textContent = formData.username;
+        document.getElementById('usernameTitle').textContent =
+          formData.username;
         renderToastMessage(SUCCESS.EDIT_USER.message, TOAST_TYPES.SUCCESS);
       }
     });
@@ -65,6 +67,30 @@ const initEditPage = () => {
 };
 
 const initOrderPage = () => {};
+
+const initResignPage = () => {
+  document
+    .getElementById('resignForm')
+    .addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById('resignPassword').value;
+      if (!password) {
+        renderToastMessage(ERROR.PASSWORD_REQUIRED.message);
+        return;
+      }
+
+      const isConfirmed = confirm('정말로 회원 탈퇴를 진행하시겠습니까?');
+      if (!isConfirmed) return;
+      const result = await userService.requestDeleteUser(password);
+      if (result.error) {
+        renderToastMessage(result.error.message);
+      } else {
+        logoutAndRedirect();
+        location.href = '/'
+      }
+    });
+};
 
 const initPage = async () => {
   await authService.initializeAuth();
@@ -80,6 +106,8 @@ const initPage = async () => {
     initEditPage();
   } else if (path === '/user/order') {
     initOrderPage();
+  } else if (path === '/user/resign') {
+    initResignPage();
   }
 };
 

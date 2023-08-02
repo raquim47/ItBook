@@ -91,7 +91,7 @@
 .user-form__row {
   position: relative;
   max-width: 450px;
-  border-bottom: 1px solid #ddd ;
+  border-bottom: 1px solid #ddd;
   padding: 10px 15px;
   margin-bottom: 5px;
 }
@@ -140,17 +140,61 @@
   border-radius: 4px;
   background-color: #ddd;
   color: #000;
-  transition: .2s ease-in;
+  transition: 0.2s ease-in;
 }
 
 .user-form__save-btn:hover {
   background-color: #7156ed;
   color: #fff;
-} 
+}
 
 .resign-btn {
   font-size: 13px;
   position: absolute;
   right: 0;
   top: 10px;
+}
+
+/* resign */
+.resign__title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resign-form {
+  padding: 15px;
+}
+
+.resign-form__row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.resign-form__row label {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.resign-form__row input {
+  width: 200px;
+  border: 1px solid #ddd;
+  outline: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.resign-form__btn {
+  background-color: #f45552;
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+
+.resign__warning {
+  font-size: 14px;
+  margin-top: 15px;
+  line-height: 1.3;
+  color: #f45552;
 }

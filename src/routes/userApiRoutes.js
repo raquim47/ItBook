@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
@@ -153,6 +154,21 @@ router.post(
 
     await newOrder.save();
 
+    res.json(buildResponse());
+  })
+);
+
+router.delete(
+  '/api/user',
+  asyncApiHandler(async (req, res) => {
+    const { password } = req.body;
+    const user = await User.findById(req.user._id);
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(400).json(buildResponse(null, ERROR.PASSWORD_INVALID));
+    }
+    await User.deleteOne({ _id: user._id });
     res.json(buildResponse());
   })
 );

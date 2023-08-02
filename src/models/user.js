@@ -15,6 +15,9 @@ const userSchema = new Schema({
       quantity: { type: Number, required: true },
     },
   ],
+  recentlyViewed: [
+    { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
+  ],
 });
 
 export default mongoose.model('User', userSchema);

@@ -38,6 +38,11 @@ export const ERROR = {
     message: '이름은 필수 입력사항입니다.'
   },
 
+  PASSWORD_REQUIRED :{
+    type:'PASSWORD_REQUIRED',
+    message: '비밀번호를 입력해주세요.'
+  },
+
   AGREEMENT_REQUIRED: {
     type: 'AGREEMENT_REQUIRED',
     message: '동의 사항에 체크해주세요',
