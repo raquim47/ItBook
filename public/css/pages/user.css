@@ -1,0 +1,67 @@
+.user {
+  padding: 60px 50px 0;
+}
+
+.user__title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 65px;
+}
+
+.user__content {
+  display: flex;
+  gap: 35px;
+}
+
+.user__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 220px;
+  font-weight: 500;
+}
+
+.user__nav h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.user__nav a {
+  font-size: 18px;
+  color: #303030;
+}
+
+.user__nav a:hover,
+.user__nav a.active {
+  color: #7156ed;
+}
+
+.user__sections {
+  flex: 1px;
+}
+
+.greet {
+  background-color: #f9f9f9;
+  padding: 80px 30px 30px;
+  border-radius: 8px;
+  margin-bottom: 50px;
+}
+
+.greet__message {
+  display: flex;
+  gap: 10px;
+  font-size: 38px;
+  font-weight: 600;
+}
+
+.greet__message strong {
+  color: #7156ed;
+}
+
+.liked-products h3 {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}

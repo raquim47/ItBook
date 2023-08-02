@@ -23,4 +23,17 @@ router.get(
   })
 );
 
+router.get(
+  '/user',
+  asyncRenderHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    res.render('user.ejs', {
+      authStatus: req.user,
+      userData: {
+        username: user.username,
+      },
+      pageTitle: `마이페이지 - 잇북`,
+    });
+  })
+);
 export default router;
