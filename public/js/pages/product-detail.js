@@ -50,7 +50,7 @@ const onclickAddCartBtn = async (e) => {
     return;
   }
   const toastMessageContent = `
-      <div class="toastMessage__contentLinked">
+      <div class="toastMessage__content">
         <p>장바구니에 상품을 담았습니다.</p>
         <a href="/cart">장바구니로 이동 &gt;</a>
       </div>

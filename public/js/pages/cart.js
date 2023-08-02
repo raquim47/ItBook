@@ -150,7 +150,7 @@ const onClickCartForm = async (e) => {
 };
 
 // 주문 금액 계산
-const renderTotalPrice = () => {
+const renderPaymentPrice = () => {
   const checkedItems = document.querySelectorAll(
     '.cart-checkbox:checked:not(#allCheck)'
   );
@@ -216,7 +216,7 @@ const onChangeCheckBox = (e) => {
     allCheckBox.checked = isAllChecked;
   }
   renderSelectStatus();
-  renderTotalPrice();
+  renderPaymentPrice();
 };
 
 // 주문시 선택한 상품 배열로 가져오기
@@ -238,20 +238,25 @@ const getSelectedItems = () => {
 };
 
 // 주문하기
-const onSubmitOrder = (e) => {
+const onSubmitForm = (e) => {
   e.preventDefault();
   if (!authService.isAuth) {
     renderToastMessage(ERROR.AUTH_REQUIRED.message, TOAST_TYPES.WARNING);
     return;
   }
   const itemsToOrder = getSelectedItems();
+  const productAmount = document.querySelector('#productAmount').textContent.replace(/[,\s원]/g, '')
   // localStorage에 저장
+  const data = {
+    products : itemsToOrder,
+    productAmount
+  }
   localStorage.setItem(
     LOCAL_STORAGE_KEYS.ORDER_ITEMS,
-    JSON.stringify(itemsToOrder)
+    JSON.stringify(data)
   );
   // 주문 페이지로 이동
-  window.location.href = '/order';
+  location.href = '/order';
 };
 
 const initPage = async () => {
@@ -264,19 +269,16 @@ const initPage = async () => {
   const cartForm = document.getElementById('cartForm');
   cartForm.addEventListener('click', onClickCartForm);
   cartForm.addEventListener('change', onChangeCheckBox);
-
+  cartForm.addEventListener('submit', onSubmitForm);
   await renderCartList();
   renderSelectStatus();
-  renderTotalPrice();
+  renderPaymentPrice();
 
   document.addEventListener(CUSTOM_EVENT.CART_UPDATED, async () => {
     await renderCartList();
     renderSelectStatus();
-    renderTotalPrice();
+    renderPaymentPrice();
   });
-
-  const orderBtn = document.getElementById('orderBtn');
-  orderBtn.addEventListener('click', onSubmitOrder);
 };
 
 initPage();

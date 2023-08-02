@@ -68,11 +68,17 @@ router.get(
   '/api/product/:productId',
   asyncApiHandler(async (req, res) => {
     const productId = req.params.productId;
+    const fields = req.query.fields;
     const product = await Product.findById(productId);
 
     if (!product) {
       return res.status(404).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
     }
+
+    if (fields === 'title') {
+      return res.json(buildResponse(product.title));
+    }
+
     res.json(buildResponse(product));
   })
 );

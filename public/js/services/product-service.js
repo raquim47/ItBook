@@ -1,12 +1,13 @@
-import buildResponse from "../utils/build-response.js";
-import { ERROR } from "../utils/constants.js";
+import buildResponse from '../utils/build-response.js';
+import { ERROR } from '../utils/constants.js';
 
 class ProductService {
   constructor() {}
 
-  async requestGetProduct(productId) {
+  async requestGetProduct(productId, fields = null) {
     try {
-      const response = await fetch(`/api/product/${productId}`);
+      const endpoint = fields ? `/api/product/${productId}/?fields=${fields}` : `/api/product/${productId}`;
+      const response = await fetch(endpoint);
       const result = await response.json();
 
       if (!response.ok) {

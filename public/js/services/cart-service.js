@@ -119,6 +119,42 @@ class CartService {
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
+  
+  // 장바구니 상품 여러개 삭제
+  async requestDeleteMultipleFromCart(productIds) {
+    try {
+      if (authService.isAuth) {
+        const response = await fetch(`/api/cart`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ productIds }),
+        });
+
+        const result = await response.json();
+        if (!response.ok) {
+          return buildResponse(null, result.error);
+        }
+
+        this._cart = result.data.cart;
+      } else {
+        this._cart = this._cart.filter(
+          (item) => !productIds.includes(item.productId)
+        );
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.CART_ITEMS,
+          JSON.stringify(this._cart)
+        );
+      }
+
+      this.dispatchCartUpdate();
+      return buildResponse();
+    } catch (error) {
+      console.error('In requestDeleteMultipleFromCart', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
+    }
+  }
 
   // 장바구니 수량 변경
   async requestPutCartItemQuantity(productId, direction) {
@@ -190,7 +226,6 @@ class CartService {
 
   // updateCart 이벤트 발행
   dispatchCartUpdate() {
-    console.log('dispatch');
     const event = new CustomEvent(CUSTOM_EVENT.CART_UPDATED);
     document.dispatchEvent(event);
   }

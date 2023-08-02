@@ -14,8 +14,8 @@ body {
 }
 
 .main {
-  min-height: calc(100vh - 150px);
-  padding: 30px 0;
+  min-height: calc(100vh - 210px);
+  padding: 30px 0 100px;
 }
 
 .hidden {
@@ -82,7 +82,7 @@ body {
   background-color: rgba(114, 86, 237, 0.9);
 }
 
-.toastMessage__contentLinked {
+.toastMessage__content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -90,7 +90,7 @@ body {
   gap: 10px;
 }
 
-.toastMessage__contentLinked a {
+.toastMessage__content a {
   text-decoration: underline;
 }
 

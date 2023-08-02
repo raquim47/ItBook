@@ -2,6 +2,8 @@ import express from 'express';
 import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
+import Order from '../models/order';
+import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
@@ -83,6 +85,24 @@ router.put(
   })
 );
 
+// 장바구니 상품 여러개(배열) 삭제
+router.delete(
+  '/api/cart',
+  asyncApiHandler(async (req, res) => {
+   
+    const user = await User.findById(req.user._id);
+    const productIds = req.body.productIds;
+    user.cart = user.cart.filter(
+      (item) => !productIds.includes(item.productId)
+    );
+
+    await user.save();
+    console.log(user.cart)
+    res.json(buildResponse({ cart: user.cart }));
+  })
+);
+
+// 장바구니 상품 하나만 삭제
 router.delete(
   '/api/cart/:productId',
   asyncApiHandler(async (req, res) => {
@@ -101,6 +121,41 @@ router.delete(
     await user.save();
 
     res.json(buildResponse({ cart: user.cart }));
+  })
+);
+
+router.put(
+  '/api/user',
+  asyncApiHandler(async (req, res) => {
+    const user = await User.findById(req.user._id);
+    const { username, address, phone } = req.body;
+
+    if (username) user.username = username;
+    if (address) user.address = address;
+    if (phone) user.phone = phone;
+
+    await user.save();
+
+    res.json(buildResponse());
+  })
+);
+
+router.post(
+  '/api/order',
+  asyncApiHandler(async (req, res) => {
+    const { products, address, phone, totalPrice } = req.body;
+
+    const newOrder = new Order({
+      products: products,
+      userId: req.user._id,
+      totalPrice: totalPrice,
+      address: address,
+      phone: phone,
+    });
+
+    await newOrder.save();
+
+    res.json(buildResponse());
   })
 );
 

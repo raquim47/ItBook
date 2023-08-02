@@ -19,10 +19,25 @@ export const ERROR = {
     type: 'AUTH_REQUIRED',
     message: '로그인이 필요합니다',
   },
+  
+  AGREEMENT_REQUIRED: {
+    type: 'AGREEMENT_REQUIRED',
+    message: '동의 사항에 체크해주세요',
+  },
 
   PASSWORD_INVALID: {
     type: 'PASSWORD_INVALID',
     message: '비밀번호가 올바르지 않습니다.',
+  },
+  
+  PHONE_INVALID: {
+    type: 'PHONE_INVALID',
+    message: '전화번호 양식이 올바르지 않습니다.',
+  },
+
+  ADDREDD_PHONE_REQUIRED: {
+    type: 'ADDREDD_PHONE_REQUIRED',
+    message: '배송지와 전화번호를 모두 입력해주세요.',
   },
 
   EMAIL_NOT_FOUND: {
