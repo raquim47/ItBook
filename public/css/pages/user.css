@@ -41,6 +41,7 @@
   flex: 1px;
 }
 
+/* greet */
 .greet {
   background-color: #f9f9f9;
   padding: 80px 30px 30px;
@@ -59,9 +60,97 @@
   color: #7156ed;
 }
 
-.liked-products h3 {
+/* liked-products */
+.liked-products__title {
   font-size: 20px;
   font-weight: 600;
   padding-bottom: 15px;
   border-bottom: 1px solid #ddd;
+}
+
+/* edit-user */
+.edit-user {
+  position: relative;
+}
+
+.edit-user__title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.edit-user__title strong {
+  color: #7156ed;
+}
+
+.user-form {
+  padding: 15px;
+}
+
+.user-form__row {
+  position: relative;
+  max-width: 450px;
+  border-bottom: 1px solid #ddd ;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+}
+
+.required {
+  color: #7156ed;
+}
+
+.user-form__row.readonly input {
+  color: #000;
+}
+
+.user-form__row label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #000;
+}
+
+.user-form__row input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #919191;
+}
+
+.address-search-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 80px;
+  font-size: 12px;
+  padding: 6px 0;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #7156ed;
+}
+
+.user-form__save-btn {
+  width: 100%;
+  max-width: 450px;
+  margin-top: 10px;
+  padding: 15px 10px;
+  border-radius: 4px;
+  background-color: #ddd;
+  color: #000;
+  transition: .2s ease-in;
+}
+
+.user-form__save-btn:hover {
+  background-color: #7156ed;
+  color: #fff;
+} 
+
+.resign-btn {
+  font-size: 13px;
+  position: absolute;
+  right: 0;
+  top: 10px;
 }

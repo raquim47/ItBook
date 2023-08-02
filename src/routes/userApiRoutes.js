@@ -89,7 +89,6 @@ router.put(
 router.delete(
   '/api/cart',
   asyncApiHandler(async (req, res) => {
-   
     const user = await User.findById(req.user._id);
     const productIds = req.body.productIds;
     user.cart = user.cart.filter(
@@ -97,7 +96,7 @@ router.delete(
     );
 
     await user.save();
-    console.log(user.cart)
+    console.log(user.cart);
     res.json(buildResponse({ cart: user.cart }));
   })
 );
@@ -131,11 +130,10 @@ router.put(
     const { username, address, phone } = req.body;
 
     if (username) user.username = username;
-    if (address) user.address = address;
-    if (phone) user.phone = phone;
+    user.address = address || '';
+    user.phone = phone || '';
 
     await user.save();
-
     res.json(buildResponse());
   })
 );

@@ -3,6 +3,7 @@
   <head>
     <%- include('./includes/head.ejs') %>
     <link rel="stylesheet" href="/css/pages/user.css" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="/js/pages/user.js" type="module" defer></script>
   </head>
 
@@ -11,16 +12,25 @@
     <main class="main">
       <div class="container">
         <div class="user">
-          <h2 class="user__title">마이페이지</h2>
+          <h2 class="user__title">
+            <% if (section === 'info') { %> 
+              회원 정보 변경 
+            <% } else if (section === 'order') { %> 
+              주문 내역 
+            <% } else { %>
+               마이페이지
+            <% } %>
+          </h2>
           <div class="user__content">
             <aside>
               <nav class="user__nav">
-                <a href="/user" class="active">마이페이지</a>
-                <a href="/user/info">회원 정보 변경</a>
-                <a href="/user/order">주문 내역</a>
-              </nav>
+                <a href="/user" class="<%= section === 'mypage' || !section ? 'active' : '' %>">마이페이지</a>
+                <a href="/user/edit" class="<%= section === 'edit' ? 'active' : '' %>">회원 정보 변경</a>
+                <a href="/user/order" class="<%= section === 'order' ? 'active' : '' %>">주문 내역</a>
+            </nav>
             </aside>
             <div class="user__sections">
+              <% if (section === 'mypage') { %>
               <section class="greet">
                 <h3 class="greet__message">
                   <span>반가워요, </span>
@@ -28,7 +38,7 @@
                 </h3>
               </section>
               <section class="liked-products">
-                <h3>찜한 상품</h3>
+                <h3 class="liked-products__title">찜한 상품</h3>
                 <ul class="liked-products__list">
                   <!-- <li
                     class="product-item"
@@ -55,6 +65,51 @@
                   </li> -->
                 </ul>
               </section>
+              <% } else if (section === 'edit') { %>
+              <section class="edit-user">
+                <h3 class="edit-user__title"><strong id="usernameTitle"><%= userData.username %></strong>님의 회원정보</h3>
+                <form class="user-form">
+                  <div class="user-form__row readonly">
+                    <label for="email">이메일<span class="required">*</span></label>
+                    <input id="email" type="email" value="<%= userData.email %>" readonly>
+                  </div>
+                  <div class="user-form__row">
+                    <label for="username">이름<span class="required">*</span></label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value="<%= userData.username %>"
+                    />
+                  </div>
+                  <div class="user-form__row">
+                    <label for="address">주소</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value="<%= userData.address %>"
+                    />
+                    <button class="address-search-btn" type="button">
+                      배송지 검색
+                    </button>
+                  </div>
+                  <div class="user-form__row">
+                    <label for="phone">전화번호</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value="<%= userData.phone %>"
+                    />
+                  </div>
+                  <button class="user-form__save-btn">저장하기</button>
+                </form>
+                <a href="/user/resign" class="resign-btn">회원 탈퇴 &gt;</a>
+              </section>
+              <% } else if (section === 'order') { %>
+              <!-- Order History Content -->
+              <% } %>
             </div>
           </div>
         </div>

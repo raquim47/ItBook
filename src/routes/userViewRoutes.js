@@ -24,16 +24,30 @@ router.get(
 );
 
 router.get(
-  '/user',
+  '/user/:section?',
   asyncRenderHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
+    const section = req.params.section || 'mypage';
+    const sectionTitles = {
+      mypage: '마이페이지',
+      edit: '회원정보 변경',
+      order: '주문 내역',
+      resign: '회원 탈퇴'
+    };
+    
+    if (!['mypage', 'edit', 'order', 'resign'].includes(section)) {
+      return res.status(404).render('error.ejs', {
+        pageTitle: '404 - 페이지를 찾을 수 없습니다.',
+      });
+    }
+
     res.render('user.ejs', {
       authStatus: req.user,
-      userData: {
-        username: user.username,
-      },
-      pageTitle: `마이페이지 - 잇북`,
+      userData: user,
+      section, 
+      pageTitle: `${sectionTitles[section]} - 잇북`,
     });
   })
 );
+
 export default router;

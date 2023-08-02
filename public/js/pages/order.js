@@ -6,6 +6,7 @@ import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
 import productService from '../services/product-service.js';
 import userService from '../services/user-service.js';
+import bindAddressSearch from '../utils/bindAddressSearch.js';
 import {
   DELIVERY,
   ERROR,
@@ -53,19 +54,6 @@ const renderOrderItems = async (products) => {
     tr.innerHTML = `<td>${title}</td><td>${product.quantity}</td>`;
     tbody.appendChild(tr);
   }
-};
-
-// 배송지 검색 바인딩(다음 주소 api)
-const bindAddressSearch = () => {
-  document
-    .querySelector('.address-search-btn')
-    .addEventListener('click', () => {
-      new daum.Postcode({
-        oncomplete: (data) => {
-          document.querySelector('#address').value = data.roadAddress;
-        },
-      }).open();
-    });
 };
 
 // 주문 동의 체크박스 이벤트 바인딩
@@ -154,9 +142,9 @@ const postOrder = async (data) => {
     return renderToastMessage(result.error.message);
   }
 
-  renderToastMessage(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
+  renderToastMessage(SUCCESS.ORDER.message, TOAST_TYPES.SUCCESS);
 
-  setTimeout(() => (location.href = '/user/info'), 2500);
+  setTimeout(() => (location.href = '/user/order'), 2500);
 };
 
 // 주문 폼 제출

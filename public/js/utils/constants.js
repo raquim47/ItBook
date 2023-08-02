@@ -16,6 +16,10 @@ export const SUCCESS = {
     type: 'ORDER_SUCCESS',
     message: '주문이 완료되었습니다.',
   },
+  EDIT_USER : {
+    type: 'EDIT_USER',
+    message : '회원 정보가 변경되었습니다.'
+  }
 };
 
 export const ERROR = {
@@ -24,6 +28,16 @@ export const ERROR = {
     message: '로그인이 필요합니다',
   },
   
+  USERNAME_INVALID :{
+    type:'USERNAME_INVALID',
+    message: '한글로 이름을 입력해주세요.'
+  },
+  
+  USERNAME_REQUIRED :{
+    type:'USERNAME_REQUIRED',
+    message: '이름은 필수 입력사항입니다.'
+  },
+
   AGREEMENT_REQUIRED: {
     type: 'AGREEMENT_REQUIRED',
     message: '동의 사항에 체크해주세요',

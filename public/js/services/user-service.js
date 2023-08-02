@@ -3,6 +3,7 @@ import { ERROR } from "../utils/constants.js";
 
 class UserService {
   async requestPutUserInfo(userData) {
+    console.log(userData)
     try {
       const response = await fetch('/api/user', {
         method: 'PUT',
