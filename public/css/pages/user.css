@@ -71,7 +71,63 @@
   color: #7156ed;
 }
 
-/* liked-products */
+/* wishlist */
+.wishlist__list{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem 3rem;
+  margin-top: 30px;
+}
+
+.product-item {
+  position: relative;
+  padding-bottom: 200%; 
+  overflow: hidden;
+}
+
+.product-item a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-item img {
+  height: 70%;
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  transition: filter 0.15s ease-in;
+}
+
+.product-item__info {
+  text-align: center;
+  padding-top: 10px;
+  flex-grow: 1; 
+}
+
+.product-item__title {
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 두 줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.product-item a:hover img {
+  filter: brightness(0.8); 
+}
+
+.product-item a:hover .product-item__title {
+  text-decoration: underline;
+}
 
 /* edit-user */
 .edit-user {

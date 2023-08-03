@@ -26,7 +26,7 @@ router.get(
 router.get(
   '/user/:section?',
   asyncRenderHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).populate('wishList');
     const section = req.params.section || 'mypage';
     const sectionTitles = {
       mypage: '마이페이지',
@@ -40,10 +40,10 @@ router.get(
         pageTitle: '404 - 페이지를 찾을 수 없습니다.',
       });
     }
-
     res.render('user.ejs', {
       authStatus: req.user,
       userData: user,
+      wishList: user.wishList,  
       section, 
       pageTitle: `${sectionTitles[section]} - 잇북`,
     });

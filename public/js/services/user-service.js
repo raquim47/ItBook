@@ -48,7 +48,6 @@ class UserService {
   }
 
   async requestPutUserWishlist(productId){
-    console.log(productId)
     try {
       const response = await fetch(`/api/user/wishlist/${productId}`, {
         method: 'PUT',

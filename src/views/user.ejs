@@ -37,33 +37,29 @@
                 </h3>
               </section>
               <!-- 최근 본 상품 -->
-              <section class="liked-products">
+              <section class="wishlist">
                 <h3 class="user__section-title">찜한 상품</h3>
-                <ul class="liked-products__list">
-                  <!-- <li
-                    class="product-item"
-                    data-price="24000"
-                    data-created-at="Thu Jul 20 2023 01:03:32 GMT+0900 (대한민국 표준시)"
-                    data-categories="mongodb"
-                  >
-                    <a href="/product/64b80954434a4773a2ff913e">
+                <% if (wishList && wishList.length > 0) { %>
+                <ul class="wishlist__list">
+                  <% wishList.forEach(product => { %>
+                  <li class="product-item">
+                    <a href="/product/<%= product._id %>">
                       <img
-                        src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791193059067.jpg"
-                        alt="한 권으로 끝내는 아두이노와 파이썬으로 52개 작품 만들기"
+                        src="<%= product.imageUrl %>"
+                        alt="<%= product.title %>"
                       />
                       <div class="product-item__info">
-                        <strong class="product-item__category">
-                          mongodb
-                        </strong>
                         <h4 class="product-item__title">
-                          한 권으로 끝내는 아두이노와 파이썬으로 52개 작품
-                          만들기
+                          <%= product.title %>
                         </h4>
-                        <p class="product-item__price">24,000원</p>
                       </div>
                     </a>
-                  </li> -->
+                  </li>
+                  <% }) %>
                 </ul>
+                <% } else { %>
+                <p class="empty">찜한 상품이 없습니다.</p>
+                <% } %>
               </section>
               <% } else if (section === 'edit') { %>
               <!-- 회원 정보 수정 -->
