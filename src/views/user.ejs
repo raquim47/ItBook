@@ -12,22 +12,21 @@
     <main class="main">
       <div class="container">
         <div class="user">
-          <h2 class="user__title">
-            <% if (section === 'info') { %> 
-              회원 정보 변경 
-            <% } else if (section === 'order') { %> 
-              주문 내역 
-            <% } else { %>
-               마이페이지
-            <% } %>
-          </h2>
+          <h2 class="user__title"><a href="/user">마이페이지</a></h2>
           <div class="user__content">
             <aside>
               <nav class="user__nav">
-                <a href="/user" class="<%= section === 'mypage' || !section ? 'active' : '' %>">마이페이지</a>
-                <a href="/user/edit" class="<%= section === 'edit' ? 'active' : '' %>">회원 정보 변경</a>
-                <a href="/user/order" class="<%= section === 'order' ? 'active' : '' %>">주문 내역</a>
-            </nav>
+                <a
+                  href="/user/edit"
+                  class="<%= section === 'edit' ? 'active' : '' %>"
+                  >회원 정보 변경</a
+                >
+                <a
+                  href="/user/order"
+                  class="<%= section === 'order' ? 'active' : '' %>"
+                  >주문 내역</a
+                >
+              </nav>
             </aside>
             <div class="user__sections">
               <% if (section === 'mypage') { %>
@@ -37,8 +36,9 @@
                   <span><strong><%= userData.username %></strong> 님</span>
                 </h3>
               </section>
+              <!-- 최근 본 상품 -->
               <section class="liked-products">
-                <h3 class="liked-products__title">찜한 상품</h3>
+                <h3 class="user__section-title">찜한 상품</h3>
                 <ul class="liked-products__list">
                   <!-- <li
                     class="product-item"
@@ -66,15 +66,28 @@
                 </ul>
               </section>
               <% } else if (section === 'edit') { %>
+              <!-- 회원 정보 수정 -->
               <section class="edit-user">
-                <h3 class="edit-user__title"><strong id="usernameTitle"><%= userData.username %></strong>님의 회원정보</h3>
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 회원정보
+                </h3>
                 <form class="user-form">
                   <div class="user-form__row readonly">
-                    <label for="email">이메일<span class="required">*</span></label>
-                    <input id="email" type="email" value="<%= userData.email %>" readonly>
+                    <label for="email"
+                      >이메일<span class="required">*</span></label
+                    >
+                    <input
+                      id="email"
+                      type="email"
+                      value="<%= userData.email %>"
+                      readonly
+                    />
                   </div>
                   <div class="user-form__row">
-                    <label for="username">이름<span class="required">*</span></label>
+                    <label for="username"
+                      >이름<span class="required">*</span></label
+                    >
                     <input
                       type="text"
                       id="username"
@@ -108,19 +121,46 @@
                 <a href="/user/resign" class="resign-btn">회원 탈퇴 &gt;</a>
               </section>
               <% } else if (section === 'order') { %>
-              <!-- Order History Content -->
+              <!-- 주문 조회/수정 -->
+              <section class="order">
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 주문내역
+                </h3>
+                <table class="order__table">
+                  <thead>
+                    <tr>
+                      <th class="th-date">날짜</th>
+                      <th class="th-content">내용</th>
+                      <th class="th-price">결제금액</th>
+                      <th class="th-delivery">배송상태</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
               <% } else if (section === 'resign') { %>
-                <section class="resign">
-                  <h3 class="resign__title">회원 탈퇴</h3>
-                  <form class="resign-form" id="resignForm">
-                    <div class="resign-form__row">
-                      <label for="resignPassword">비밀번호를 입력해주세요</label>
-                      <input id="resignPassword" type="password" autocomplete="new-password">
-                      <button class="resign-form__btn">회원 탈퇴</button>
-                    </div>
-                    <p class="resign__warning">탈퇴 시 모든 정보가 영구적으로 삭제됩니다.<br>이 동작은 취소할 수 없습니다.</p>
-                  </form>
-                </section>
+              <!-- 회원탈퇴 -->
+              <section class="resign">
+                <h3 class="user__section-title">회원 탈퇴</h3>
+                <form class="resign-form" id="resignForm">
+                  <div class="resign-form__row">
+                    <label for="resignPassword">비밀번호를 입력해주세요</label>
+                    <input
+                      id="resignPassword"
+                      type="password"
+                      autocomplete="new-password"
+                    />
+                    <button class="resign-form__btn">회원 탈퇴</button>
+                  </div>
+                  <p class="resign__warning">
+                    탈퇴 시 모든 정보가 영구적으로 삭제됩니다.<br />이 동작은
+                    취소할 수 없습니다.
+                  </p>
+                </form>
+              </section>
               <% } %>
             </div>
           </div>

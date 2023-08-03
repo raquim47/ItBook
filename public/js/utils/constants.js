@@ -19,6 +19,10 @@ export const SUCCESS = {
   EDIT_USER : {
     type: 'EDIT_USER',
     message : '회원 정보가 변경되었습니다.'
+  },
+  CANCLE_ORDER : {
+    type: 'CANCLE_ORDER',
+    message : '주문이 취소되었습니다.'
   }
 };
 
@@ -51,6 +55,11 @@ export const ERROR = {
   ORDER_ITEMS_REQUIRED: {
     type: 'ORDER_ITEMS_REQUIRED',
     message: '선택된 주문 상품이 없습니다.',
+  },
+  
+  ORDER_NOT_FOUND: {
+    type: 'ORDER_NOT_FOUND',
+    message: '주문 내역을 찾을 수 없습니다.',
   },
 
   PASSWORD_INVALID: {

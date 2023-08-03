@@ -3,6 +3,7 @@ import renderScrollTopBtn from '../components/scroll-top-btn.js';
 import renderToastMessage from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
+import orderService from '../services/order-service.js';
 import userService from '../services/user-service.js';
 import bindAddressSearch from '../utils/bindAddressSearch.js';
 import { ERROR, SUCCESS, TOAST_TYPES } from '../utils/constants.js';
@@ -66,7 +67,85 @@ const initEditPage = () => {
   bindSaveUser();
 };
 
-const initOrderPage = () => {};
+const cancelOrder = async (orderId) => {
+  const result = await orderService.requestPutCancelOrder(orderId);
+  if (result.error) {
+    renderToastMessage(result.error.message);
+  } else {
+    renderToastMessage(SUCCESS.CANCLE_ORDER.message, TOAST_TYPES.SUCCESS);
+    // 성공적으로 주문 취소 요청을 처리한 후 UI 갱신
+    const updatedOrder = result.data;
+    const orderItemElement = document.querySelector(
+      `.order__item[data-order-id="${orderId}"]`
+    );
+
+    // 주문 상태 업데이트
+    const statusElement = orderItemElement.querySelector('td:nth-child(4)');
+    statusElement.innerHTML = `
+    ${updatedOrder.deliveryStatus}
+    ${
+      updatedOrder.deliveryStatus === '상품 준비중'
+        ? '<button class="order__cancel-btn">배송취소</button>'
+        : '<button class="order__cancel-btn" disabled>배송취소</button>'
+    }
+  `;
+  }
+};
+
+const initOrderPage = async () => {
+  const result = await orderService.requestGetMyOrder();
+  if (result.error) {
+    renderToastMessage(result.error.message);
+    return;
+  }
+  const orderTableBody = document.querySelector('.order__table tbody');
+  const orders = result.data;
+
+  if (orders.length === 0) {
+    orderTableBody.innerHTML =
+      '<tr><td colspan="4" class="empty">주문 내역이 없습니다.</td></tr>';
+    return;
+  }
+
+  orderTableBody.innerHTML = orders
+    .map(
+      (order) => `
+      <tr class="order__item" data-order-id="${order._id}">
+        <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+        <td>
+          ${order.products
+            .map(
+              (product) => `
+            <div class="order__product">
+              ${product.productId.title} (${product.quantity})
+            </div>
+          `
+            )
+            .join('')}
+        </td>
+        <td>${order.totalPrice.toLocaleString()}원</td>
+        <td>
+          ${order.deliveryStatus}
+          ${
+            order.deliveryStatus === '상품 준비중'
+              ? '<button class="order__cancel-btn">배송취소</button>'
+              : '<button class="order__cancel-btn" disabled>배송취소</button>'
+          }
+        </td>
+      </tr>
+    `
+    )
+    .join('');
+
+  orderTableBody.addEventListener('click', (event) => {
+    if (event.target.classList.contains('order__cancel-btn')) {
+      const isConfirmed = confirm('주문을 취소하시겠습니까?');
+      if (!isConfirmed) return;
+      const orderId = event.target.closest('.order__item').dataset.orderId;
+      cancelOrder(orderId);
+    }
+  });
+};
 
 const initResignPage = () => {
   document
@@ -87,7 +166,7 @@ const initResignPage = () => {
         renderToastMessage(result.error.message);
       } else {
         logoutAndRedirect();
-        location.href = '/'
+        location.href = '/';
       }
     });
 };

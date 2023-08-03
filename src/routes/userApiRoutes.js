@@ -139,6 +139,21 @@ router.put(
   })
 );
 
+router.get(
+  '/api/order',
+  asyncApiHandler(async (req, res) => {
+    const userOrders = await Order.find({ userId: req.user._id }).populate(
+      'products.productId'
+    );
+
+    if (!userOrders.length) {
+      return res.json(buildResponse([]));
+    }
+
+    res.json(buildResponse(userOrders));
+  })
+);
+
 router.post(
   '/api/order',
   asyncApiHandler(async (req, res) => {
@@ -155,6 +170,20 @@ router.post(
     await newOrder.save();
 
     res.json(buildResponse());
+  })
+);
+
+router.put(
+  '/api/order/cancel/:orderId',
+  asyncApiHandler(async (req, res) => {
+    const userOrders = await Order.findById(req.params.orderId);
+    if (!userOrders) {
+      return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
+    }
+    userOrders.deliveryStatus = '주문취소';
+    await userOrders.save();
+
+    res.json(buildResponse(userOrders));
   })
 );
 
