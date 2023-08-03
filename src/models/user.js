@@ -15,7 +15,7 @@ const userSchema = new Schema({
       quantity: { type: Number, required: true },
     },
   ],
-  recentlyViewed: [
+  wishList: [
     { type: Schema.Types.ObjectId, required: true, ref: 'Product' },
   ],
 });

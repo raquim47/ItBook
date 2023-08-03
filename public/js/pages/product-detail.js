@@ -3,6 +3,7 @@ import { ERROR, LOCAL_STORAGE_KEYS, TOAST_TYPES } from '../utils/constants.js';
 import showToast from '../components/toast-message.js';
 import cartService from '../services/cart-service.js';
 import authService from '../services/auth-service.js';
+import userService from '../services/user-service.js';
 
 // 총 금액 업데이트
 const updateTotalPrice = (quantity = 1) => {
@@ -39,48 +40,68 @@ const bindEventsCountBtns = () => {
   increaseBtn.addEventListener('click', adjustQuantity);
 };
 
-const onclickAddCartBtn = async (e) => {
-  const pathParts = window.location.pathname.split('/');
-  const productId = pathParts[pathParts.length - 1];
-  const quantity = Number(document.getElementById('quantity').textContent);
-
-  const result = await cartService.requestPostToCart({ productId, quantity });
-  if (result.error) {
-    showToast(result.error);
-    return;
-  }
-  const toastContent = `
-      <div class="toastMessage__content">
-        <p>장바구니에 상품을 담았습니다.</p>
-        <a href="/cart">장바구니로 이동 &gt;</a>
-      </div>
-    `;
-
-  showToast(toastContent, TOAST_TYPES.SUCCESS);
+const bindWishlistBtn = () => {
+  const wishlistBtn = document.querySelector('.product-detail__wishlist-btn');
+  wishlistBtn.addEventListener('click', async (e) => {
+    const currentBtn = e.currentTarget;
+    const productId = window.location.pathname.split('/').pop();
+    const result = await userService.requestPutUserWishlist(productId);
+    if (result.error) {
+      showToast(result.error)
+    } else {
+      currentBtn.classList.toggle('active');
+    }
+  });
 };
 
-const onClickBuyBtn = () => {
-  if(!authService.isAuth){
-    showToast(ERROR.AUTH_REQUIRED)
-    return;
-  }
+const bindCartBtn = () => {
+  const cartBtn = document.querySelector('.product-detail__cart-btn');
+  cartBtn.addEventListener('click', async () => {
+    const pathParts = window.location.pathname.split('/');
+    const productId = pathParts[pathParts.length - 1];
+    const quantity = Number(document.getElementById('quantity').textContent);
 
-  const pathParts = window.location.pathname.split('/');
-  const productId = pathParts[pathParts.length - 1];
-  const quantity = Number(document.getElementById('quantity').textContent);
+    const result = await cartService.requestPostToCart({ productId, quantity });
+    if (result.error) {
+      showToast(result.error);
+      return;
+    }
+    const toastContent = `
+        <div class="toastMessage__content">
+          <p>장바구니에 상품을 담았습니다.</p>
+          <a href="/cart">장바구니로 이동 &gt;</a>
+        </div>
+      `;
 
-  const productAmount = document
-    .querySelector('#totalPrice')
-    .textContent.replace(/[,\s원]/g, '');
-  
-  const data = {
-    products: [{productId, quantity}],
-    productAmount,
-    fromCart : false,
-  };
-  localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
-  location.href = '/order';
-}
+    showToast(toastContent, TOAST_TYPES.SUCCESS);
+  });
+};
+
+const bindBuyBtn = () => {
+  const buyBtn = document.querySelector('.product-detail__buy-btn');
+  buyBtn.addEventListener('click', () => {
+    if (!authService.isAuth) {
+      showToast(ERROR.AUTH_REQUIRED);
+      return;
+    }
+
+    const pathParts = window.location.pathname.split('/');
+    const productId = pathParts[pathParts.length - 1];
+    const quantity = Number(document.getElementById('quantity').textContent);
+
+    const productAmount = document
+      .querySelector('#totalPrice')
+      .textContent.replace(/[,\s원]/g, '');
+
+    const data = {
+      products: [{ productId, quantity }],
+      productAmount,
+      fromCart: false,
+    };
+    localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
+    location.href = '/order';
+  });
+};
 
 const initPage = async () => {
   await authService.initializeAuth();
@@ -89,10 +110,10 @@ const initPage = async () => {
   setupHeader();
   bindEventsCountBtns();
   updateTotalPrice();
-  const addCartBtn = document.querySelector('.product-detail__cart-btn');
-  const buyBtn = document.querySelector('.product-detail__buy-btn');
-  addCartBtn.addEventListener('click', onclickAddCartBtn);
-  buyBtn.addEventListener('click', onClickBuyBtn)
+
+  bindWishlistBtn();
+  bindCartBtn();
+  bindBuyBtn();
 };
 
 initPage();

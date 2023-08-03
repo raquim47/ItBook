@@ -61,10 +61,15 @@
               <strong id="totalPrice"></strong>
             </div>
             <div class="product-detail__btns">
+              <button class="product-detail__wishlist-btn <%= isWishlist ? 'active' : '' %>" aria-label="찜하기" title="찜하기">
+                <span class="heart-filled">♥︎</span>
+                <span class="heart-empty">♡</span>
+              </button>
               <button
                 data-is-auth="<%= authStatus ? 'true' : 'false' %>"
                 class="product-detail__cart-btn"
                 aria-label="장바구니 담기"
+                title="장바구니 담기"
               ></button>
               <button
                 data-is-auth="<%= authStatus ? 'true' : 'false' %>"

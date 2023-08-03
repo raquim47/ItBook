@@ -2,6 +2,7 @@ import express from 'express';
 import { asyncRenderHandler } from '../utils/asyncHandler';
 import Product from '../models/product';
 import Category from '../models/category';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -65,9 +66,16 @@ router.get(
   asyncRenderHandler(async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findById(productId).populate('subCategories');
+    let isWishlist = false;
+
+    if (req.user) {
+      isWishlist = await User.exists({ _id: req.user._id, wishList: productId });
+    }
+
     res.render('product-detail.ejs', {
       authStatus: req.user,
       product,
+      isWishlist, 
       pageTitle: `${product.title} - 잇북`,
     });
   })

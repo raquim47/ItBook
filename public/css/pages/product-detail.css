@@ -121,14 +121,35 @@
   gap: 15px;
 }
 
-.product-detail__cart-btn {
+.product-detail__cart-btn,
+.product-detail__wishlist-btn {
   display: block;
   border: 1px solid #919191;
   width: 60px;
   height: 60px;
   border-radius: 4px;
+}
+
+.product-detail__cart-btn {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAABACAMAAAB4KUSAAAAAV1BMVEUAAABAQEBCQkJAQEBAQEBFRUVERERDQ0NDQ0NCQkJFRUVFRUVCQkJERERERERERERERERDQ0NFRUVDQ0NDQ0NERERERERERERDQ0NFRUVDQ0NEREREREQfR2jqAAAAHHRSTlMAEB8gMDBAUF9gYG9wcH+Aj5CQn6+vv8/f3+/vHa+H/gAAATNJREFUSMftlt1ygyAQhaEkpLRVazSocN7/OXth6sRxfwZmelW/q5idQ5ZzFqIxJyfVvGcAwDS4QuGCJ/lWJkzY8EXCMG/CbMt3ar8AINSY1AEYaoQ3AFON0AHI29PnIx54BMfa++tOAMkSuECvz88NGBpCOL7Y6mZOeT0KewDdtmN/pE+08R9qHn7nX0keCcCbkodq/Augv973NCt5kAyMC6My5jYxR2+XB3UAmU5No+QxcnUlDwfOAyUPtlMtj8jMuJaHAwDH7z5InUamJuYxCas2wqJSp2uxJat+ERZdjRPg59ElSXeX7si5TmeMDROpSqM3/5xLxNKSnrUZkX9JcBkAvplrCouVbjHySF7WQqdMnCf/HaQLqV/rrvgX11G9c73MgjsRiVzW9kly9eTkj/kBkEQ2R+qEUX8AAAAASUVORK5CYII=)
   center center / 28px no-repeat;
+}
+
+.product-detail__wishlist-btn {
+  font-size: 28px;
+  font-weight: 200;
+}
+.product-detail__wishlist-btn .heart-filled,
+.product-detail__wishlist-btn.active .heart-empty {
+  display: none;
+}
+
+.product-detail__wishlist-btn.active .heart-filled {
+  display: inline;
+}
+
+.product-detail__wishlist-btn.active {
+  color: #f45552;
 }
 
 .product-detail__buy-btn {

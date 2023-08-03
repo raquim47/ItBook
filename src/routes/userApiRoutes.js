@@ -202,4 +202,20 @@ router.delete(
   })
 );
 
+router.put(
+  '/api/user/wishlist/:productId',
+  asyncApiHandler(async (req, res) => {
+    const productId = req.params.productId;
+    const user = await User.findById(req.user._id);
+
+    if (user.wishList.includes(productId)) { // 찜 해제
+      user.wishList = user.wishList.filter(id => id.toString() !== productId);
+    } else { // 찜하기
+      user.wishList.push(productId);
+    }
+    await user.save();
+    res.json(buildResponse());
+  })
+);
+
 export default router;

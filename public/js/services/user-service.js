@@ -36,7 +36,6 @@ class UserService {
       });
       
       const result = await response.json();
-      console.log(result)
       if (!response.ok) {
         return buildResponse(null, result.error);
       }
@@ -44,6 +43,25 @@ class UserService {
       return buildResponse();
     } catch (error) {
       console.error('In requestDeleteUser', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
+    }
+  }
+
+  async requestPutUserWishlist(productId){
+    console.log(productId)
+    try {
+      const response = await fetch(`/api/user/wishlist/${productId}`, {
+        method: 'PUT',
+      });
+      
+      const result = await response.json();
+      if (!response.ok) {
+        return buildResponse(null, result.error);
+      }
+
+      return buildResponse();
+    } catch (error) {
+      console.error('In requestPutUserWishlist', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
