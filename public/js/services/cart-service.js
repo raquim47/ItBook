@@ -1,6 +1,6 @@
 import authService from './auth-service.js';
 import { CUSTOM_EVENT, ERROR, LOCAL_STORAGE_KEYS } from '../utils/constants.js';
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import buildResponse from '../utils/build-response.js';
 
 class CartService {
@@ -17,7 +17,7 @@ class CartService {
     const cartResult = await this.requestGetCart();
 
     if (cartResult.error) {
-      renderToastMessage(cartData.message);
+      showToast(cartData.message);
     }
   }
 

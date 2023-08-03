@@ -1,4 +1,4 @@
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import buildResponse from '../utils/build-response.js';
 import { ERROR, CUSTOM_EVENT } from '../utils/constants.js';
 
@@ -20,7 +20,7 @@ class AuthService {
     const result = await this.requestGetAuthStatus();
 
     if (result.error) {
-      renderToastMessage(result.error);
+      showToast(result.error);
     }
   }
 

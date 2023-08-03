@@ -1,6 +1,6 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
@@ -45,7 +45,7 @@ const renderOrderItems = async (products) => {
     );
 
     if (result.error) {
-      renderToastMessage(result.error);
+      showToast(result.error);
       continue;
     }
 
@@ -77,7 +77,7 @@ const handleInvalidAccess = () => {
         <p>잘못된 접근입니다.</p>
         <p>장바구니페이지로 이동합니다.</p>
       </div>`;
-  renderToastMessage(toastContent);
+  showToast(toastContent);
   setTimeout(() => (window.location.href = '/cart'), 2000);
 };
 
@@ -87,13 +87,13 @@ const validateForm = () => {
   const phone = document.querySelector('#phone').value.trim();
 
   if (!address || !phone) {
-    renderToastMessage(ERROR.ADDREDD_PHONE_REQUIRED.message);
+    showToast(ERROR.ADDREDD_PHONE_REQUIRED.message);
     return false;
   }
 
   const pattern = /^010-\d{4}-\d{4}$/;
   if (!pattern.test(phone)) {
-    renderToastMessage(ERROR.PHONE_INVALID.message);
+    showToast(ERROR.PHONE_INVALID.message);
     return false;
   }
 
@@ -102,7 +102,7 @@ const validateForm = () => {
     document.querySelector('#agreePaymentInfo').checked;
   const isAgreePrivacy = document.querySelector('#agreePrivacy').checked;
   if (!isAgreePaymentInfo || !isAgreePrivacy) {
-    renderToastMessage(ERROR.AGREEMENT_REQUIRED);
+    showToast(ERROR.AGREEMENT_REQUIRED);
     return false;
   }
 
@@ -124,7 +124,7 @@ const constructOrderData = (orderData) => {
 
 const updateUserInfo = async (address, phone) => {
   const result = await userService.requestPutUserInfo({ address, phone });
-  if (result.error) return renderToastMessage(result.error);
+  if (result.error) return showToast(result.error);
 };
 
 const deleteCartItems = async (products) => {
@@ -132,17 +132,17 @@ const deleteCartItems = async (products) => {
   const result = await cartService.requestDeleteMultipleFromCart(productIds);
 
   if (result.error) {
-    return renderToastMessage(result.error);
+    return showToast(result.error);
   }
 };
 
 const postOrder = async (data) => {
   const result = await orderService.requestPostOrder(data);
   if (result.error) {
-    return renderToastMessage(result.error);
+    return showToast(result.error);
   }
 
-  renderToastMessage(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
+  showToast(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
 
   setTimeout(() => (location.href = '/user/order'), 2500);
 };

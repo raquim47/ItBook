@@ -1,6 +1,6 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
@@ -17,17 +17,17 @@ const validateForm = () => {
   const phoneRegex = /^010-(\d{4})-(\d{4})$/;
 
   if (!username) {
-    renderToastMessage(ERROR.USERNAME_REQUIRED);
+    showToast(ERROR.USERNAME_REQUIRED);
     return false;
   }
 
   if (!koreanRegex.test(username)) {
-    renderToastMessage(ERROR.USERNAME_INVALID);
+    showToast(ERROR.USERNAME_INVALID);
     return false;
   }
 
   if (phone && !phoneRegex.test(phone)) {
-    renderToastMessage(ERROR.PHONE_INVALID.message);
+    showToast(ERROR.PHONE_INVALID.message);
     return false;
   }
 
@@ -51,11 +51,11 @@ const bindSaveUser = () => {
 
       const result = await userService.requestPutUserInfo(formData);
       if (result.error) {
-        renderToastMessage(result.error);
+        showToast(result.error);
       } else {
         document.getElementById('usernameTitle').textContent =
           formData.username;
-        renderToastMessage(SUCCESS.EDIT_USER, TOAST_TYPES.SUCCESS);
+        showToast(SUCCESS.EDIT_USER, TOAST_TYPES.SUCCESS);
       }
     });
 };
@@ -70,9 +70,9 @@ const initEditPage = () => {
 const cancelOrder = async (orderId) => {
   const result = await orderService.requestPutCancelOrder(orderId);
   if (result.error) {
-    renderToastMessage(result.error);
+    showToast(result.error);
   } else {
-    renderToastMessage(SUCCESS.CANCLE_ORDER, TOAST_TYPES.SUCCESS);
+    showToast(SUCCESS.CANCLE_ORDER, TOAST_TYPES.SUCCESS);
     // 성공적으로 주문 취소 요청을 처리한 후 UI 갱신
     const updatedOrder = result.data;
     const orderItemElement = document.querySelector(
@@ -95,7 +95,7 @@ const cancelOrder = async (orderId) => {
 const initOrderPage = async () => {
   const result = await orderService.requestGetMyOrder();
   if (result.error) {
-    renderToastMessage(result.error);
+    showToast(result.error);
     return;
   }
   const orderTableBody = document.querySelector('.order__table tbody');
@@ -155,7 +155,7 @@ const initResignPage = () => {
 
       const password = document.getElementById('resignPassword').value;
       if (!password) {
-        renderToastMessage(ERROR.PASSWORD_REQUIRED);
+        showToast(ERROR.PASSWORD_REQUIRED);
         return;
       }
 
@@ -163,7 +163,7 @@ const initResignPage = () => {
       if (!isConfirmed) return;
       const result = await userService.requestDeleteUser(password);
       if (result.error) {
-        renderToastMessage(result.error);
+        showToast(result.error);
       } else {
         logoutAndRedirect();
         location.href = '/';

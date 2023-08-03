@@ -1,6 +1,6 @@
 import { TOAST_TYPES } from "../utils/constants.js";
 
-const renderToastMessage = (content, type = TOAST_TYPES.WARNING) => {
+const showToast = (content, type = TOAST_TYPES.WARNING) => {
   const existingToast = document.querySelector('.toast-message');
   if (existingToast) return;
 
@@ -22,4 +22,4 @@ const renderToastMessage = (content, type = TOAST_TYPES.WARNING) => {
   }, 3000);
 };
 
-export default renderToastMessage;
+export default showToast;

@@ -1,7 +1,7 @@
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import { ERROR, SUCCESS, TOAST_TYPES, MODAL_MODE } from '../utils/constants.js';
-import renderToastMessage from './toast-message.js';
+import showToast from './toast-message.js';
 
 // 모달 닫기
 const closeModal = () => {
@@ -30,11 +30,11 @@ const handleRequestLogin = async (requestData) => {
 
   if (!authResult.error) {
     closeModal();
-    setTimeout(() => renderToastMessage(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS), 250);
+    setTimeout(() => showToast(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS), 250);
 
     const cartResult = await cartService.requestPostMergeCarts();
     if (cartResult.error) {
-      renderToastMessage(cartResult.error);
+      showToast(cartResult.error);
     }
 
     return;
@@ -48,7 +48,7 @@ const handleRequestLogin = async (requestData) => {
       showErrorMessage('password', authResult.error);
       break;
     default:
-      renderToastMessage(authResult.error);
+      showToast(authResult.error);
   }
 };
 
@@ -61,7 +61,7 @@ const handleRequestJoin = async (requestData) => {
     case null:  
       closeModal();
       setTimeout(
-        () => renderToastMessage(SUCCESS.JOIN, TOAST_TYPES.SUCCESS),
+        () => showToast(SUCCESS.JOIN, TOAST_TYPES.SUCCESS),
         250
       );
       break;
@@ -69,7 +69,7 @@ const handleRequestJoin = async (requestData) => {
       showErrorMessage('email', result.error);
       break;
     default:
-      renderToastMessage(result.error);
+      showToast(result.error);
   }
 };
 

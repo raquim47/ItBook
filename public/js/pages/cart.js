@@ -2,7 +2,7 @@ import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import productService from '../services/product-service.js';
 import {
   CUSTOM_EVENT,
@@ -78,7 +78,7 @@ const createCartItemHTML = (item) => {
 const renderCartItem = async (item) => {
   const result = await productService.requestGetProduct(item.productId);
   if (result.error) {
-    renderToastMessage(result.error);
+    showToast(result.error);
     return;
   }
 
@@ -138,7 +138,7 @@ const onClickCartForm = async (e) => {
       direction
     );
     if (result.error) {
-      renderToastMessage(result.error);
+      showToast(result.error);
     }
   }
 
@@ -148,7 +148,7 @@ const onClickCartForm = async (e) => {
     const result = await cartService.requestDeleteFromCart(productId);
 
     if (result.error) {
-      renderToastMessage(result.error.messge);
+      showToast(result.error.messge);
     }
   }
 };
@@ -245,12 +245,12 @@ const getSelectedItems = () => {
 const onSubmitForm = (e) => {
   e.preventDefault();
   if (!authService.isAuth) {
-    renderToastMessage(ERROR.AUTH_REQUIRED);
+    showToast(ERROR.AUTH_REQUIRED);
     return;
   }
   const itemsToOrder = getSelectedItems();
   if(itemsToOrder.length === 0){
-    renderToastMessage(ERROR.ORDER_ITEMS_REQUIRED)
+    showToast(ERROR.ORDER_ITEMS_REQUIRED)
     return 
   }
   const productAmount = document

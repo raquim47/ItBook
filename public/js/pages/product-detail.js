@@ -1,6 +1,6 @@
 import setupHeader from '../components/header.js';
 import { ERROR, LOCAL_STORAGE_KEYS, TOAST_TYPES } from '../utils/constants.js';
-import renderToastMessage from '../components/toast-message.js';
+import showToast from '../components/toast-message.js';
 import cartService from '../services/cart-service.js';
 import authService from '../services/auth-service.js';
 
@@ -46,22 +46,22 @@ const onclickAddCartBtn = async (e) => {
 
   const result = await cartService.requestPostToCart({ productId, quantity });
   if (result.error) {
-    renderToastMessage(result.error);
+    showToast(result.error);
     return;
   }
-  const toastMessageContent = `
+  const toastContent = `
       <div class="toastMessage__content">
         <p>장바구니에 상품을 담았습니다.</p>
         <a href="/cart">장바구니로 이동 &gt;</a>
       </div>
     `;
 
-  renderToastMessage(toastMessageContent, TOAST_TYPES.SUCCESS);
+  showToast(toastContent, TOAST_TYPES.SUCCESS);
 };
 
 const onClickBuyBtn = () => {
   if(!authService.isAuth){
-    renderToastMessage(ERROR.AUTH_REQUIRED)
+    showToast(ERROR.AUTH_REQUIRED)
     return;
   }
 
