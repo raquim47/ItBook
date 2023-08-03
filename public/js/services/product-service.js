@@ -4,7 +4,7 @@ import { ERROR } from '../utils/constants.js';
 class ProductService {
   constructor() {}
 
-  async requestGetProduct(productId, fields = null) {
+  async getProduct(productId, fields = null) {
     try {
       const endpoint = fields ? `/api/product/${productId}/?fields=${fields}` : `/api/product/${productId}`;
       const response = await fetch(endpoint);
@@ -16,7 +16,7 @@ class ProductService {
 
       return buildResponse(result.data);
     } catch (error) {
-      console.error('In requestGetProduct', error);
+      console.error('In getProduct', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }

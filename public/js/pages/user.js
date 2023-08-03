@@ -49,7 +49,7 @@ const bindSaveUser = () => {
         phone: document.getElementById('phone').value,
       };
 
-      const result = await userService.requestPutUserInfo(formData);
+      const result = await userService.putUserInfo(formData);
       if (result.error) {
         showToast(result.error);
       } else {
@@ -68,7 +68,7 @@ const initEditPage = () => {
 };
 
 const cancelOrder = async (orderId) => {
-  const result = await orderService.requestPutCancelOrder(orderId);
+  const result = await orderService.putCancelOrder(orderId);
   if (result.error) {
     showToast(result.error);
   } else {
@@ -93,7 +93,7 @@ const cancelOrder = async (orderId) => {
 };
 
 const initOrderPage = async () => {
-  const result = await orderService.requestGetMyOrder();
+  const result = await orderService.getMyOrder();
   if (result.error) {
     showToast(result.error);
     return;
@@ -161,7 +161,7 @@ const initResignPage = () => {
 
       const isConfirmed = confirm('정말로 회원 탈퇴를 진행하시겠습니까?');
       if (!isConfirmed) return;
-      const result = await userService.requestDeleteUser(password);
+      const result = await userService.deleteUser(password);
       if (result.error) {
         showToast(result.error);
       } else {

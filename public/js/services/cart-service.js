@@ -14,7 +14,7 @@ class CartService {
 
   // 장바구니 초기화
   async initializeCart() {
-    const cartResult = await this.requestGetCart();
+    const cartResult = await this.getCart();
 
     if (cartResult.error) {
       showToast(cartData.message);
@@ -22,7 +22,7 @@ class CartService {
   }
 
   // 장바구니 가져오기
-  async requestGetCart() {
+  async getCart() {
     try {
       if (authService.isAuth) {
         const response = await fetch('/api/cart');
@@ -42,13 +42,13 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error('In requestGetCart', error);
+      console.error('In getCart', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 장바구니에 상품 추가
-  async requestPostToCart(item) {
+  async postToCart(item) {
     try {
       if (authService.isAuth) {
         const response = await fetch('/api/cart', {
@@ -85,13 +85,13 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error('In requestPostToCart', error);
+      console.error('In postToCart', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 장바구니 상품 삭제
-  async requestDeleteFromCart(productId) {
+  async deleteFromCart(productId) {
     try {
       if (authService.isAuth) {
         const response = await fetch(`/api/cart/${productId}`, {
@@ -115,13 +115,13 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error('In requestDeleteFromCart', error);
+      console.error('In deleteFromCart', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
   
   // 장바구니 상품 여러개 삭제
-  async requestDeleteMultipleFromCart(productIds) {
+  async deleteMultipleFromCart(productIds) {
     try {
       if (authService.isAuth) {
         const response = await fetch(`/api/cart`, {
@@ -151,13 +151,13 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error('In requestDeleteMultipleFromCart', error);
+      console.error('In deleteMultipleFromCart', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 장바구니 수량 변경
-  async requestPutCartItemQuantity(productId, direction) {
+  async putCartItemQuantity(productId, direction) {
     try {
       if (authService.isAuth) {
         const response = await fetch(`/api/cart/${productId}/${direction}`, {
@@ -188,13 +188,13 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error('In requestPutCartItemQuantity', error);
+      console.error('In putCartItemQuantity', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기
-  async requestPostMergeCarts() {
+  async postMergeCarts() {
     try {
       if (this.cart.length === 0) {
         this.dispatchCartUpdate();
@@ -219,7 +219,7 @@ class CartService {
       this.dispatchCartUpdate();
       return buildResponse();
     } catch (error) {
-      console.error(error);
+      console.error('In postMergeCarts', error);
       return ERROR.REQUEST_FAILED;
     }
   }

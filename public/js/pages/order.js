@@ -39,7 +39,7 @@ const renderOrderItems = async (products) => {
   const tbody = document.querySelector('.table tbody');
 
   for (const product of products) {
-    const result = await productService.requestGetProduct(
+    const result = await productService.getProduct(
       product.productId,
       'title'
     );
@@ -123,13 +123,13 @@ const constructOrderData = (orderData) => {
 };
 
 const updateUserInfo = async (address, phone) => {
-  const result = await userService.requestPutUserInfo({ address, phone });
+  const result = await userService.putUserInfo({ address, phone });
   if (result.error) return showToast(result.error);
 };
 
 const deleteCartItems = async (products) => {
   const productIds = products.map((product) => product.productId);
-  const result = await cartService.requestDeleteMultipleFromCart(productIds);
+  const result = await cartService.deleteMultipleFromCart(productIds);
 
   if (result.error) {
     return showToast(result.error);
@@ -137,7 +137,7 @@ const deleteCartItems = async (products) => {
 };
 
 const postOrder = async (data) => {
-  const result = await orderService.requestPostOrder(data);
+  const result = await orderService.postOrder(data);
   if (result.error) {
     return showToast(result.error);
   }

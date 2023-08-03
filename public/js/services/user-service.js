@@ -2,7 +2,7 @@ import buildResponse from "../utils/build-response.js";
 import { ERROR } from "../utils/constants.js";
 
 class UserService {
-  async requestPutUserInfo(userData) {
+  async putUserInfo(userData) {
     try {
       const response = await fetch('/api/user', {
         method: 'PUT',
@@ -20,12 +20,12 @@ class UserService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestPutUserInfo', error);
+      console.error('In putUserInfo', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestDeleteUser(password) {
+  async deleteUser(password) {
     try {
       const response = await fetch('/api/user', {
         method: 'DELETE',
@@ -42,12 +42,12 @@ class UserService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestDeleteUser', error);
+      console.error('In deleteUser', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestPutUserWishlist(productId){
+  async putUserWishlist(productId){
     try {
       const response = await fetch(`/api/user/wishlist/${productId}`, {
         method: 'PUT',
@@ -60,7 +60,7 @@ class UserService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestPutUserWishlist', error);
+      console.error('In putUserWishlist', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }

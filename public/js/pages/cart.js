@@ -76,7 +76,7 @@ const createCartItemHTML = (item) => {
 };
 
 const renderCartItem = async (item) => {
-  const result = await productService.requestGetProduct(item.productId);
+  const result = await productService.getProduct(item.productId);
   if (result.error) {
     showToast(result.error);
     return;
@@ -139,7 +139,7 @@ const onClickCartForm = async (e) => {
       }
     }
 
-    const result = await cartService.requestPutCartItemQuantity(
+    const result = await cartService.putCartItemQuantity(
       productId,
       direction
     );
@@ -151,7 +151,7 @@ const onClickCartForm = async (e) => {
   if (target.classList.contains('x-btn')) {
     savedCheckedProductIds = saveUncheckedState();
     const productId = target.closest('.cart-item').dataset.productId;
-    const result = await cartService.requestDeleteFromCart(productId);
+    const result = await cartService.deleteFromCart(productId);
 
     if (result.error) {
       showToast(result.error.messge);

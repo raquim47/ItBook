@@ -26,13 +26,13 @@ const showErrorMessage = (field, message) => {
 
 // 로그인 요청
 const handleRequestLogin = async (requestData) => {
-  const authResult = await authService.requestPostLogin(requestData);
+  const authResult = await authService.postLogin(requestData);
 
   if (!authResult.error) {
     closeModal();
     setTimeout(() => showToast(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS), 250);
 
-    const cartResult = await cartService.requestPostMergeCarts();
+    const cartResult = await cartService.postMergeCarts();
     if (cartResult.error) {
       showToast(cartResult.error);
     }
@@ -54,7 +54,7 @@ const handleRequestLogin = async (requestData) => {
 
 // 회원 가입 요청
 const handleRequestJoin = async (requestData) => {
-  const result = await authService.requestPostJoin(requestData);
+  const result = await authService.postJoin(requestData);
 
   switch (result.error) {
     case undefined:  

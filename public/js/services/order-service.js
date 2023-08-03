@@ -2,7 +2,7 @@ import buildResponse from '../utils/build-response.js';
 import { ERROR } from '../utils/constants.js';
 
 class OrderService {
-  async requestGetMyOrder() {
+  async getMyOrder() {
     try {
       const response = await fetch('/api/order');
 
@@ -13,12 +13,12 @@ class OrderService {
 
       return buildResponse(result.data);
     } catch (error) {
-      console.error('In requestGetOrder', error);
+      console.error('In getOrder', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestPostOrder(orderData) {
+  async postOrder(orderData) {
     try {
       const response = await fetch('/api/order', {
         method: 'POST',
@@ -35,12 +35,12 @@ class OrderService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestPostOrder', error);
+      console.error('In postOrder', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestPutCancelOrder(orderId) {
+  async putCancelOrder(orderId) {
     try {
       const response = await fetch(`/api/order/cancel/${orderId}`, { 
         method: 'PUT',
@@ -53,7 +53,7 @@ class OrderService {
 
       return buildResponse(result.data);
     } catch (error) {
-      console.error('In requestPutCancleOrder', error);
+      console.error('In putCancelOrder', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }

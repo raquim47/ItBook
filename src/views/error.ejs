@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+  </head>
 
-<head>
-  <%- include('./includes/head.ejs') %>
-</head>
-
-<body>
-  <main class="main">
-    <h1>404 페이지를 찾을 수 없습니다</h1>
-    <a href="/">홈으로 이동</a>
-  </main>
-  <%- include('./includes/footer.ejs') %>
-</body>
+  <body>
+    <main class="main">
+      <h1 class="empty"><%= message %></h1>
+      <a
+        href="/"
+        style="
+          text-align: center;
+          display: block;
+          width: 140px;
+          margin: 0 auto;
+          font-size: 16px;
+          padding: 10px;
+          background-color: #7156ed;
+          border-radius: 4px;
+          color: #fff;
+        "
+        >홈으로 이동</a
+      >
+    </main>
+    <%- include('./includes/footer.ejs') %>
+  </body>
 </html>
-

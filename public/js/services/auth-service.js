@@ -17,14 +17,14 @@ class AuthService {
   }
 
   async initializeAuth() {
-    const result = await this.requestGetAuthStatus();
+    const result = await this.getAuthStatus();
 
     if (result.error) {
       showToast(result.error);
     }
   }
 
-  async requestGetAuthStatus() {
+  async getAuthStatus() {
     try {
       const response = await fetch('/api/auth');
       const result = await response.json();
@@ -38,12 +38,12 @@ class AuthService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestGetAuthStatus', error);
+      console.error('In getAuthStatus', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestPostLogin(requestData) {
+  async postLogin(requestData) {
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -65,12 +65,12 @@ class AuthService {
       document.dispatchEvent(new Event(CUSTOM_EVENT.LOGIN_SUCCESS));
       return buildResponse();
     } catch (error) {
-      console.error('In requestPostLogin', error);
+      console.error('In postLogin', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
-  async requestPostJoin(requestData) {
+  async postJoin(requestData) {
     try {
       const response = await fetch('/api/join', {
         method: 'POST',
@@ -86,7 +86,7 @@ class AuthService {
 
       return buildResponse();
     } catch (error) {
-      console.error('In requestPostJoin', error);
+      console.error('In postJoin', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }

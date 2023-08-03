@@ -11,6 +11,7 @@ import publicApiRoutes from './routes/publicApiRoutes'
 import userApiRoutes from './routes/userApiRoutes'
 import publicViewRoutes from './routes/publicViewRoutes'
 import userViewRoutes from './routes/userViewRoutes'
+import { ERROR_PAGE } from '../public/js/utils/constants';
 
 
 dotenv.config();
@@ -39,15 +40,7 @@ app.use(userViewRoutes);
 
 // 404
 app.use((req, res) => {
-  res.status(404).render('404', {
-      pageTitle: '404 - 페이지를 찾을 수 없습니다',
-  });
-});
-
-// Error handler
-app.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(404).render('error', ERROR_PAGE[404]);
 });
 
 const PORT = process.env.PORT || 3000;

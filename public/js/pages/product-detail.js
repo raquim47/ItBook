@@ -45,7 +45,7 @@ const bindWishlistBtn = () => {
   wishlistBtn.addEventListener('click', async (e) => {
     const currentBtn = e.currentTarget;
     const productId = window.location.pathname.split('/').pop();
-    const result = await userService.requestPutUserWishlist(productId);
+    const result = await userService.putUserWishlist(productId);
     if (result.error) {
       showToast(result.error)
     } else {
@@ -61,7 +61,7 @@ const bindCartBtn = () => {
     const productId = pathParts[pathParts.length - 1];
     const quantity = Number(document.getElementById('quantity').textContent);
 
-    const result = await cartService.requestPostToCart({ productId, quantity });
+    const result = await cartService.postToCart({ productId, quantity });
     if (result.error) {
       showToast(result.error);
       return;

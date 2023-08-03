@@ -48,3 +48,10 @@ export const LOCAL_STORAGE_KEYS = {
   ORDER_ITEMS: 'orderItems',
   CART_ITEMS: 'cartItems',
 };
+
+export const ERROR_PAGE = {
+  404: {
+    message: '페이지를 찾을 수 없습니다.',
+    pageTitle: '404 ERROR - 잇북',
+  },
+};

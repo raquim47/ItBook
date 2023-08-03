@@ -1,8 +1,10 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import { asyncRenderHandler } from '../utils/asyncHandler';
 import Product from '../models/product';
 import Category from '../models/category';
 import User from '../models/user';
+import { ERROR_PAGE } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
@@ -33,9 +35,7 @@ router.get(
     const { mainCategory } = req.params;
 
     if (!['all', 'frontend', 'backend', 'cs'].includes(mainCategory)) {
-      return res.status(404).render('error.ejs', {
-        pageTitle: '404 - 페이지를 찾을 수 없습니다.',
-      });
+      return res.status(404).render('error', ERROR_PAGE[404]);
     }
 
     const productFilter = mainCategory !== 'all' ? { mainCategory } : {};
@@ -65,17 +65,30 @@ router.get(
   '/product/:productId',
   asyncRenderHandler(async (req, res) => {
     const { productId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.render('error', ERROR_PAGE[404]);
+    }
+
     const product = await Product.findById(productId).populate('subCategories');
+
+    if (!product) {
+      return res.render('error', ERROR_PAGE[404]);
+    }
+
     let isWishlist = false;
 
     if (req.user) {
-      isWishlist = await User.exists({ _id: req.user._id, wishList: productId });
+      isWishlist = await User.exists({
+        _id: req.user._id,
+        wishList: productId,
+      });
     }
 
     res.render('product-detail.ejs', {
       authStatus: req.user,
       product,
-      isWishlist, 
+      isWishlist,
       pageTitle: `${product.title} - 잇북`,
     });
   })

@@ -1,6 +1,7 @@
 import express from 'express';
 import { asyncRenderHandler } from '../utils/asyncHandler';
 import User from '../models/user';
+import { ERROR_PAGE } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
@@ -36,9 +37,7 @@ router.get(
     };
     
     if (!['mypage', 'edit', 'order', 'resign'].includes(section)) {
-      return res.status(404).render('error.ejs', {
-        pageTitle: '404 - 페이지를 찾을 수 없습니다.',
-      });
+      return res.status(404).render('error', ERROR_PAGE[404]);
     }
     res.render('user.ejs', {
       authStatus: req.user,
