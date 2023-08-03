@@ -94,6 +94,12 @@ const renderCartItem = async (item) => {
 const renderCartList = async () => {
   const cartList = document.getElementById('cartList');
   const cart = cartService.cart;
+  
+  if(cart.length === 0){
+    cartList.innerHTML = '<p class="empty">담긴 상품이 없습니다.</p>'
+    return;
+  }
+
   const cartItemsHTMLPromises = cart.map((item) => renderCartItem(item));
   const cartItemsHTMLArray = await Promise.all(cartItemsHTMLPromises);
 
