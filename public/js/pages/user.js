@@ -17,12 +17,12 @@ const validateForm = () => {
   const phoneRegex = /^010-(\d{4})-(\d{4})$/;
 
   if (!username) {
-    renderToastMessage(ERROR.USERNAME_REQUIRED.message);
+    renderToastMessage(ERROR.USERNAME_REQUIRED);
     return false;
   }
 
   if (!koreanRegex.test(username)) {
-    renderToastMessage(ERROR.USERNAME_INVALID.message);
+    renderToastMessage(ERROR.USERNAME_INVALID);
     return false;
   }
 
@@ -51,11 +51,11 @@ const bindSaveUser = () => {
 
       const result = await userService.requestPutUserInfo(formData);
       if (result.error) {
-        renderToastMessage(result.error.message);
+        renderToastMessage(result.error);
       } else {
         document.getElementById('usernameTitle').textContent =
           formData.username;
-        renderToastMessage(SUCCESS.EDIT_USER.message, TOAST_TYPES.SUCCESS);
+        renderToastMessage(SUCCESS.EDIT_USER, TOAST_TYPES.SUCCESS);
       }
     });
 };
@@ -70,9 +70,9 @@ const initEditPage = () => {
 const cancelOrder = async (orderId) => {
   const result = await orderService.requestPutCancelOrder(orderId);
   if (result.error) {
-    renderToastMessage(result.error.message);
+    renderToastMessage(result.error);
   } else {
-    renderToastMessage(SUCCESS.CANCLE_ORDER.message, TOAST_TYPES.SUCCESS);
+    renderToastMessage(SUCCESS.CANCLE_ORDER, TOAST_TYPES.SUCCESS);
     // 성공적으로 주문 취소 요청을 처리한 후 UI 갱신
     const updatedOrder = result.data;
     const orderItemElement = document.querySelector(
@@ -95,7 +95,7 @@ const cancelOrder = async (orderId) => {
 const initOrderPage = async () => {
   const result = await orderService.requestGetMyOrder();
   if (result.error) {
-    renderToastMessage(result.error.message);
+    renderToastMessage(result.error);
     return;
   }
   const orderTableBody = document.querySelector('.order__table tbody');
@@ -155,7 +155,7 @@ const initResignPage = () => {
 
       const password = document.getElementById('resignPassword').value;
       if (!password) {
-        renderToastMessage(ERROR.PASSWORD_REQUIRED.message);
+        renderToastMessage(ERROR.PASSWORD_REQUIRED);
         return;
       }
 
@@ -163,7 +163,7 @@ const initResignPage = () => {
       if (!isConfirmed) return;
       const result = await userService.requestDeleteUser(password);
       if (result.error) {
-        renderToastMessage(result.error.message);
+        renderToastMessage(result.error);
       } else {
         logoutAndRedirect();
         location.href = '/';

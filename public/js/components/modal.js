@@ -30,11 +30,11 @@ const handleRequestLogin = async (requestData) => {
 
   if (!authResult.error) {
     closeModal();
-    setTimeout(() => renderToastMessage(SUCCESS.LOGIN.message, TOAST_TYPES.SUCCESS), 250);
+    setTimeout(() => renderToastMessage(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS), 250);
 
     const cartResult = await cartService.requestPostMergeCarts();
     if (cartResult.error) {
-      renderToastMessage(cartResult.error.message);
+      renderToastMessage(cartResult.error);
     }
 
     return;
@@ -42,13 +42,13 @@ const handleRequestLogin = async (requestData) => {
 
   switch (authResult.error.type) {
     case ERROR.EMAIL_NOT_FOUND.type:
-      showErrorMessage('email', authResult.error.message);
+      showErrorMessage('email', authResult.error);
       break;
     case ERROR.PASSWORD_INVALID.type:
-      showErrorMessage('password', authResult.error.message);
+      showErrorMessage('password', authResult.error);
       break;
     default:
-      renderToastMessage(authResult.error.message);
+      renderToastMessage(authResult.error);
   }
 };
 
@@ -56,21 +56,20 @@ const handleRequestLogin = async (requestData) => {
 const handleRequestJoin = async (requestData) => {
   const result = await authService.requestPostJoin(requestData);
 
-  if (!result.error) {
-    closeModal();
-    setTimeout(
-      () => renderToastMessage(SUCCESS.JOIN.message, TOAST_TYPES.SUCCESS),
-      250
-    );
-    return;
-  }
-
-  switch (result.error.type) {
-    case ERROR.EMAIL_DUPLICATE.type:
-      showErrorMessage('email', result.error.message);
+  switch (result.error) {
+    case undefined:  
+    case null:  
+      closeModal();
+      setTimeout(
+        () => renderToastMessage(SUCCESS.JOIN, TOAST_TYPES.SUCCESS),
+        250
+      );
+      break;
+    case ERROR.EMAIL_DUPLICATE:
+      showErrorMessage('email', result.error);
       break;
     default:
-      renderToastMessage(result.error.message);
+      renderToastMessage(result.error);
   }
 };
 

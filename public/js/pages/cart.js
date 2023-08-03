@@ -78,7 +78,7 @@ const createCartItemHTML = (item) => {
 const renderCartItem = async (item) => {
   const result = await productService.requestGetProduct(item.productId);
   if (result.error) {
-    renderToastMessage(result.error.message);
+    renderToastMessage(result.error);
     return;
   }
 
@@ -138,7 +138,7 @@ const onClickCartForm = async (e) => {
       direction
     );
     if (result.error) {
-      renderToastMessage(result.error.message);
+      renderToastMessage(result.error);
     }
   }
 
@@ -245,12 +245,12 @@ const getSelectedItems = () => {
 const onSubmitForm = (e) => {
   e.preventDefault();
   if (!authService.isAuth) {
-    renderToastMessage(ERROR.AUTH_REQUIRED.message);
+    renderToastMessage(ERROR.AUTH_REQUIRED);
     return;
   }
   const itemsToOrder = getSelectedItems();
   if(itemsToOrder.length === 0){
-    renderToastMessage(ERROR.ORDER_ITEMS_REQUIRED.message)
+    renderToastMessage(ERROR.ORDER_ITEMS_REQUIRED)
     return 
   }
   const productAmount = document

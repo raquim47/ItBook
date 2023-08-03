@@ -45,7 +45,7 @@ const renderOrderItems = async (products) => {
     );
 
     if (result.error) {
-      renderToastMessage(result.error.message);
+      renderToastMessage(result.error);
       continue;
     }
 
@@ -102,7 +102,7 @@ const validateForm = () => {
     document.querySelector('#agreePaymentInfo').checked;
   const isAgreePrivacy = document.querySelector('#agreePrivacy').checked;
   if (!isAgreePaymentInfo || !isAgreePrivacy) {
-    renderToastMessage(ERROR.AGREEMENT_REQUIRED.message);
+    renderToastMessage(ERROR.AGREEMENT_REQUIRED);
     return false;
   }
 
@@ -124,7 +124,7 @@ const constructOrderData = (orderData) => {
 
 const updateUserInfo = async (address, phone) => {
   const result = await userService.requestPutUserInfo({ address, phone });
-  if (result.error) return renderToastMessage(result.error.message);
+  if (result.error) return renderToastMessage(result.error);
 };
 
 const deleteCartItems = async (products) => {
@@ -132,17 +132,17 @@ const deleteCartItems = async (products) => {
   const result = await cartService.requestDeleteMultipleFromCart(productIds);
 
   if (result.error) {
-    return renderToastMessage(result.error.message);
+    return renderToastMessage(result.error);
   }
 };
 
 const postOrder = async (data) => {
   const result = await orderService.requestPostOrder(data);
   if (result.error) {
-    return renderToastMessage(result.error.message);
+    return renderToastMessage(result.error);
   }
 
-  renderToastMessage(SUCCESS.ORDER.message, TOAST_TYPES.SUCCESS);
+  renderToastMessage(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
 
   setTimeout(() => (location.href = '/user/order'), 2500);
 };

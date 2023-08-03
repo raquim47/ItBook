@@ -46,7 +46,7 @@ const onclickAddCartBtn = async (e) => {
 
   const result = await cartService.requestPostToCart({ productId, quantity });
   if (result.error) {
-    renderToastMessage(result.error.message);
+    renderToastMessage(result.error);
     return;
   }
   const toastMessageContent = `
