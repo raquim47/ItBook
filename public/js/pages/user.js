@@ -103,7 +103,7 @@ const initOrderPage = async () => {
 
   if (orders.length === 0) {
     orderTableBody.innerHTML =
-      '<tr><td colspan="4" class="empty">주문 내역이 없습니다.</td></tr>';
+      '<tr><td colspan="4"><p class="empty">주문 내역이 없습니다.</p></td></tr>';
     return;
   }
 

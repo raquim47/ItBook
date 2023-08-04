@@ -29,14 +29,14 @@ router.get(
   asyncRenderHandler(async (req, res) => {
     const user = await User.findById(req.user._id).populate('wishList');
     const section = req.params.section || 'mypage';
-    const sectionTitles = {
+    const sectionMap = {
       mypage: '마이페이지',
       edit: '회원정보 변경',
       order: '주문 내역',
       resign: '회원 탈퇴'
     };
     
-    if (!['mypage', 'edit', 'order', 'resign'].includes(section)) {
+    if (!Object.keys(sectionMap).includes(section)) {
       return res.status(404).render('error', ERROR_PAGE[404]);
     }
     res.render('user.ejs', {
@@ -44,7 +44,7 @@ router.get(
       userData: user,
       wishList: user.wishList,  
       section, 
-      pageTitle: `${sectionTitles[section]} - 잇북`,
+      pageTitle: `${sectionMap[section]} - 잇북`,
     });
   })
 );

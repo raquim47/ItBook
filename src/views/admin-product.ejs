@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/admin.css" />
+    <script src="/js/pages/admin.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="admin">
+          <h2 class="admin__title">관리자 페이지</h2>
+          <div class="admin__content">
+            <aside>
+              <nav class="admin__nav">
+                <a href="/admin/product" class="active">상품 관리</a>
+                <a href="/admin/order">주문 관리</a>
+                <a href="/admin/category">카테고리 관리</a>
+              </nav>
+            </aside>
+            <div class="admin__sections">
+              <section class="product-view">
+                <h3 class="admin__section-title">
+                  상품 관리<span>(<%= products.length %>건)</span>
+                </h3>
+                <div class="admin__options">
+                  <button
+                    href="/admin/product/add"
+                    class="add-product-btn"
+                    id="addProductBtn"
+                  >
+                    상품 등록
+                  </button>
+                  <button class="selected-delete-btn">선택 삭제</button>
+                </div>
+                <table class="product-table">
+                  <thead>
+                    <tr>
+                      <th class="product-table__th--category">카테고리</th>
+                      <th class="product-table__th--info">상품 정보</th>
+                      <th class="product-table__th--image">이미지</th>
+                      <th class="product-table__th--edit">관리</th>
+                      <th class="product-table__th--select">
+                        <input type="checkbox" aria-label="전체 상품 선택" />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
+              <section class="product-form hidden">
+                <h3 class="admin__section-title">상품 등록</h3>
+                <div class="admin__options">
+                  <button aria-label="목록 보기" id="showProductBtn">
+                    목록 보기
+                  </button>
+                </div>
+                <form id="form" class="admin-form">
+                  <ul>
+                    <li>
+                      <label for="title">상품명</label>
+                      <input type="text" id="title" name="title" required/>
+                    </li>
+                    <li>
+                      <label for="imageUrl">상품 이미지(url)</label>
+                      <input type="text" id="imageUrl" name="imageUrl" required/>
+                    </li>
+
+                    <li>
+                      <label for="description">설명</label>
+                      <input type="text" id="description" name="description" required/>
+                    </li>
+                    <li>
+                      <label for="price">가격</label>
+                      <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        class="numberInput"
+                        required
+                      />원
+                    </li>
+                    <li>
+                      <label for="author">저자</label>
+                      <input type="text" id="author" name="author" required/>
+                    </li>
+                    <li>
+                      <label for="pages">페이지</label>
+                      <input
+                        type="number"
+                        id="pages"
+                        name="pages"
+                        class="numberInput"
+                        required
+                      />쪽
+                    </li>
+                    <li>
+                      <label for="mainCategory">대분류</label>
+                      <select name="mainCategory" id="mainCategory">
+                        <option value="FrontEnd">프론트엔드</option>
+                        <option value="BackEnd">백엔드</option>
+                        <option value="CS">CS</option>
+                      </select>
+                    </li>
+                    <li>
+                      <p>서브 카테고리</p>
+                      <div id="subCategory">
+                        <!-- JS로 렌더링될 서브 카테고리 체크박스 항목들 -->
+                      </div>
+                    </li>
+                  </ul>
+                  <button type="submit" class="admin-form__submit-btn" id="submitBtn">저장하기</button>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

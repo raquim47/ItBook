@@ -15,6 +15,7 @@ router.get(
     res.json(buildResponse({ cart: user.cart }));
   })
 );
+router.get('/api/category')
 
 router.post(
   '/api/cart',

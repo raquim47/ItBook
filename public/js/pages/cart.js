@@ -12,7 +12,7 @@ import {
   LOCAL_STORAGE_KEYS,
 } from '../utils/constants.js';
 
-let savedCheckedProductIds = [];
+let savedCheckedProductIds = [];  
 let isInitialRender = true;
 
 // 체크 안 한 상품 저장

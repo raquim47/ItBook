@@ -6,13 +6,7 @@ import passport from 'passport';
 import getUserFromJWT from './middlewares/get-user-from-jwt';
 import dotenv from 'dotenv';
 import initPassport from './passport';
-
-import publicApiRoutes from './routes/publicApiRoutes'
-import userApiRoutes from './routes/userApiRoutes'
-import publicViewRoutes from './routes/publicViewRoutes'
-import userViewRoutes from './routes/userViewRoutes'
-import { ERROR_PAGE } from '../public/js/utils/constants';
-
+import indexRoutes from './routes/indexRoutes'
 
 dotenv.config();
 initPassport();
@@ -32,29 +26,19 @@ app.use(getUserFromJWT);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(publicApiRoutes);
-app.use(userApiRoutes);
-
-app.use(publicViewRoutes);
-app.use(userViewRoutes);
-
-// 404
-app.use((req, res) => {
-  res.status(404).render('error', ERROR_PAGE[404]);
-});
-
-const PORT = process.env.PORT || 3000;
+// routes
+app.use(indexRoutes);
 
 mongoose
   .connect(process.env.DB_URI)
   .then(() => {
-    console.log('Successfully connected to the database');
+    console.log('DB 연결');
   })
   .catch((err) => {
-    console.error("Mongoose connection error:", err);
+    console.error("Mongoose error:", err);
     process.exit(1);
   });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`서버 실행, 포트 : ${process.env.PORT}`);
 });

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/admin.css" />
+    <script src="/js/pages/admin.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="admin">
+          <h2 class="admin__title">관리자 페이지</h2>
+          <div class="admin__content">
+            <aside>
+              <nav class="admin__nav">
+                <a
+                  href="/admin/product"
+                  class="<%= section === 'product' ? 'active' : '' %>"
+                  >상품 관리</a
+                >
+                <a
+                  href="/admin/order"
+                  class="<%= section === 'order' ? 'active' : '' %>"
+                  >주문 관리</a
+                >
+                <a
+                  href="/admin/category"
+                  class="<%= section === 'category' ? 'active' : '' %>"
+                  >카테고리 관리</a
+                >
+              </nav>
+            </aside>
+            <div class="admin__sections">
+              <% if (section === 'product') { %>
+              <!-- 상품 관리 -->
+              <section class="product">
+                <h3 class="admin__section-title">
+                  상품 관리<span>(<%= products.length %>건)</span>
+                </h3>
+                <div class="product__btns">
+                  <button class="add-product-btn">상품 등록</button>
+                  <button class="selected-delete-btn">선택 삭제</button>
+                </div>
+                <table class="product-table">
+                  <thead>
+                    <tr>
+                      <th class="product-table__th--category">카테고리</th>
+                      <th class="product-table__th--info">상품 정보</th>
+                      <th class="product-table__th--image">이미지</th>
+                      <th class="product-table__th--edit">관리</th>
+                      <th class="product-table__th--select">
+                        <input type="checkbox" aria-label="전체 상품 선택" />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if(products && products.length > 0) { %> <%
+                    products.forEach(product => { %>
+                    <tr class="product-table__row">
+                      <td>
+                        <div class="cell-wrapper product-category">
+                          <strong class="product-category__main"
+                            ><%= product.mainCategory %></strong
+                          >
+                          <% product.subCategories.forEach(sub => { %>
+                          <span class="product-category__sub"><%= sub.name %></span>
+                          <!-- 서브 카테고리의 구체적인 구조에 따라 수정 필요 -->
+                          <% }); %>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="cell-wrapper product-info">
+                          <h4 class="product-info__title">
+                            <%= product.title %>
+                          </h4>
+                          <p class="product-info__description">
+                            <%= product.description %>
+                          </p>
+                          <span
+                            ><%= product.author %> 저, <%= product.price %>원,
+                            <%= product.pages %>p</span
+                          >
+                        </div>
+                      </td>
+                      <td>
+                        <div class="cell-wrapper">
+                          <img
+                            class="product-image"
+                            src="<%= product.imageUrl %>"
+                            alt="책 이미지"
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="cell-wrapper product-management">
+                          <button class="btn">수정</button>
+                          <button class="btn">삭제</button>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="cell-wrapper product-select">
+                          <input type="checkbox" aria-label="상품 선택" />
+                        </div>
+                      </td>
+                    </tr>
+                    <% }); %> <% } else { %>
+                    <tr>
+                      <td colspan="5" class="empty-cell">
+                        <p class="empty">상품이 없습니다.</p>
+                      </td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </section>
+              <% } else if (section === 'order') { %>
+              <!-- 주문 관리 -->
+              <section class="edit-user">
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 회원정보
+                </h3>
+                <form class="user-form">
+                  <div class="user-form__row readonly">
+                    <label for="email"
+                      >이메일<span class="required">*</span></label
+                    >
+                    <input
+                      id="email"
+                      type="email"
+                      value="<%= userData.email %>"
+                      readonly
+                    />
+                  </div>
+                  <div class="user-form__row">
+                    <label for="username"
+                      >이름<span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value="<%= userData.username %>"
+                    />
+                  </div>
+                  <div class="user-form__row">
+                    <label for="address">주소</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value="<%= userData.address %>"
+                    />
+                    <button class="address-search-btn" type="button">
+                      배송지 검색
+                    </button>
+                  </div>
+                  <div class="user-form__row">
+                    <label for="phone">전화번호</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value="<%= userData.phone %>"
+                    />
+                  </div>
+                  <button class="user-form__save-btn">저장하기</button>
+                </form>
+                <a href="/user/resign" class="resign-btn">회원 탈퇴 &gt;</a>
+              </section>
+              <% } else if (section === 'category') { %>
+              <!-- 카테고리 관리 -->
+              <section class="order">
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 주문내역
+                </h3>
+                <table class="order__table">
+                  <thead>
+                    <tr>
+                      <th class="th-date">날짜</th>
+                      <th class="th-content">내용</th>
+                      <th class="th-price">결제금액</th>
+                      <th class="th-delivery">배송상태</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
+              <% } else if (section === 'resign') { %> <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

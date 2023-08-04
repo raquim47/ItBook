@@ -9,6 +9,8 @@ export const SUCCESS = {
   EDIT_USER: '회원 정보가 변경되었습니다.',
   ORDER: '주문이 완료되었습니다.',
   CANCLE_ORDER: '주문이 취소되었습니다.',
+  PRODUCT_POSTED : '상품이 등록되었습니다.',
+  PRODUCT_UPDATED : '상품 내용이 수정되었습니다.'
 };
 
 export const ERROR = {
@@ -17,6 +19,7 @@ export const ERROR = {
   USERNAME_REQUIRED: '이름은 필수 입력사항입니다.',
   PASSWORD_REQUIRED: '비밀번호를 입력해주세요.',
   AGREEMENT_REQUIRED: '동의 사항에 체크해주세요',
+  CATEGORY_REQUIRED: '소분류 카테고리가 선택되지 않았습니다.',
   ORDER_ITEMS_REQUIRED: '선택된 주문 상품이 없습니다.',
   ORDER_NOT_FOUND: '주문 내역을 찾을 수 없습니다.',
   PASSWORD_INVALID: '비밀번호가 올바르지 않습니다.',
@@ -55,3 +58,8 @@ export const ERROR_PAGE = {
     pageTitle: '404 ERROR - 잇북',
   },
 };
+
+
+export const CLASSNAME = {
+  HIDDEN : 'hidden',
+}
