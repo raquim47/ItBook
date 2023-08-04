@@ -7,6 +7,29 @@ import categoryService from '../services/category-service.js';
 import productService from '../services/product-service.js';
 import { CLASSNAME, ERROR, SUCCESS, TOAST_TYPES } from '../utils/constants.js';
 
+const handleSearch = (e) => {
+  e.preventDefault();
+  const searchTerm = document.getElementById('searchName').value.trim();
+  renderProductsTable(searchTerm);
+};
+
+const handleDeleteProduct = async (event) => {
+  const productId = event?.target.closest('tr')?.dataset.productId;
+  if (!productId) return;
+
+  const isConfirmed = confirm("정말로 이 상품을 삭제하시겠습니까?");
+  
+  if (isConfirmed) {
+    const result = await productService.deleteProduct(productId);
+    if (result.error) {
+      showToast(result.error);
+      return;
+    }
+    showToast("상품이 성공적으로 삭제되었습니다.", TOAST_TYPES.SUCCESS);
+    renderProductsTable();  
+  }
+};
+
 const renderProduct = (product) => {
   const subCategoriesHTML = product.subCategories
     .map((sub) => `<span class="product-category__sub">${sub.name}</span>`)
@@ -34,43 +57,46 @@ const renderProduct = (product) => {
       </td>
       <td>
         <div class="cell-wrapper product-management">
-          <button class="btn editBtn">수정</button>
-          <button class="btn deleteBtn">삭제</button>
-        </div>
-      </td>
-      <td>
-        <div class="cell-wrapper product-select">
-          <input type="checkbox" aria-label="상품 선택" />
+          <button class="btn edit-btn">수정</button>
+          <button class="btn delete-btn">삭제</button>
         </div>
       </td>
     </tr>
   `;
 };
 
-const renderProductsTable = async () => {
+const renderProductsTable = async (searchTerm = "") => {
   const response = await productService.getProducts();
   if(response.error){
-    showToast(response.error)
+    showToast(response.error);
     return;
   }
   const products = response.data.products;
-  console.log(response, products)
+
+  let filteredProducts = products;
+  if (searchTerm) {
+    filteredProducts = products.filter(product => product.title.includes(searchTerm));
+  }
+
   const productTableBody = document.querySelector('.product-table tbody');
 
-  if (products.length === 0) {
+  if (filteredProducts.length === 0) {
     productTableBody.innerHTML = `
       <tr>
         <td colspan="5" class="empty-cell">
-          <p class="empty">상품이 없습니다.</p>
+          ${searchTerm ? '<p class="empty">검색된 상품이 없습니다.</p>' : '<p class="empty">상품이 없습니다.</p>'}
         </td>
       </tr>
     `;
   } else {
-    productTableBody.innerHTML = products.map(renderProduct).join('');
+    productTableBody.innerHTML = filteredProducts.map(renderProduct).join('');
   }
 
-  productTableBody.querySelectorAll('.editBtn').forEach((btn) => {
+  productTableBody.querySelectorAll('.edit-btn').forEach((btn) => {
     btn.addEventListener('click', showEditForm);
+  });
+  productTableBody.querySelectorAll('.delete-btn').forEach(button => {
+    button.addEventListener('click', handleDeleteProduct);
   });
 };
 
@@ -189,6 +215,7 @@ const bindEvents = () => {
   const showProductBtn = document.getElementById('showProductBtn');
   const mainCategory = document.getElementById('mainCategory');
   const form = document.getElementById('form');
+  const searchForm = document.getElementById('searchForm');
 
   addProductBtn.addEventListener('click', showAddForm);
   showProductBtn.addEventListener('click', toggleFormDisplay);
@@ -196,6 +223,7 @@ const bindEvents = () => {
     renderSubCategories(event.target.value);
   });
   form.addEventListener('submit', submitProductForm);
+  searchForm.addEventListener('submit', handleSearch);
 };
 
 const initPage = async () => {

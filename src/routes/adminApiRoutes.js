@@ -60,4 +60,18 @@ router.put(
   })
 );
 
+router.delete(
+  '/api/product/:productId',
+  asyncApiHandler(async (req, res) => {
+    const productId = req.params.productId;
+    const product = await Product.findByIdAndRemove(productId)
+
+    if (!product) {
+      return res.status(404).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
+    }
+
+    res.json(buildResponse());
+  })
+);
+
 export default router;

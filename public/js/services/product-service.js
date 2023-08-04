@@ -19,7 +19,6 @@ class ProductService {
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
-
   
   async postProduct(productData) {
     try {
@@ -77,6 +76,24 @@ class ProductService {
       return buildResponse(result.data);
     } catch (error) {
       console.error('In updateProduct', error);
+      return buildResponse(null, ERROR.REQUEST_FAILED);
+    }
+  }
+
+  async deleteProduct(productId) {
+    try {
+      const response = await fetch(`/api/product/${productId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        return buildResponse(null, result.error);
+      }
+
+      return buildResponse(result.data);
+    } catch (error) {
+      console.error('In deleteProduct', error);
       return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }

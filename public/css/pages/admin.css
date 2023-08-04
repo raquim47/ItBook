@@ -53,16 +53,10 @@
 
 .admin__options {
   position: absolute;
-  top: 5px;
+  top: -5px;
   right: 0;
   display: flex;
   gap: 5px;
-  font-size: 12px;
-}
-
-.admin__options button {
-  border-radius: 4px;
-  padding: 4px 8px;
   font-size: 12px;
 }
 
@@ -71,13 +65,43 @@
   position: relative;
 }
 
+.btn {
+  padding: 4px 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #919191;
+  color: #fff;
+}
+
+.product-search form {
+  display: flex;
+}
+
+.product-search input {
+  width: 120px;
+  outline: none;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 4px 0 0 4px;
+}
+
+.product-search button {
+  border-radius: 0 4px 4px 0;
+}
+
 .add-product-btn {
   background-color: #7156ed;
   color: #fff;
 }
 
-.selected-delete-btn {
-  background-color: #d9d9d9;
+.add-product-btn:hover {
+  background-color: #7156ed;
 }
 
 /* table */
@@ -92,7 +116,8 @@
   border-bottom: 1px solid #ddd;
 }
 
-.product-table__th--image {
+.product-table__th--image,
+.product-table__th--edit {
   width: 60px;
 }
 
@@ -102,14 +127,6 @@
 
 .product-table__th--category {
   width: 100px;
-}
-
-.product-table__th--edit {
-  width: 60px;
-}
-
-.product-table__th--select {
-  width: 30px;
 }
 
 .product-table__th--checkbox input {
@@ -160,32 +177,15 @@
   font-weight: 600;
 }
 
-.product-option input {
-  border: 1px solid red;
-  accent-color: #7156ed;
-}
-
 .product-form {
   position: relative;
-}
-
-.btn {
-  padding: 4px 10px;
-  margin: 0 2px;
-  border: none;
-  font-size: 12px;
-  background-color: #ddd;
-  cursor: pointer;
-  border-radius: 3px;
-  margin-bottom: 4px;
-  transition: background-color 0.3s;
-}
-
-.btn:hover {
-  background-color: #c5c5c5;
 }
 
 .product-image {
   max-width: 100%;
   height: auto;
+}
+
+.edit-btn {
+  margin-bottom: 6px;
 }

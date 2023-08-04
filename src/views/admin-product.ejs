@@ -3,7 +3,7 @@
   <head>
     <%- include('./includes/head.ejs') %>
     <link rel="stylesheet" href="/css/pages/admin.css" />
-    <script src="/js/pages/admin.js" type="module" defer></script>
+    <script src="/js/pages/admin-product.js" type="module" defer></script>
   </head>
 
   <body>
@@ -26,14 +26,24 @@
                   상품 관리<span>(<%= products.length %>건)</span>
                 </h3>
                 <div class="admin__options">
+                  <div class="product-search">
+                    <form id="searchForm">
+                      <input
+                        aria-label="검색"
+                        type="search"
+                        placeholder="상품명 입력"
+                        id="searchName"
+                      />
+                      <button class="btn search-btn">검색</button>
+                    </form>
+                  </div>
                   <button
                     href="/admin/product/add"
-                    class="add-product-btn"
+                    class="btn add-product-btn"
                     id="addProductBtn"
                   >
                     상품 등록
                   </button>
-                  <button class="selected-delete-btn">선택 삭제</button>
                 </div>
                 <table class="product-table">
                   <thead>
@@ -42,9 +52,6 @@
                       <th class="product-table__th--info">상품 정보</th>
                       <th class="product-table__th--image">이미지</th>
                       <th class="product-table__th--edit">관리</th>
-                      <th class="product-table__th--select">
-                        <input type="checkbox" aria-label="전체 상품 선택" />
-                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -63,16 +70,26 @@
                   <ul>
                     <li>
                       <label for="title">상품명</label>
-                      <input type="text" id="title" name="title" required/>
+                      <input type="text" id="title" name="title" required />
                     </li>
                     <li>
                       <label for="imageUrl">상품 이미지(url)</label>
-                      <input type="text" id="imageUrl" name="imageUrl" required/>
+                      <input
+                        type="text"
+                        id="imageUrl"
+                        name="imageUrl"
+                        required
+                      />
                     </li>
 
                     <li>
                       <label for="description">설명</label>
-                      <input type="text" id="description" name="description" required/>
+                      <input
+                        type="text"
+                        id="description"
+                        name="description"
+                        required
+                      />
                     </li>
                     <li>
                       <label for="price">가격</label>
@@ -86,7 +103,7 @@
                     </li>
                     <li>
                       <label for="author">저자</label>
-                      <input type="text" id="author" name="author" required/>
+                      <input type="text" id="author" name="author" required />
                     </li>
                     <li>
                       <label for="pages">페이지</label>
@@ -113,7 +130,13 @@
                       </div>
                     </li>
                   </ul>
-                  <button type="submit" class="admin-form__submit-btn" id="submitBtn">저장하기</button>
+                  <button
+                    type="submit"
+                    class="admin-form__submit-btn"
+                    id="submitBtn"
+                  >
+                    저장하기
+                  </button>
                 </form>
               </section>
             </div>
