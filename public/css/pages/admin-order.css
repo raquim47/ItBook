@@ -47,8 +47,16 @@
   top: 0;
   right: 0;
   display: flex;
+  align-items: center;
   gap: 5px;
   font-size: 12px;
+}
+
+.order-status-filter {
+  padding: 2px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
 }
 
 .admin__section-title {
@@ -86,9 +94,12 @@
 }
 
 .order-table__th--price,
-.order-table__th--status,
 .order-table__th--edit {
   width: 80px;
+}
+
+.order-table__th--status {
+  width: 110px;
 }
 
 .order-table__row > td {
@@ -103,7 +114,6 @@
 .cell-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   height: 100%;
 }
@@ -114,7 +124,7 @@
 }
 
 .product-title span {
-  width: 200px;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,10 +134,11 @@
   text-decoration: underline;
 }
 
-.order-status{
+.order-status {
   outline: none;
   border: 1px solid #ddd;
-  padding: 4px 6px;
+  padding: 4px;
+  border-radius: 4px;
 }
 
 .delete-btn {
