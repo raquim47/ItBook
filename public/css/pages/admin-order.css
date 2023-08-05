@@ -1,0 +1,141 @@
+.admin {
+  padding: 60px 50px 0;
+}
+
+.admin__title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.admin__content {
+  display: flex;
+  gap: 35px;
+}
+
+/* nav */
+.admin__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 220px;
+  font-weight: 500;
+}
+
+.admin__nav a {
+  font-size: 18px;
+  color: #303030;
+}
+
+.admin__nav a:hover,
+.admin__nav a.active {
+  color: #7156ed;
+}
+
+/* admin__sections */
+.admin__sections {
+  flex: 1px;
+}
+
+.admin__section {
+  position: relative;
+}
+
+.admin__section-options {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.admin__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin__section-title span {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.order-table th {
+  font-size: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-table__th--date {
+  width: 100px;
+}
+
+.order-table__th--user,
+.order-table__th--info {
+  width: 250px;
+}
+
+.order-table__th--price,
+.order-table__th--status,
+.order-table__th--edit {
+  width: 80px;
+}
+
+.order-table__row > td {
+  padding: 14px 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.cell-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.product-title {
+  display: flex;
+  align-items: center;
+}
+
+.product-title span {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-title span:hover {
+  text-decoration: underline;
+}
+
+.order-status{
+  outline: none;
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+}
+
+.delete-btn {
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background-color: #ddd;
+}

@@ -14,7 +14,7 @@ const orderSchema = new Schema(
     totalPrice: { type: Number, required: true },
     address: { type: String, required: true },
     phone: { type: String, required: true },
-    deliveryStatus: { type: String, default: '상품 준비중', required: true },
+    deliveryStatus: { type: String, default: '상품준비중', required: true },
   },
   {
     timestamps: true,

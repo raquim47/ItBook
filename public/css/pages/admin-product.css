@@ -51,7 +51,7 @@
   margin-left: 5px;
 }
 
-.admin__options {
+.admin__section-options {
   position: absolute;
   top: -5px;
   right: 0;
@@ -112,7 +112,8 @@
 }
 
 .product-table th {
-  padding: 10px 0;
+  font-size: 15px;
+  padding: 15px 0;
   border-bottom: 1px solid #ddd;
 }
 

@@ -78,6 +78,9 @@ const renderProductsTable = async (searchTerm = '') => {
   }
   const products = response.data.products;
 
+  const productsAmount = document.getElementById('productsAmount');
+  productsAmount.textContent = `(${products.length}건)`;
+
   let filteredProducts = products;
   if (searchTerm) {
     filteredProducts = products.filter((product) =>

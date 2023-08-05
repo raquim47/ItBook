@@ -28,6 +28,7 @@ export const ERROR = {
   EMAIL_NOT_FOUND: '등록되지 않은 이메일입니다.',
   EMAIL_DUPLICATE: '이미 등록된 이메일입니다.',
   PRODUCT_NOT_FOUND: '등록되지 않은 상품입니다.',
+  ORDER_NOT_FOUND: '해당 주문을 찾을 수 없습니다.',
   INTERNAL_ERROR: '서버 오류가 발생했습니다.',
   REQUEST_FAILED: '요청에 실패했습니다.',
 };
