@@ -21,9 +21,9 @@ class OrderService {
     return requestHandler(`/api/order/cancel/${orderId}`, 'PUT');
   }
 
-  async putOrderStatus(orderId, deliveryStatus) {
+  async putOrderStatus(orderId, status) {
     return requestHandler(`/api/order/${orderId}/status`, 'PUT', {
-      deliveryStatus,
+      status,
     });
   }
 

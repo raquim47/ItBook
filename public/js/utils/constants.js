@@ -10,7 +10,9 @@ export const SUCCESS = {
   ORDER: '주문이 완료되었습니다.',
   CANCLE_ORDER: '주문이 취소되었습니다.',
   PRODUCT_POSTED : '상품이 등록되었습니다.',
-  PRODUCT_UPDATED : '상품 내용이 수정되었습니다.'
+  PRODUCT_UPDATED : '상품 내용이 수정되었습니다.',
+  ORDER_STATUS_UPDATED : '주문 상태가 수정되었습니다.',
+  ORDER_DELETED : '주문이 삭제되었습니다.'
 };
 
 export const ERROR = {

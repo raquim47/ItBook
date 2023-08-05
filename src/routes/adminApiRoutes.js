@@ -94,13 +94,13 @@ router.put(
   '/api/order/:orderId/status',
   asyncApiHandler(async (req, res) => {
     const orderId = req.params.orderId;
-    const { deliveryStatus } = req.body;
+    const { status } = req.body;
     const order = await Order.findById(orderId);
     
     if (!order) {
       return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
     }
-    order.deliveryStatus = deliveryStatus;
+    order.status = status;
     await order.save();
     res.json(buildResponse());
   })

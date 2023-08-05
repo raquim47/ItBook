@@ -1,8 +1,10 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
+import showToast from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
+import { SUCCESS, TOAST_TYPES } from '../utils/constants.js';
 
 const renderOrder = (order) => {
   return `
@@ -13,15 +15,15 @@ const renderOrder = (order) => {
       ).toLocaleDateString()}</p></div>
     </td>
     <td>
-      <div class="cell-wrapper order-info">
-        <h4 class="order-info__title">${order.userId.username}</h4>
+      <div class="cell-wrapper">
+        <h4>${order.userId.username}</h4>
         <p>${order.userId.email}</p>
         <p>${order.address}</p>
         <p>${order.phone}</p>
       </div>
     </td>
     <td>
-      <div class="cell-wrapper order-content">
+      <div class="cell-wrapper">
         ${order.products
           .map(
             (product) =>
@@ -91,7 +93,6 @@ const filterOrdersByStatus = () => {
   const filteredOrders = orders.filter(
     (order) => order.deliveryStatus === status
   );
-  console.log(status, orders, filteredOrders);
   updateOrderTable(filteredOrders);
 };
 
@@ -101,6 +102,7 @@ const handleStatusChange = async (event) => {
   await orderService.putOrderStatus(orderId, newStatus);
   await orderService.getAllOrders();
   filterOrdersByStatus();
+  showToast(SUCCESS.ORDER_STATUS_UPDATED, TOAST_TYPES.SUCCESS)
 };
 
 const handleDeleteOrder = async (event) => {
@@ -111,6 +113,7 @@ const handleDeleteOrder = async (event) => {
   await orderService.deleteOrder(orderId);
   await orderService.getAllOrders();
   filterOrdersByStatus();
+  showToast(SUCCESS.ORDER_DELETED, TOAST_TYPES.SUCCESS)
 };
 
 const fetchOrders = async () => {
@@ -118,7 +121,7 @@ const fetchOrders = async () => {
   updateOrderTable(orders);
 };
 
-// 배송 수정/삭제 이벤트 -- 이벤트 위임
+// 배송 수정/삭제 이벤트 -- 이벤트 위임, 배송상태 필터
 const bindEvents = () => {
   const tableBody = document.querySelector('.order-table tbody');
 
