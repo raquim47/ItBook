@@ -1,36 +1,8 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import showToast from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
-
-const handleStatusChange = async (event) => {
-  const orderId = event.target.closest('.order-table__row').dataset.orderId;
-  const newStatus = event.target.value;
-  const response = await orderService.putOrderStatus(orderId, newStatus);
-  if (response.error) {
-    showToast(response.error);
-    return;
-  }
-
-  renderOrders();
-};
-
-const handleDeleteOrder = async (event) => {
-  if (!confirm('해당 주문 정보를 삭제하시겠습니까?')) {
-    return;
-  }
-  const orderId = event.target.closest('.order-table__row').dataset.orderId;
-  const response = await orderService.deleteOrder(orderId);
-
-  if (response.error) {
-    showToast(response.error);
-    return;
-  }
-
-  renderOrders();
-};
 
 const renderOrder = (order) => {
   return `
@@ -109,28 +81,41 @@ const updateOrderTable = (orders) => {
   }
 };
 
-const renderOrders = async () => {
-  const response = await orderService.getAllOrders();
-  if (response.error) {
-    showToast(response.error);
-    return;
-  }
-  const orders = response.data.orders;
-  updateOrderTable(orders);
-};
-
-const filterOrdersByStatus = (e) => {
-  const status = e.target.value;
+const filterOrdersByStatus = () => {
+  const status = document.getElementById('orderStatusFilter').value;
   const { orders } = orderService;
   if (status === '전체') {
     updateOrderTable(orders);
     return;
   }
-  console.log(orders);
   const filteredOrders = orders.filter(
     (order) => order.deliveryStatus === status
   );
+  console.log(status, orders, filteredOrders);
   updateOrderTable(filteredOrders);
+};
+
+const handleStatusChange = async (event) => {
+  const orderId = event.target.closest('.order-table__row').dataset.orderId;
+  const newStatus = event.target.value;
+  await orderService.putOrderStatus(orderId, newStatus);
+  await orderService.getAllOrders();
+  filterOrdersByStatus();
+};
+
+const handleDeleteOrder = async (event) => {
+  if (!confirm('해당 주문 정보를 삭제하시겠습니까?')) {
+    return;
+  }
+  const orderId = event.target.closest('.order-table__row').dataset.orderId;
+  await orderService.deleteOrder(orderId);
+  await orderService.getAllOrders();
+  filterOrdersByStatus();
+};
+
+const fetchOrders = async () => {
+  const orders = await orderService.getAllOrders();
+  updateOrderTable(orders);
 };
 
 // 배송 수정/삭제 이벤트 -- 이벤트 위임
@@ -163,7 +148,7 @@ const initPage = async () => {
   setupHeader();
   renderScrollTopBtn();
   bindEvents();
-  renderOrders();
+  fetchOrders();
 };
 
 initPage();

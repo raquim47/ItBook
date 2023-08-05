@@ -1,123 +1,41 @@
-import buildResponse from '../utils/build-response.js';
-import { ERROR } from '../utils/constants.js';
+import requestHandler from '../utils/requestHandler.js';
 
 class OrderService {
   constructor() {
     this._orders = [];
   }
 
-  get orders(){
+  get orders() {
     return this._orders;
   }
 
   async getMyOrder() {
-    try {
-      const response = await fetch('/api/order');
-
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In getOrder', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler('/api/order');
   }
 
   async postOrder(orderData) {
-    try {
-      const response = await fetch('/api/order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse();
-    } catch (error) {
-      console.error('In postOrder', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler('/api/order', 'POST', orderData);
   }
 
   async putCancelOrder(orderId) {
-    try {
-      const response = await fetch(`/api/order/cancel/${orderId}`, {
-        method: 'PUT',
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In putCancelOrder', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler(`/api/order/cancel/${orderId}`, 'PUT');
   }
 
   async putOrderStatus(orderId, deliveryStatus) {
-    try {
-      const response = await fetch(`/api/order/${orderId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ deliveryStatus }),
-      });
-      console.log(deliveryStatus)
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-      return buildResponse();
-    } catch (error) {
-      console.error('In putOrderStatus', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler(`/api/order/${orderId}/status`, 'PUT', {
+      deliveryStatus,
+    });
   }
 
   async deleteOrder(orderId) {
-    try {
-      const response = await fetch(`/api/order/${orderId}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-      return buildResponse();
-    } catch (error) {
-      console.error('In deleteOrder', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler(`/api/order/${orderId}`, 'DELETE');
   }
 
   async getAllOrders() {
-    try {
-      const response = await fetch('/api/orders');
-
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-      this._orders = result.data.orders;
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In getAllOrders', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    const data = await requestHandler('/api/orders');
+    const orders = data ? data.orders : [];
+    this._orders = orders;
+    return orders;
   }
 }
 
