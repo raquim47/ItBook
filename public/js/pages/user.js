@@ -60,54 +60,37 @@ const bindSaveUser = () => {
     });
 };
 
-const initMyPage = () => {};
-
 const initEditPage = () => {
   bindAddressSearch();
   bindSaveUser();
 };
 
 const cancelOrder = async (orderId) => {
-  const result = await orderService.putCancelOrder(orderId);
-  if (result.error) {
-    showToast(result.error);
-  } else {
-    showToast(SUCCESS.CANCLE_ORDER, TOAST_TYPES.SUCCESS);
-    // 성공적으로 주문 취소 요청을 처리한 후 UI 갱신
-    const updatedOrder = result.data;
-    const orderItemElement = document.querySelector(
-      `.order__item[data-order-id="${orderId}"]`
-    );
+  await orderService.putCancelOrder(orderId);
+  showToast(SUCCESS.CANCLE_ORDER, TOAST_TYPES.SUCCESS);
+  // 성공적으로 주문 취소 요청을 처리한 후 UI 갱신
+  const orderItemElement = document.querySelector(
+    `.order__item[data-order-id="${orderId}"]`
+  );
 
-    // 주문 상태 업데이트
-    const statusElement = orderItemElement.querySelector('td:nth-child(4)');
-    statusElement.innerHTML = `
-    ${updatedOrder.deliveryStatus}
-    ${
-      updatedOrder.deliveryStatus === '상품 준비중'
-        ? '<button class="order__cancel-btn">배송취소</button>'
-        : '<button class="order__cancel-btn" disabled>배송취소</button>'
-    }
+  // 주문 취소 UI 변경
+  const statusElement = orderItemElement.querySelector('td:nth-child(4)');
+  statusElement.innerHTML = `
+    <span>주문취소</span>
+    <button class="order__cancel-btn" disabled>배송취소</button>
   `;
-  }
 };
 
 const initOrderPage = async () => {
-  const result = await orderService.getMyOrder();
-  if (result.error) {
-    showToast(result.error);
-    return;
-  }
+  const { myOrders } = await orderService.getMyOrder();
   const orderTableBody = document.querySelector('.order__table tbody');
-  const orders = result.data;
-
-  if (orders.length === 0) {
+  if (myOrders.length === 0) {
     orderTableBody.innerHTML =
       '<tr><td colspan="4"><p class="empty">주문 내역이 없습니다.</p></td></tr>';
     return;
   }
 
-  orderTableBody.innerHTML = orders
+  orderTableBody.innerHTML = myOrders
     .map(
       (order) => `
       <tr class="order__item" data-order-id="${order._id}">
@@ -125,9 +108,9 @@ const initOrderPage = async () => {
         </td>
         <td>${order.totalPrice.toLocaleString()}원</td>
         <td>
-          ${order.deliveryStatus}
+          <span>${order.status}</span>
           ${
-            order.deliveryStatus === '상품 준비중'
+            order.status === '상품준비중'
               ? '<button class="order__cancel-btn">배송취소</button>'
               : '<button class="order__cancel-btn" disabled>배송취소</button>'
           }
@@ -179,9 +162,7 @@ const initPage = async () => {
   renderScrollTopBtn();
 
   const path = window.location.pathname;
-  if (path === '/user' || path === '/user/mypage') {
-    initMyPage();
-  } else if (path === '/user/edit') {
+  if (path === '/user/edit') {
     initEditPage();
   } else if (path === '/user/order') {
     initOrderPage();

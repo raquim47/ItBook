@@ -137,11 +137,7 @@ const deleteCartItems = async (products) => {
 };
 
 const postOrder = async (data) => {
-  const result = await orderService.postOrder(data);
-  if (result.error) {
-    return showToast(result.error);
-  }
-
+  await orderService.postOrder(data);
   showToast(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
 
   setTimeout(() => (location.href = '/user/order'), 2500);

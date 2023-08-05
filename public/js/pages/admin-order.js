@@ -41,16 +41,16 @@ const renderOrder = (order) => {
       <div class="cell-wrapper">
         <select class="order-status">
           <option ${
-            order.deliveryStatus === '상품준비중' ? 'selected' : ''
+            order.status === '상품준비중' ? 'selected' : ''
           }>상품준비중</option>
           <option ${
-            order.deliveryStatus === '배송중' ? 'selected' : ''
+            order.status === '배송중' ? 'selected' : ''
           }>배송중</option>
           <option ${
-            order.deliveryStatus === '배송완료' ? 'selected' : ''
+            order.status === '배송완료' ? 'selected' : ''
           }>배송완료</option>
           <option ${
-            order.deliveryStatus === '주문취소' ? 'selected' : ''
+            order.status === '주문취소' ? 'selected' : ''
           }>주문취소</option>
         </select>
       </div>
@@ -91,7 +91,7 @@ const filterOrdersByStatus = () => {
     return;
   }
   const filteredOrders = orders.filter(
-    (order) => order.deliveryStatus === status
+    (order) => order.status === status
   );
   updateOrderTable(filteredOrders);
 };
@@ -118,6 +118,7 @@ const handleDeleteOrder = async (event) => {
 
 const fetchOrders = async () => {
   const orders = await orderService.getAllOrders();
+  console.log(orders)
   updateOrderTable(orders);
 };
 
