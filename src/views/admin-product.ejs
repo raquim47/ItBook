@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/pages/admin.css" />
+    <link rel="stylesheet" href="/css/pages/admin-product.css" />
     <script src="/js/pages/admin-product.js" type="module" defer></script>
   </head>
 
@@ -59,21 +59,21 @@
                   </tbody>
                 </table>
               </section>
-              <section class="product-form hidden">
+              <section class="product-edit hidden">
                 <h3 class="admin__section-title">상품 등록</h3>
                 <div class="admin__options">
                   <button aria-label="목록 보기" id="showProductBtn">
                     목록 보기
                   </button>
                 </div>
-                <form id="form" class="admin-form">
-                  <ul>
-                    <li>
-                      <label for="title">상품명</label>
+                <form id="form" class="product-form">
+                  <ul class="product-form__list">
+                    <li class="product-form__row">
+                      <label for="title" class="product-form__row-title">상품명</label>
                       <input type="text" id="title" name="title" required />
                     </li>
-                    <li>
-                      <label for="imageUrl">상품 이미지(url)</label>
+                    <li class="product-form__row">
+                      <label for="imageUrl" class="product-form__row-title">이미지(url)</label>
                       <input
                         type="text"
                         id="imageUrl"
@@ -82,8 +82,8 @@
                       />
                     </li>
 
-                    <li>
-                      <label for="description">설명</label>
+                    <li class="product-form__row">
+                      <label for="description" class="product-form__row-title">설명</label>
                       <input
                         type="text"
                         id="description"
@@ -91,52 +91,55 @@
                         required
                       />
                     </li>
-                    <li>
-                      <label for="price">가격</label>
+                    <li class="product-form__row">
+                      <label for="price" class="product-form__row-title">가격(원)</label>
                       <input
                         type="number"
                         id="price"
                         name="price"
                         class="numberInput"
                         required
-                      />원
+                      />
                     </li>
-                    <li>
-                      <label for="author">저자</label>
+                    <li class="product-form__row">
+                      <label for="author" class="product-form__row-title">저자</label>
                       <input type="text" id="author" name="author" required />
                     </li>
-                    <li>
-                      <label for="pages">페이지</label>
+                    <li class="product-form__row">
+                      <label for="pages" class="product-form__row-title">페이지(쪽)</label>
                       <input
                         type="number"
                         id="pages"
                         name="pages"
                         class="numberInput"
                         required
-                      />쪽
+                      />
                     </li>
-                    <li>
-                      <label for="mainCategory">대분류</label>
+                    <li class="product-form__row">
+                      <label for="mainCategory" class="product-form__row-title">대분류</label>
                       <select name="mainCategory" id="mainCategory">
                         <option value="FrontEnd">프론트엔드</option>
                         <option value="BackEnd">백엔드</option>
                         <option value="CS">CS</option>
                       </select>
                     </li>
-                    <li>
-                      <p>서브 카테고리</p>
-                      <div id="subCategory">
+                    <li class="product-form__row">
+                      <p class="product-form__row-title">소분류</p>
+                      <div id="subCategory" class="subCategories">
                         <!-- JS로 렌더링될 서브 카테고리 체크박스 항목들 -->
                       </div>
                     </li>
                   </ul>
-                  <button
-                    type="submit"
-                    class="admin-form__submit-btn"
-                    id="submitBtn"
-                  >
-                    저장하기
-                  </button>
+                  <div class="product-form__btns">
+                    <button type="button" class="product-form__cancle-btn" id="cancleBtn">취소</button>
+                    <button
+                      type="submit"
+                      class="product-form__submit-btn"
+                      id="submitBtn"
+                    >
+                      저장
+                    </button>
+                  </div>
                 </form>
               </section>
             </div>

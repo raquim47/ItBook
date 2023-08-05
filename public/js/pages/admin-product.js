@@ -17,16 +17,16 @@ const handleDeleteProduct = async (event) => {
   const productId = event?.target.closest('tr')?.dataset.productId;
   if (!productId) return;
 
-  const isConfirmed = confirm("정말로 이 상품을 삭제하시겠습니까?");
-  
+  const isConfirmed = confirm('정말로 이 상품을 삭제하시겠습니까?');
+
   if (isConfirmed) {
     const result = await productService.deleteProduct(productId);
     if (result.error) {
       showToast(result.error);
       return;
     }
-    showToast("상품이 성공적으로 삭제되었습니다.", TOAST_TYPES.SUCCESS);
-    renderProductsTable();  
+    showToast('상품이 성공적으로 삭제되었습니다.', TOAST_TYPES.SUCCESS);
+    renderProductsTable();
   }
 };
 
@@ -34,12 +34,14 @@ const renderProduct = (product) => {
   const subCategoriesHTML = product.subCategories
     .map((sub) => `<span class="product-category__sub">${sub.name}</span>`)
     .join('');
-  console.log(product.subCategories)
+  console.log(product.subCategories);
   return `
     <tr class="product-table__row" data-product-id="${product._id}">
       <td>
         <div class="cell-wrapper product-category">
-          <strong class="product-category__main">${product.mainCategory}</strong>
+          <strong class="product-category__main">${
+            product.mainCategory
+          }</strong>
           ${subCategoriesHTML}
         </div>
       </td>
@@ -47,12 +49,16 @@ const renderProduct = (product) => {
         <div class="cell-wrapper product-info">
           <h4 class="product-info__title">${product.title}</h4>
           <p class="product-info__description">${product.description}</p>
-          <span>${product.author} 저 / ${product.price.toLocaleString()}원 / ${product.pages}p</span>
+          <span>${product.author} 저 / ${product.price.toLocaleString()}원 / ${
+    product.pages
+  }p</span>
         </div>
       </td>
       <td>
         <div class="cell-wrapper">
-          <img class="product-image" src="${product.imageUrl}" alt="책 이미지" />
+          <img class="product-image" src="${product.imageUrl}" alt="${
+    product.title
+  }" />
         </div>
       </td>
       <td>
@@ -65,9 +71,9 @@ const renderProduct = (product) => {
   `;
 };
 
-const renderProductsTable = async (searchTerm = "") => {
+const renderProductsTable = async (searchTerm = '') => {
   const response = await productService.getProducts();
-  if(response.error){
+  if (response.error) {
     showToast(response.error);
     return;
   }
@@ -75,7 +81,9 @@ const renderProductsTable = async (searchTerm = "") => {
 
   let filteredProducts = products;
   if (searchTerm) {
-    filteredProducts = products.filter(product => product.title.includes(searchTerm));
+    filteredProducts = products.filter((product) =>
+      product.title.includes(searchTerm)
+    );
   }
 
   const productTableBody = document.querySelector('.product-table tbody');
@@ -84,7 +92,11 @@ const renderProductsTable = async (searchTerm = "") => {
     productTableBody.innerHTML = `
       <tr>
         <td colspan="5" class="empty-cell">
-          ${searchTerm ? '<p class="empty">검색된 상품이 없습니다.</p>' : '<p class="empty">상품이 없습니다.</p>'}
+          ${
+            searchTerm
+              ? '<p class="empty">검색된 상품이 없습니다.</p>'
+              : '<p class="empty">상품이 없습니다.</p>'
+          }
         </td>
       </tr>
     `;
@@ -95,7 +107,7 @@ const renderProductsTable = async (searchTerm = "") => {
   productTableBody.querySelectorAll('.edit-btn').forEach((btn) => {
     btn.addEventListener('click', showEditForm);
   });
-  productTableBody.querySelectorAll('.delete-btn').forEach(button => {
+  productTableBody.querySelectorAll('.delete-btn').forEach((button) => {
     button.addEventListener('click', handleDeleteProduct);
   });
 };
@@ -111,11 +123,13 @@ const getFormValues = (form) => {
 
 const submitProductForm = async (e) => {
   e.preventDefault();
-  const subCategories = document.querySelectorAll('#subCategory input[type="checkbox"]');
-  const isAnyChecked = [...subCategories].some(checkbox => checkbox.checked);
-  
+  const subCategories = document.querySelectorAll(
+    '#subCategory input[type="checkbox"]'
+  );
+  const isAnyChecked = [...subCategories].some((checkbox) => checkbox.checked);
+
   if (!isAnyChecked) {
-    showToast(ERROR.CATEGORY_REQUIRED)
+    showToast(ERROR.CATEGORY_REQUIRED);
     return;
   }
 
@@ -124,8 +138,10 @@ const submitProductForm = async (e) => {
   const productId = form.dataset.productId;
   const method = productId ? 'updateProduct' : 'postProduct';
   const args = productId ? [productId, productData] : [productData];
-  const toastMessage = productId? SUCCESS.PRODUCT_UPDATED : SUCCESS.PRODUCT_POSTED
-  
+  const toastMessage = productId
+    ? SUCCESS.PRODUCT_UPDATED
+    : SUCCESS.PRODUCT_POSTED;
+
   const result = await productService[method](...args);
   if (result.error) {
     showToast(result.error);
@@ -156,13 +172,15 @@ const renderSubCategories = async (
         ? 'checked'
         : '';
       return `
-        <input 
-          type="checkbox" 
-          name="subCategory" 
-          value="${subCategory._id}" 
-          id="sub_${subCategory.name}" 
-          ${isChecked}>
-        <label for="sub_${subCategory.name}">${subCategory.name}</label>
+        <div class="subCategories__item">
+          <input 
+            type="checkbox" 
+            name="subCategory" 
+            value="${subCategory._id}" 
+            id="sub_${subCategory._id}" 
+            ${isChecked}>
+          <label for="sub_${subCategory._id}">${subCategory.name}</label>
+        </div>
       `;
     })
     .join('');
@@ -172,7 +190,7 @@ const renderSubCategories = async (
 
 const toggleFormDisplay = () => {
   document.querySelector('.product-view').classList.toggle(CLASSNAME.HIDDEN);
-  document.querySelector('.product-form').classList.toggle(CLASSNAME.HIDDEN);
+  document.querySelector('.product-edit').classList.toggle(CLASSNAME.HIDDEN);
 };
 
 const populateFormWithData = (data) => {
@@ -216,6 +234,7 @@ const bindEvents = () => {
   const mainCategory = document.getElementById('mainCategory');
   const form = document.getElementById('form');
   const searchForm = document.getElementById('searchForm');
+  const cancleBtn = document.getElementById('cancleBtn');
 
   addProductBtn.addEventListener('click', showAddForm);
   showProductBtn.addEventListener('click', toggleFormDisplay);
@@ -224,6 +243,7 @@ const bindEvents = () => {
   });
   form.addEventListener('submit', submitProductForm);
   searchForm.addEventListener('submit', handleSearch);
+  cancleBtn.addEventListener('click', toggleFormDisplay);
 };
 
 const initPage = async () => {
