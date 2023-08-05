@@ -34,7 +34,6 @@ const renderProduct = (product) => {
   const subCategoriesHTML = product.subCategories
     .map((sub) => `<span class="product-category__sub">${sub.name}</span>`)
     .join('');
-  console.log(product.subCategories);
   return `
     <tr class="product-table__row" data-product-id="${product._id}">
       <td>
@@ -163,7 +162,6 @@ const renderSubCategories = async (
     showToast(result.error);
     return;
   }
-  console.log(selectedSubCategories);
   const categories = result.data.categories;
   const subCategoryHTML = categories
     .filter((category) => category.type === mainCategory)
@@ -207,6 +205,8 @@ const showAddForm = () => {
   formElement.reset();
   formElement.dataset.productId = '';
   renderSubCategories(document.getElementById('mainCategory').value);
+  const productEditTitle = document.getElementById('productEditTitle');
+  productEditTitle.textContent = '상품 등록';
   toggleFormDisplay();
 };
 
@@ -219,7 +219,8 @@ const showEditForm = async (event) => {
     showToast(result.error);
     return;
   }
-
+  const productEditTitle = document.getElementById('productEditTitle');
+  productEditTitle.textContent = '상품 수정';
   populateFormWithData(result.data);
   renderSubCategories(result.data.mainCategory, result.data.subCategories);
   toggleFormDisplay();
