@@ -32,7 +32,7 @@ const requestHandler = async (
     onSuccess && onSuccess(result.data);
     return buildResponse(result.data, null);
   } catch (error) {
-    console.error(`Error in request for ${url}`, error);
+    console.error(`Error in request for ${url} / ${method}`, error);
     showToast(ERROR.REQUEST_FAILED);
     return buildResponse(null, ERROR.REQUEST_FAILED);
   }

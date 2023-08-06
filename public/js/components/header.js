@@ -7,6 +7,7 @@ import logoutAndRedirect from '../utils/logoutAndRedirect.js';
 // 카트 수량 배지 업데이트
 const updateCartbadge = async () => {
   const cart = cartService.cart;
+  console.log(cart, cart.length)
   const cartBadge = document.getElementById('cartBadge');
   cartBadge.textContent = cart.length > 0 ? cart.length : '';
   cartBadge.classList.toggle('visible', cart.length > 0);

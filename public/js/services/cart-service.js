@@ -1,6 +1,6 @@
 import authService from './auth-service.js';
-import { CUSTOM_EVENT, ERROR, LOCAL_STORAGE_KEYS } from '../utils/constants.js';
-import showToast from '../components/toast-message.js';
+import { CUSTOM_EVENT, LOCAL_STORAGE_KEYS } from '../utils/constants.js';
+import requestHandler from '../utils/requestHandler.js';
 import buildResponse from '../utils/build-response.js';
 
 class CartService {
@@ -14,220 +14,131 @@ class CartService {
 
   // 장바구니 초기화
   async initializeCart() {
-    const cartResult = await this.getCart();
-
-    if (cartResult.error) {
-      showToast(cartData.message);
-    }
+    await this.getCart();
   }
 
   // 장바구니 가져오기
   async getCart() {
-    try {
-      if (authService.isAuth) {
-        const response = await fetch('/api/cart');
-        const result = await response.json();
-        if (!response.ok) {
-          return buildResponse(null, result.error);
-        }
-
-        this._cart = result.data.cart;
-      } else {
-        const localStorageCart = localStorage.getItem(
-          LOCAL_STORAGE_KEYS.CART_ITEMS
-        );
-        this._cart = localStorageCart ? JSON.parse(localStorageCart) : [];
-      }
-
-      this.dispatchCartUpdate();
-      return buildResponse();
-    } catch (error) {
-      console.error('In getCart', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
+    if (authService.isAuth) {
+      const onSuccess = (data) => {
+        this._cart = data;
+      };
+      return requestHandler('/api/cart', 'GET', null, onSuccess);
+    } else {
+      const localStorageCart = localStorage.getItem(
+        LOCAL_STORAGE_KEYS.CART_ITEMS
+      );
+      this._cart = localStorageCart ? JSON.parse(localStorageCart) : [];
     }
   }
 
-  // 장바구니에 상품 추가
+  // 장바구니 상품 추가
   async postToCart(item) {
-    try {
-      if (authService.isAuth) {
-        const response = await fetch('/api/cart', {
-          method: 'POST',
-          body: JSON.stringify(item),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+    if (authService.isAuth) {
+      return requestHandler('/api/cart', 'POST', item, this.onSuccess);
+    } else {
+      const existingItem = this.cart.find(
+        (product) => product.productId === item.productId
+      );
 
-        const result = await response.json();
-        if (!response.ok) {
-          return buildResponse(null, result.error);
-        }
-
-        this._cart = result.data.cart;
+      if (existingItem) {
+        existingItem.quantity += item.quantity;
       } else {
-        const existingItem = this.cart.find(
-          (product) => product.productId === item.productId
-        );
-
-        if (existingItem) {
-          existingItem.quantity += item.quantity;
-        } else {
-          this.cart.unshift(item);
-        }
-
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.CART_ITEMS,
-          JSON.stringify(this.cart)
-        );
+        this.cart.unshift(item);
       }
 
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.CART_ITEMS,
+        JSON.stringify(this.cart)
+      );
       this.dispatchCartUpdate();
       return buildResponse();
-    } catch (error) {
-      console.error('In postToCart', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 장바구니 상품 삭제
   async deleteFromCart(productId) {
-    try {
-      if (authService.isAuth) {
-        const response = await fetch(`/api/cart/${productId}`, {
-          method: 'DELETE',
-        });
-
-        const result = await response.json();
-        if (!response.ok) {
-          return buildResponse(null, result.error);
-        }
-
-        this._cart = result.data.cart;
-      } else {
-        this._cart = this._cart.filter((item) => item.productId !== productId);
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.CART_ITEMS,
-          JSON.stringify(this._cart)
-        );
-      }
-
+    if (authService.isAuth) {
+      return requestHandler(
+        `/api/cart/${productId}`,
+        'DELETE',
+        null,
+        this.onSuccess
+      );
+    } else {
+      this._cart = this._cart.filter((item) => item.productId !== productId);
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.CART_ITEMS,
+        JSON.stringify(this._cart)
+      );
       this.dispatchCartUpdate();
       return buildResponse();
-    } catch (error) {
-      console.error('In deleteFromCart', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
-  
+
   // 장바구니 상품 여러개 삭제
   async deleteMultipleFromCart(productIds) {
-    try {
-      if (authService.isAuth) {
-        const response = await fetch(`/api/cart`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productIds }),
-        });
-
-        const result = await response.json();
-        if (!response.ok) {
-          return buildResponse(null, result.error);
-        }
-
-        this._cart = result.data.cart;
-      } else {
-        this._cart = this._cart.filter(
-          (item) => !productIds.includes(item.productId)
-        );
-        localStorage.setItem(
-          LOCAL_STORAGE_KEYS.CART_ITEMS,
-          JSON.stringify(this._cart)
-        );
-      }
-
+    if (authService.isAuth) {
+      return requestHandler(`/api/cart/`, 'DELETE', productIds, this.onSuccess);
+    } else {
+      this._cart = this._cart.filter(
+        (item) => !productIds.includes(item.productId)
+      );
+      localStorage.setItem(
+        LOCAL_STORAGE_KEYS.CART_ITEMS,
+        JSON.stringify(this._cart)
+      );
       this.dispatchCartUpdate();
       return buildResponse();
-    } catch (error) {
-      console.error('In deleteMultipleFromCart', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 장바구니 수량 변경
   async putCartItemQuantity(productId, direction) {
-    try {
-      if (authService.isAuth) {
-        const response = await fetch(`/api/cart/${productId}/${direction}`, {
-          method: 'PUT',
-        });
-
-        const result = await response.json();
-        if (!response.ok) {
-          return buildResponse(null, result.error);
+    if (authService.isAuth) {
+      return requestHandler(
+        `/api/cart/${productId}/${direction}`,
+        'PUT',
+        null,
+        this.onSuccess
+      );
+    } else {
+      const item = this._cart.find((i) => i.productId === productId);
+      if (item) {
+        if (direction === 'increase') {
+          item.quantity++;
+        } else if (direction === 'decrease') {
+          item.quantity--;
         }
-
-        this._cart = result.data.cart;
-      } else {
-        const item = this._cart.find((i) => i.productId === productId);
-        if (item) {
-          if (direction === 'increase') {
-            item.quantity++;
-          } else if (direction === 'decrease') {
-            item.quantity--;
-          }
-          localStorage.setItem(
-            LOCAL_STORAGE_KEYS.CART_ITEMS,
-            JSON.stringify(this._cart)
-          );
-        }
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.CART_ITEMS,
+          JSON.stringify(this._cart)
+        );
       }
-
       this.dispatchCartUpdate();
       return buildResponse();
-    } catch (error) {
-      console.error('In putCartItemQuantity', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
     }
   }
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기
   async postMergeCarts() {
-    try {
-      if (this.cart.length === 0) {
-        this.dispatchCartUpdate();
-        buildResponse();
-      }
-
-      const response = await fetch('/api/cart/merge', {
-        method: 'POST',
-        body: JSON.stringify(this._cart),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      this._cart = result.data.cart;
-
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.CART_ITEMS);
-      this.dispatchCartUpdate();
-      return buildResponse();
-    } catch (error) {
-      console.error('In postMergeCarts', error);
-      return ERROR.REQUEST_FAILED;
-    }
+    return requestHandler(
+      '/api/cart/merge',
+      'POST',
+      this._cart,
+      this.onSuccess
+    );
   }
 
+  onSuccess = (data) => {
+    this._cart = data;
+    this.dispatchCartUpdate();
+  };
   // updateCart 이벤트 발행
   dispatchCartUpdate() {
     const event = new CustomEvent(CUSTOM_EVENT.CART_UPDATED);
     document.dispatchEvent(event);
+    console.log('event');
   }
 }
 

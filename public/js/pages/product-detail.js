@@ -62,10 +62,9 @@ const bindCartBtn = () => {
     const quantity = Number(document.getElementById('quantity').textContent);
 
     const result = await cartService.postToCart({ productId, quantity });
-    if (result.error) {
-      showToast(result.error);
-      return;
-    }
+    console.log(result)
+    if (result.error) return;
+    
     const toastContent = `
         <div class="toastMessage__content">
           <p>장바구니에 상품을 담았습니다.</p>

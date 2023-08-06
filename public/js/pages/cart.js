@@ -12,7 +12,7 @@ import {
   LOCAL_STORAGE_KEYS,
 } from '../utils/constants.js';
 
-let savedCheckedProductIds = [];  
+let savedCheckedProductIds = [];
 let isInitialRender = true;
 
 // 체크 안 한 상품 저장
@@ -94,9 +94,9 @@ const renderCartItem = async (item) => {
 const renderCartList = async () => {
   const cartList = document.getElementById('cartList');
   const cart = cartService.cart;
-  
-  if(cart.length === 0){
-    cartList.innerHTML = '<p class="empty">담긴 상품이 없습니다.</p>'
+
+  if (cart.length === 0) {
+    cartList.innerHTML = '<p class="empty">담긴 상품이 없습니다.</p>';
     return;
   }
 
@@ -139,23 +139,13 @@ const onClickCartForm = async (e) => {
       }
     }
 
-    const result = await cartService.putCartItemQuantity(
-      productId,
-      direction
-    );
-    if (result.error) {
-      showToast(result.error);
-    }
+    await cartService.putCartItemQuantity(productId, direction);
   }
 
   if (target.classList.contains('x-btn')) {
     savedCheckedProductIds = saveUncheckedState();
     const productId = target.closest('.cart-item').dataset.productId;
-    const result = await cartService.deleteFromCart(productId);
-
-    if (result.error) {
-      showToast(result.error.messge);
-    }
+    await cartService.deleteFromCart(productId);
   }
 };
 
@@ -255,9 +245,9 @@ const onSubmitForm = (e) => {
     return;
   }
   const itemsToOrder = getSelectedItems();
-  if(itemsToOrder.length === 0){
-    showToast(ERROR.ORDER_ITEMS_REQUIRED)
-    return 
+  if (itemsToOrder.length === 0) {
+    showToast(ERROR.ORDER_ITEMS_REQUIRED);
+    return;
   }
   const productAmount = document
     .querySelector('#productAmount')
@@ -266,7 +256,7 @@ const onSubmitForm = (e) => {
   const data = {
     products: itemsToOrder,
     productAmount,
-    fromCart : true,
+    fromCart: true,
   };
   localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEMS, JSON.stringify(data));
   // 주문 페이지로 이동

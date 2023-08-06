@@ -10,7 +10,7 @@ router.get(
   '/api/cart',
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 
@@ -38,7 +38,7 @@ router.post(
     user.cart = updatedCartItems;
 
     await user.save();
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 
@@ -60,7 +60,7 @@ router.post(
     }
 
     await user.save();
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 
@@ -80,7 +80,7 @@ router.put(
     cartItem.quantity += adjustment;
     await user.save();
 
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 
@@ -96,7 +96,7 @@ router.delete(
 
     await user.save();
     console.log(user.cart);
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 
@@ -118,7 +118,7 @@ router.delete(
     user.cart.splice(cartItemIndex, 1);
     await user.save();
 
-    res.json(buildResponse({ cart: user.cart }));
+    res.json(buildResponse(user.cart));
   })
 );
 

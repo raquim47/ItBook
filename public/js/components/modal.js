@@ -37,11 +37,8 @@ const handleRequestLogin = async (requestData) => {
     return;
   }
 
+  await cartService.postMergeCarts();
   closeModal();
-  const cartResult = await cartService.postMergeCarts();
-  if (cartResult.error) {
-    showToast(cartResult.error);
-  }
 };
 
 // 회원 가입 요청
