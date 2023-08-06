@@ -122,12 +122,12 @@ class CartService {
 
   // 로그인 시 로컬 스토래지 -> 서버 장바구니 데이터 합치기
   async postMergeCarts() {
-    return requestHandler(
-      '/api/cart/merge',
-      'POST',
-      this._cart,
-      this.onSuccess
-    );
+    const onSuccess = (data) => {
+      this._cart = data;
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.CART_ITEMS);
+      this.dispatchCartUpdate();
+    };
+    return requestHandler('/api/cart/merge', 'POST', this._cart, onSuccess);
   }
 
   onSuccess = (data) => {
@@ -138,7 +138,6 @@ class CartService {
   dispatchCartUpdate() {
     const event = new CustomEvent(CUSTOM_EVENT.CART_UPDATED);
     document.dispatchEvent(event);
-    console.log('event');
   }
 }
 
