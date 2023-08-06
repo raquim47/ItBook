@@ -4,7 +4,7 @@ import Product from '../models/product';
 import Category from '../models/category';
 import User from '../models/user';
 import { asyncRenderHandler } from '../utils/asyncHandler';
-import { ERROR_PAGE } from '../../public/js/utils/constants';
+import { ERROR_PAGE } from '../utils/constants';
 import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();

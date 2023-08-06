@@ -5,7 +5,7 @@ import hashPassword from '../utils/hash-password';
 import bcrypt from 'bcrypt';
 import buildResponse from '../utils/build-response';
 import { asyncApiHandler } from '../utils/asyncHandler';
-import { ERROR } from '../../public/js/utils/constants';
+import { ERROR } from '../utils/constants';
 
 const router = express.Router();
 
