@@ -8,7 +8,7 @@ const cookieExtractor = req => {
 };
 
 const opts = {
-  secretOrKey: process.env.JWT_SECRET, //./utils/jwt 의 secret 사용하기
+  secretOrKey: process.env.JWT_SECRET, 
   jwtFromRequest: cookieExtractor,
 };
 

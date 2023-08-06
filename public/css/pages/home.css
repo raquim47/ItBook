@@ -1,0 +1,185 @@
+/* main-slide */
+.main-slide {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-slide__list {
+  display: flex;
+  width: 300%; 
+  transition: transform 0.5s ease-in-out; 
+}
+
+.main-slide__item {
+  width: 33.33%; 
+  flex-shrink: 0;
+}
+
+.main-slide__pagination {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+}
+
+.main-slide__dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.main-slide__dot.active {
+  background-color: #6236ff; 
+}
+
+/* .new-books */
+.new-books {
+  padding: 80px 25px 40px;
+}
+
+.new-books__title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 65px;
+}
+
+.product-slider {
+  position: relative;
+  padding: 0 60px; /* 좌우 패딩 추가 */
+}
+
+.product-slider__wrap {
+  overflow: hidden;
+}
+
+.product-slider__list {
+  display: grid;
+  gap: 9rem;
+  grid-template-columns: repeat(6, calc((100% - 18rem) / 3)); /* 수정 */
+  transition: all 0.3s;
+}
+
+.product-slider__btn {
+  position: absolute;
+  top: 40%;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.product-slider__btn:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.product-slider__btn.prev {
+  left: -15px;
+}
+
+.product-slider__btn.next {
+  right: -15px;
+}
+
+.product-slider__btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+}
+
+.product-slider__btn.prev::before {
+  transform: translate(-35%, -50%) rotate(-135deg);
+  border-width: 2px 2px 0 0;
+  border-color: white;
+}
+
+.product-slider__btn.next::before {
+  transform: translate(-65%, -50%) rotate(45deg);
+  border-width: 2px 2px 0 0;
+  border-color: white;
+}
+
+/* .recommand-books */
+.recommand-books {
+  padding: 80px 25px 40px;
+}
+
+.recommand-books__title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 65px;
+}
+
+.recommand-books__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem 4.5rem;
+}
+
+/* product-item */
+.product-item {
+  position: relative;
+  padding-bottom: 200%;
+  overflow: hidden;
+}
+
+.product-item a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-item img {
+  height: 70%;
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  transition: filter 0.15s ease-in;
+}
+
+.product-item__info {
+  text-align: center;
+  padding-top: 20px;
+  flex-grow: 1;
+}
+
+.product-item__category {
+  font-size: 14px;
+  color: #6236ff;
+}
+
+.product-item__title {
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 두 줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.product-item a:hover img {
+  filter: brightness(0.8);
+}
+
+.product-item a:hover .product-item__title {
+  text-decoration: underline;
+}

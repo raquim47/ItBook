@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/admin-order.css" />
+    <script src="/js/pages/admin-order.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="admin">
+          <h2 class="admin__title">관리자 페이지</h2>
+          <div class="admin__content">
+            <aside>
+              <nav class="admin__nav">
+                <a href="/admin/product">상품 관리</a>
+                <a href="/admin/order" class="active">주문 관리</a>
+                <a href="/admin/category">카테고리 관리</a>
+              </nav>
+            </aside>
+            <div class="admin__sections">
+              <section class="admin-section">
+                <header class="admin-section__header ">
+                  <h3 class="admin-section__title">
+                    주문 관리<span
+                      id="ordersAmount"
+                      aria-label="등록된 주문 수"
+                    ></span>
+                  </h3>
+                  <div class="admin-section__options">
+                    <div class="status-filter">
+                      <label for="orderStatusFilter" class="admin__section-label"
+                        >주문 상태별 조회</label
+                      >
+                      <select id="orderStatusFilter">
+                        <option value="전체">전체</option>
+                        <option value="상품준비중">상품준비중</option>
+                        <option value="배송중">배송중</option>
+                        <option value="배송완료">배송완료</option>
+                        <option value="주문취소">주문취소</option>
+                      </select>
+                    </div>
+                  </div>
+                </header>
+                <table class="order-table">
+                  <thead>
+                    <tr>
+                      <th class="order-table__th--date">날짜</th>
+                      <th class="order-table__th--user">주문자</th>
+                      <th class="order-table__th--info">주문내역</th>
+                      <th class="order-table__th--price">가격</th>
+                      <th class="order-table__th--status">주문상태</th>
+                      <th class="order-table__th--edit">관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

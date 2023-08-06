@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/order.css" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/pages/order.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="order">
+          <h2 class="order__title">주문서</h2>
+          <div class="order__sections">
+            <!-- 주문서 정보  -->
+            <section class="order__content">
+              <form id="orderForm" class="order-form">
+                <fieldset class="order-form__field">
+                  <legend class="order-form__title">배송 정보</legend>
+                  <div class="order-form__row">
+                    <label for="username">이름</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      readonly
+                      required
+                      value="<%= userData.username %>"
+                    />
+                  </div>
+                  <div class="order-form__row error address">
+                    <label for="address">배송지</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      placeholder="배송지를 입력하세요."
+                      value="<%= userData.address %>"
+                      required
+                    />
+                    <button class="address-search-btn" type="button">
+                      배송지 검색
+                    </button>
+                  </div>
+                  <div class="order-form__row no-border">
+                    <label for="phone">전화번호</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      placeholder="010-1234-5678"
+                      value="<%= userData.phone %>"
+                      required
+                    />
+                  </div>
+                  <div class="set-defalut">
+                    <input type="checkbox" id="setDefault" />
+                    <label for="setDefault"
+                      >현재 배송 정보를 기본 정보로 저장</label
+                    >
+                  </div>
+                </fieldset>
+                <fieldset class="order-form__field">
+                  <legend class="order-form__title">주문상품 정보</legend>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="table__th-name">상품명</th>
+                        <th class="table__th-quantity">수량</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!--주문 상품 목록 -->
+                    </tbody>
+                  </table>
+                </fieldset>
+              </form>
+            </section>
+            <!-- 주문서 결제  -->
+            <section class="order__payment">
+              <div class="order-amount">
+                <div class="order-amount__row">
+                  <h4>총 상품 금액</h4>
+                  <strong id="orderAmount">0원</strong>
+                </div>
+                <div class="order-amount__row">
+                  <h4>배송비</h4>
+                  <strong id="deliveryFee">+0원</strong>
+                </div>
+                <div class="order-amount__row">
+                  <p class="order-amount-desc">
+                    50,000원 이상 구매시 배송비 무료
+                  </p>
+                </div>
+              </div>
+              <div class="order-total-price">
+                <h3>총 결제 금액</h3>
+                <p id="orderPrice">0원</p>
+              </div>
+              <div class="agreement">
+                <div class="agreement__row">
+                  <input type="checkbox" id="agreeAll" />
+                  <label for="agreeAll">전체 동의</label>
+                </div>
+                <div class="agreement__row">
+                  <input type="checkbox" id="agreePaymentInfo" />
+                  <label for="agreePaymentInfo"
+                    >(필수) 구매할 상품의 결제정보(상품명, 상품가격)를
+                    확인하였으며, 구매진행에 동의합니다.</label
+                  >
+                </div>
+                <div class="agreement__row">
+                  <input type="checkbox" id="agreePrivacy" />
+                  <label for="agreePrivacy"
+                    >(필수) 개인정보 수집 및 이용에 동의합니다.</label
+                  >
+                </div>
+              </div>
+              <button
+                id="orderSubmitBtn"
+                class="order__submit-btn"
+              >
+                결제하기
+              </button>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

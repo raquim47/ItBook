@@ -5,25 +5,11 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import getUserFromJWT from './middlewares/get-user-from-jwt';
 import dotenv from 'dotenv';
-import viewsRoutes from './routes/views.js';
-import productRoutes from './routes/product.js';
-import userRoutes from './routes/user.js';
-import authRoutes from './routes/auth';
-import categoryRoutes from './routes/category';
-import orderRoutes from './routes/order';
 import initPassport from './passport';
+import indexRoutes from './routes/indexRoutes'
 
 dotenv.config();
 initPassport();
-
-mongoose
-  .connect(
-    'mongodb+srv://Gwanggaeto:Gwang1234@cluster0.o8ndafw.mongodb.net/?retryWrites=true&w=majority'
-  )
-  .then(() => {
-    app.listen(3000);
-  })
-  .catch((err) => console.log(err));
 
 const app = express();
 
@@ -32,13 +18,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// passport/jwt
 app.use(passport.initialize());
-// jwt 로그인 미들웨어 추가
 app.use(getUserFromJWT);
 
-app.use(categoryRoutes);
-app.use(productRoutes);
-app.use(authRoutes);
-app.use(userRoutes);
-app.use(viewsRoutes);
-app.use(orderRoutes);
+// views/ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// routes
+app.use(indexRoutes);
+
+mongoose
+  .connect(process.env.DB_URI)
+  .then(() => {
+    console.log('DB 연결');
+  })
+  .catch((err) => {
+    console.error("Mongoose error:", err);
+    process.exit(1);
+  });
+
+app.listen(process.env.PORT, () => {
+  console.log(`서버 실행, 포트 : ${process.env.PORT}`);
+});
