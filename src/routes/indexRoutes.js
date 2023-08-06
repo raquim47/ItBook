@@ -7,7 +7,7 @@ import orderRoutes from './orderRoutes';
 import productRoutes from './productRoutes';
 import userRoutes from './userRoutes';
 import viewRoutes from './viewRoutes';
-import { ERROR_PAGE } from '../../public/js/utils/constants';
+import { ERROR_PAGE } from '../utils/constants';
 
 const router = express.Router();
 
