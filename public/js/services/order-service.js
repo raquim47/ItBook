@@ -37,6 +37,12 @@ class OrderService {
     this._orders = orders;
     return orders;
   }
+
+  // updateCart 이벤트 발행
+  dispatchCartUpdate() {
+    const event = new CustomEvent(CUSTOM_EVENT.CART_UPDATED);
+    document.dispatchEvent(event);
+  }
 }
 
 const orderService = new OrderService();

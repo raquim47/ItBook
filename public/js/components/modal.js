@@ -28,49 +28,30 @@ const showErrorMessage = (field, message) => {
 const handleRequestLogin = async (requestData) => {
   const authResult = await authService.postLogin(requestData);
 
-  if (!authResult.error) {
-    closeModal();
-    setTimeout(() => showToast(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS), 250);
-
-    const cartResult = await cartService.postMergeCarts();
-    if (cartResult.error) {
-      showToast(cartResult.error);
+  if (authResult.error) {
+    if (authResult.error === ERROR.EMAIL_NOT_FOUND) {
+      showErrorMessage('email', authResult.error);
+    } else if (authResult.error === ERROR.PASSWORD_INVALID) {
+      showErrorMessage('password', authResult.error);
     }
-
     return;
   }
 
-  switch (authResult.error.type) {
-    case ERROR.EMAIL_NOT_FOUND.type:
-      showErrorMessage('email', authResult.error);
-      break;
-    case ERROR.PASSWORD_INVALID.type:
-      showErrorMessage('password', authResult.error);
-      break;
-    default:
-      showToast(authResult.error);
+  closeModal();
+  const cartResult = await cartService.postMergeCarts();
+  if (cartResult.error) {
+    showToast(cartResult.error);
   }
 };
 
 // 회원 가입 요청
 const handleRequestJoin = async (requestData) => {
   const result = await authService.postJoin(requestData);
-
-  switch (result.error) {
-    case undefined:  
-    case null:  
-      closeModal();
-      setTimeout(
-        () => showToast(SUCCESS.JOIN, TOAST_TYPES.SUCCESS),
-        250
-      );
-      break;
-    case ERROR.EMAIL_DUPLICATE:
-      showErrorMessage('email', result.error);
-      break;
-    default:
-      showToast(result.error);
+  if (result.error === ERROR.EMAIL_DUPLICATE) {
+    showErrorMessage('email', result.error);
+    return;
   }
+  closeModal();
 };
 
 const validationRules = {

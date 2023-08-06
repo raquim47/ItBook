@@ -1,5 +1,4 @@
 import express from 'express';
-import Product from '../models/product';
 import User from '../models/user';
 import setUserToken from '../utils/set-user-token';
 import hashPassword from '../utils/hash-password';
@@ -61,25 +60,6 @@ router.post(
     });
 
     res.json(buildResponse());
-  })
-);
-
-router.get(
-  '/api/product/:productId',
-  asyncApiHandler(async (req, res) => {
-    const productId = req.params.productId;
-    const fields = req.query.fields;
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res.status(404).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
-    }
-
-    if (fields === 'title') {
-      return res.json(buildResponse(product.title));
-    }
-
-    res.json(buildResponse(product));
   })
 );
 

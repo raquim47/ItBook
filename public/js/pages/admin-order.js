@@ -43,9 +43,7 @@ const renderOrder = (order) => {
           <option ${
             order.status === '상품준비중' ? 'selected' : ''
           }>상품준비중</option>
-          <option ${
-            order.status === '배송중' ? 'selected' : ''
-          }>배송중</option>
+          <option ${order.status === '배송중' ? 'selected' : ''}>배송중</option>
           <option ${
             order.status === '배송완료' ? 'selected' : ''
           }>배송완료</option>
@@ -90,19 +88,20 @@ const filterOrdersByStatus = () => {
     updateOrderTable(orders);
     return;
   }
-  const filteredOrders = orders.filter(
-    (order) => order.status === status
-  );
+  const filteredOrders = orders.filter((order) => order.status === status);
   updateOrderTable(filteredOrders);
 };
 
 const handleStatusChange = async (event) => {
   const orderId = event.target.closest('.order-table__row').dataset.orderId;
   const newStatus = event.target.value;
-  await orderService.putOrderStatus(orderId, newStatus);
-  await orderService.getAllOrders();
+  const { error } = await orderService.putOrderStatus(
+    orderId,
+    newStatus
+  );
+  if (error) return;
   filterOrdersByStatus();
-  showToast(SUCCESS.ORDER_STATUS_UPDATED, TOAST_TYPES.SUCCESS)
+  showToast(SUCCESS.ORDER_STATUS_UPDATED, TOAST_TYPES.SUCCESS);
 };
 
 const handleDeleteOrder = async (event) => {
@@ -111,14 +110,12 @@ const handleDeleteOrder = async (event) => {
   }
   const orderId = event.target.closest('.order-table__row').dataset.orderId;
   await orderService.deleteOrder(orderId);
-  await orderService.getAllOrders();
-  filterOrdersByStatus();
-  showToast(SUCCESS.ORDER_DELETED, TOAST_TYPES.SUCCESS)
+  showToast(SUCCESS.ORDER_DELETED, TOAST_TYPES.SUCCESS);
 };
 
 const fetchOrders = async () => {
   const orders = await orderService.getAllOrders();
-  console.log(orders)
+  console.log(orders);
   updateOrderTable(orders);
 };
 

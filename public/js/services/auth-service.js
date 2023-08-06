@@ -1,6 +1,11 @@
 import showToast from '../components/toast-message.js';
-import buildResponse from '../utils/build-response.js';
-import { ERROR, CUSTOM_EVENT } from '../utils/constants.js';
+import {
+  ERROR,
+  CUSTOM_EVENT,
+  SUCCESS,
+  TOAST_TYPES,
+} from '../utils/constants.js';
+import requestHandler from '../utils/requestHandler.js';
 
 class AuthService {
   constructor() {
@@ -17,78 +22,57 @@ class AuthService {
   }
 
   async initializeAuth() {
-    const result = await this.getAuthStatus();
-
-    if (result.error) {
-      showToast(result.error);
-    }
+    await this.getAuthStatus();
   }
 
   async getAuthStatus() {
-    try {
-      const response = await fetch('/api/auth');
-      const result = await response.json();
-
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      this._isAuth = result.data.isAuth;
-      this._isAdmin = result.data.isAuth;
-
-      return buildResponse();
-    } catch (error) {
-      console.error('In getAuthStatus', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    const onSuccess = (data) => {
+      this._isAuth = data.isAuth;
+      this._isAdmin = data.isAdmin;
+    };
+    return await requestHandler('/api/auth', 'GET', null, onSuccess);
   }
 
   async postLogin(requestData) {
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        body: JSON.stringify(requestData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      this._isAuth = result.data.isAuth;
-      this._isAdmin = result.data.isAdmin;
-
+    const onSuccess = (data) => {
+      this._isAuth = data.isAuth;
+      this._isAdmin = data.isAdmin;
       document.dispatchEvent(new Event(CUSTOM_EVENT.LOGIN_SUCCESS));
-      return buildResponse();
-    } catch (error) {
-      console.error('In postLogin', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+      showToast(SUCCESS.LOGIN, TOAST_TYPES.SUCCESS);
+    };
+
+    const onError = (error) => {
+      if (error !== ERROR.PASSWORD_INVALID && error !== ERROR.EMAIL_NOT_FOUND) {
+        showToast(error);
+      }
+    };
+
+    return await requestHandler(
+      '/api/login',
+      'POST',
+      requestData,
+      onSuccess,
+      onError
+    );
   }
 
   async postJoin(requestData) {
-    try {
-      const response = await fetch('/api/join', {
-        method: 'POST',
-        body: JSON.stringify(requestData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
+    const onSuccess = () => {
+      showToast(SUCCESS.JOIN, TOAST_TYPES.SUCCESS);
+    };
+    const onError = (error) => {
+      if (error !== ERROR.EMAIL_DUPLICATE) {
+        showToast(error);
       }
+    };
 
-      return buildResponse();
-    } catch (error) {
-      console.error('In postJoin', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return await requestHandler(
+      '/api/join',
+      'POST',
+      requestData,
+      onSuccess,
+      onError
+    );
   }
 }
 

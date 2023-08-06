@@ -1,104 +1,26 @@
-import buildResponse from '../utils/build-response.js';
-import { ERROR } from '../utils/constants.js';
+import requestHandler from '../utils/requestHandler.js';
 
 class ProductService {
-  constructor() {}
-
   async getProducts() {
-    try {
-      const response = await fetch(`/api/products`);  
-      const result = await response.json();
-  
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-  
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In getProducts', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
-  }
-  
-  async postProduct(productData) {
-    try {
-      const response = await fetch('/api/product', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-      const result = await response.json();
-
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In postProduct', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler('/api/products');
   }
 
   async getProduct(productId) {
-    try {
-      const response = await fetch(`/api/product/${productId}`);
-      const result = await response.json();
-
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In getProduct', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler(`/api/product/${productId}`);
   }
-  
-  async updateProduct(productId, productData) {
-    try {
-      const response = await fetch(`/api/product/${productId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-      const result = await response.json();
 
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
+  async postProduct(productData) {
+    return requestHandler('/api/product', 'POST', productData);
+  }
 
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In updateProduct', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+  async putProduct(productId, productData) {
+    return requestHandler(`/api/product/${productId}`, 'PUT', productData);
   }
 
   async deleteProduct(productId) {
-    try {
-      const response = await fetch(`/api/product/${productId}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In deleteProduct', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler(`/api/product/${productId}`, 'DELETE');
   }
 }
 
 const productService = new ProductService();
-
 export default productService;

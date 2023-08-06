@@ -20,11 +20,8 @@ const handleDeleteProduct = async (event) => {
   const isConfirmed = confirm('정말로 이 상품을 삭제하시겠습니까?');
 
   if (isConfirmed) {
-    const result = await productService.deleteProduct(productId);
-    if (result.error) {
-      showToast(result.error);
-      return;
-    }
+    const { error } = await productService.deleteProduct(productId);
+    if (error) return;
     showToast('상품이 성공적으로 삭제되었습니다.', TOAST_TYPES.SUCCESS);
     renderProductsTable();
   }
@@ -71,13 +68,9 @@ const renderProduct = (product) => {
 };
 
 const renderProductsTable = async (searchTerm = '') => {
-  const response = await productService.getProducts();
-  if (response.error) {
-    showToast(response.error);
-    return;
-  }
-  const products = response.data.products;
-
+  const { data, error } = await productService.getProducts();
+  if (error) return;
+  const { products } = data;
   const productsAmount = document.getElementById('productsAmount');
   productsAmount.textContent = `(${products.length}건)`;
 
@@ -138,21 +131,18 @@ const submitProductForm = async (e) => {
   const form = e.target;
   const productData = getFormValues(form);
   const productId = form.dataset.productId;
-  const method = productId ? 'updateProduct' : 'postProduct';
+  const method = productId ? 'putProduct' : 'postProduct';
   const args = productId ? [productId, productData] : [productData];
   const toastMessage = productId
     ? SUCCESS.PRODUCT_UPDATED
     : SUCCESS.PRODUCT_POSTED;
 
-  const result = await productService[method](...args);
-  if (result.error) {
-    showToast(result.error);
-    return;
+  const { error } = await productService[method](...args);
+  if (!error) {
+    renderProductsTable();
+    toggleFormDisplay();
+    showToast(toastMessage, TOAST_TYPES.SUCCESS);
   }
-
-  renderProductsTable();
-  toggleFormDisplay();
-  showToast(toastMessage, TOAST_TYPES.SUCCESS);
 };
 
 const renderSubCategories = async (
@@ -160,12 +150,10 @@ const renderSubCategories = async (
   selectedSubCategories = []
 ) => {
   const subCategoryContainer = document.getElementById('subCategory');
-  const result = await categoryService.getCategories();
-  if (result.error) {
-    showToast(result.error);
-    return;
-  }
-  const categories = result.data.categories;
+  const { data, error } = await categoryService.getCategories();
+  if (error) return;
+  const { categories } = data;
+
   const subCategoryHTML = categories
     .filter((category) => category.type === mainCategory)
     .map((subCategory) => {
@@ -217,15 +205,14 @@ const showEditForm = async (event) => {
   const productId = event?.target.closest('tr')?.dataset.productId;
   if (!productId) return;
 
-  const result = await productService.getProduct(productId);
-  if (result.error) {
-    showToast(result.error);
-    return;
-  }
+  const { data, error } = await productService.getProduct(productId);
+  if (error) return;
+  const { product } = data;
+
   const productEditTitle = document.getElementById('productEditTitle');
   productEditTitle.textContent = '상품 수정';
-  populateFormWithData(result.data);
-  renderSubCategories(result.data.mainCategory, result.data.subCategories);
+  populateFormWithData(product);
+  renderSubCategories(product.mainCategory, product.subCategories);
   toggleFormDisplay();
 
   const formElement = document.getElementById('form');

@@ -1,21 +1,23 @@
 // indexRoutes.js
 import express from 'express';
-import publicApiRoutes from './publicApiRoutes';
-import userApiRoutes from './userApiRoutes';
-import adminApiRoutes from './adminApiRoutes';
-import publicViewRoutes from './publicViewRoutes';
-import userViewRoutes from './userViewRoutes';
-import adminViewRoutes from './adminViewRoutes';
+import authRoutes from './authRoutes';
+import cartRoutes from './cartRoutes';
+import categoryRoutes from './categoryRoutes';
+import orderRoutes from './orderRoutes';
+import productRoutes from './productRoutes';
+import userRoutes from './userRoutes';
+import viewRoutes from './viewRoutes';
 import { ERROR_PAGE } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
-router.use(publicApiRoutes);
-router.use(userApiRoutes);
-router.use(adminApiRoutes);
-router.use(publicViewRoutes);
-router.use(userViewRoutes);
-router.use(adminViewRoutes);
+router.use(authRoutes);
+router.use(cartRoutes);
+router.use(categoryRoutes);
+router.use(orderRoutes);
+router.use(productRoutes);
+router.use(userRoutes);
+router.use(viewRoutes);
 
 // 404
 router.use((req, res) => {

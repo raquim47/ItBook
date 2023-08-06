@@ -19,14 +19,6 @@ router.get(
   })
 );
 
-router.get(
-  '/api/category',
-  asyncApiHandler(async (req, res) => {
-    const categories = await Category.find();
-    res.json(buildResponse({ categories }));
-  })
-);
-
 router.post(
   '/api/product',
   asyncApiHandler(async (req, res) => {
@@ -74,47 +66,6 @@ router.delete(
       return res.status(404).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
     }
 
-    res.json(buildResponse());
-  })
-);
-
-router.get(
-  '/api/orders',
-  asyncApiHandler(async (req, res) => {
-    const orders = await Order.find({})
-      .populate('userId', 'email username')
-      .populate('products.productId', 'title')
-      .sort({ createdAt: -1 });
-
-    res.json(buildResponse({ orders }));
-  })
-);
-
-router.put(
-  '/api/order/:orderId/status',
-  asyncApiHandler(async (req, res) => {
-    const orderId = req.params.orderId;
-    const { status } = req.body;
-    const order = await Order.findById(orderId);
-    
-    if (!order) {
-      return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
-    }
-    order.status = status;
-    await order.save();
-    res.json(buildResponse());
-  })
-);
-
-router.delete(
-  '/api/order/:orderId',
-  asyncApiHandler(async (req, res) => {
-    const orderId = req.params.orderId;
-
-    const order = await Order.findByIdAndRemove(orderId);
-    if (!order) {
-      return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
-    }
     res.json(buildResponse());
   })
 );

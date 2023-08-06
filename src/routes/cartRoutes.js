@@ -1,9 +1,7 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
-import Order from '../models/order';
 import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
@@ -15,7 +13,6 @@ router.get(
     res.json(buildResponse({ cart: user.cart }));
   })
 );
-router.get('/api/category');
 
 router.post(
   '/api/cart',
@@ -122,105 +119,6 @@ router.delete(
     await user.save();
 
     res.json(buildResponse({ cart: user.cart }));
-  })
-);
-
-router.put(
-  '/api/user',
-  asyncApiHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    const { username, address, phone } = req.body;
-
-    if (username) user.username = username;
-    user.address = address || '';
-    user.phone = phone || '';
-
-    await user.save();
-    res.json(buildResponse());
-  })
-);
-
-router.delete(
-  '/api/user',
-  asyncApiHandler(async (req, res) => {
-    const { password } = req.body;
-    const user = await User.findById(req.user._id);
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      return res.status(400).json(buildResponse(null, ERROR.PASSWORD_INVALID));
-    }
-    await User.deleteOne({ _id: user._id });
-    res.json(buildResponse());
-  })
-);
-
-router.put(
-  '/api/user/wishlist/:productId',
-  asyncApiHandler(async (req, res) => {
-    const productId = req.params.productId;
-    const user = await User.findById(req.user._id);
-
-    if (user.wishList.includes(productId)) {
-      // 찜 해제
-      user.wishList = user.wishList.filter((id) => id.toString() !== productId);
-    } else {
-      // 찜하기
-      user.wishList.push(productId);
-    }
-    await user.save();
-    res.json(buildResponse());
-  })
-);
-
-// 내 주문 가져오기
-router.get(
-  '/api/order',
-  asyncApiHandler(async (req, res) => {
-    const myOrders = await Order.find({ userId: req.user._id })
-      .populate('products.productId')
-      .sort({ createdAt: -1 });
-
-    if (!myOrders.length) {
-      return res.json(buildResponse([]));
-    }
-
-    res.json(buildResponse({ myOrders }));
-  })
-);
-
-// 주문 등록
-router.post(
-  '/api/order',
-  asyncApiHandler(async (req, res) => {
-    const { products, address, phone, totalPrice } = req.body;
-
-    const newOrder = new Order({
-      products: products,
-      userId: req.user._id,
-      totalPrice: totalPrice,
-      address: address,
-      phone: phone,
-    });
-
-    await newOrder.save();
-
-    res.json(buildResponse());
-  })
-);
-
-// 주문 취소
-router.put(
-  '/api/order/cancel/:orderId',
-  asyncApiHandler(async (req, res) => {
-    const order = await Order.findById(req.params.orderId);
-    if (!order) {
-      return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
-    }
-    order.status = '주문취소';
-    await order.save();
-
-    res.json(buildResponse());
   })
 );
 
