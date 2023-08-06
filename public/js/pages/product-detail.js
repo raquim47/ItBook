@@ -46,11 +46,8 @@ const bindWishlistBtn = () => {
     const currentBtn = e.currentTarget;
     const productId = window.location.pathname.split('/').pop();
     const result = await userService.putUserWishlist(productId);
-    if (result.error) {
-      showToast(result.error)
-    } else {
-      currentBtn.classList.toggle('active');
-    }
+    if (result.error) return;
+    currentBtn.classList.toggle('active');
   });
 };
 
@@ -62,9 +59,9 @@ const bindCartBtn = () => {
     const quantity = Number(document.getElementById('quantity').textContent);
 
     const result = await cartService.postToCart({ productId, quantity });
-    console.log(result)
+    console.log(result);
     if (result.error) return;
-    
+
     const toastContent = `
         <div class="toastMessage__content">
           <p>장바구니에 상품을 담았습니다.</p>

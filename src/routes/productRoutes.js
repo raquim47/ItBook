@@ -6,6 +6,7 @@ import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
+// 상품 전체 가져오기
 router.get(
   '/api/products',
   asyncApiHandler(async (req, res) => {
@@ -16,6 +17,7 @@ router.get(
   })
 );
 
+// 상품(상세) 가져오기
 router.get(
   '/api/product/:productId',
   asyncApiHandler(async (req, res) => {
@@ -29,6 +31,7 @@ router.get(
   })
 );
 
+// 상품 등록
 router.post(
   '/api/product',
   asyncApiHandler(async (req, res) => {
@@ -43,7 +46,7 @@ router.post(
   })
 );
 
-// 상품 수정 API
+// 상품 수정
 router.put(
   '/api/product/:productId',
   asyncApiHandler(async (req, res) => {
@@ -64,6 +67,7 @@ router.put(
   })
 );
 
+// 상품 삭제
 router.delete(
   '/api/product/:productId',
   asyncApiHandler(async (req, res) => {

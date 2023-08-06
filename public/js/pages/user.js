@@ -50,13 +50,9 @@ const bindSaveUser = () => {
       };
 
       const result = await userService.putUserInfo(formData);
-      if (result.error) {
-        showToast(result.error);
-      } else {
-        document.getElementById('usernameTitle').textContent =
-          formData.username;
-        showToast(SUCCESS.EDIT_USER, TOAST_TYPES.SUCCESS);
-      }
+      if (result.error) return;
+      document.getElementById('usernameTitle').textContent = formData.username;
+      showToast(SUCCESS.EDIT_USER, TOAST_TYPES.SUCCESS);
     });
 };
 
@@ -142,14 +138,10 @@ const initResignPage = () => {
         return;
       }
 
-      const isConfirmed = confirm('정말로 회원 탈퇴를 진행하시겠습니까?');
-      if (!isConfirmed) return;
-      const result = await userService.deleteUser(password);
-      if (result.error) {
-        showToast(result.error);
-      } else {
+      if (confirm('정말로 회원 탈퇴를 진행하시겠습니까?')) {
+        const result = await userService.deleteUser({ password });
+        if (result.error) return;
         logoutAndRedirect();
-        location.href = '/';
       }
     });
 };

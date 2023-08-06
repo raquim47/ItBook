@@ -7,6 +7,7 @@ import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
+// 유저 정보 수정
 router.put(
   '/api/user',
   asyncApiHandler(async (req, res) => {
@@ -22,9 +23,15 @@ router.put(
   })
 );
 
+// 유저 삭제 (탈퇴)
 router.delete(
   '/api/user',
   asyncApiHandler(async (req, res) => {
+    if (req.user.isAdmin) {
+      return res
+        .status(403)
+        .json(buildResponse(null, ERROR.ADMIN_DELETE_NOT_ALLOWED));
+    }
     const { password } = req.body;
     const user = await User.findById(req.user._id);
 
@@ -37,6 +44,7 @@ router.delete(
   })
 );
 
+// 찜한 상품 저장
 router.put(
   '/api/user/wishlist/:productId',
   asyncApiHandler(async (req, res) => {

@@ -9,6 +9,7 @@ import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
+// 로그인 상태 가져오기
 router.get(
   '/api/auth',
   asyncApiHandler(async (req, res) => {
@@ -20,6 +21,7 @@ router.get(
   })
 );
 
+// 로그인
 router.post(
   '/api/login',
   asyncApiHandler(async (req, res) => {
@@ -41,6 +43,7 @@ router.post(
   })
 );
 
+// 회원가입
 router.post(
   '/api/join',
   asyncApiHandler(async (req, res) => {
