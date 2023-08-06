@@ -3,12 +3,15 @@ import { asyncApiHandler } from '../utils/asyncHandler';
 import Order from '../models/order';
 import buildResponse from '../utils/build-response';
 import { ERROR } from '../../public/js/utils/constants';
+import loginRequired from '../middlewares/login-required';
+import adminRequired from '../middlewares/admin-required';
 
 const router = express.Router();
 
 // 내 주문 가져오기
 router.get(
   '/api/order',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const myOrders = await Order.find({ userId: req.user._id })
       .populate('products.productId')
@@ -25,6 +28,7 @@ router.get(
 // 주문 등록
 router.post(
   '/api/order',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const { products, address, phone, totalPrice } = req.body;
 
@@ -45,6 +49,7 @@ router.post(
 // 주문 취소
 router.put(
   '/api/order/cancel/:orderId',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const order = await Order.findById(req.params.orderId);
     if (!order) {
@@ -60,6 +65,7 @@ router.put(
 // 주문 상태 수정
 router.put(
   '/api/order/:orderId/status',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const orderId = req.params.orderId;
     const { status } = req.body;
@@ -77,6 +83,7 @@ router.put(
 // 주문 삭제
 router.delete(
   '/api/order/:orderId',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const orderId = req.params.orderId;
 
@@ -91,6 +98,7 @@ router.delete(
 // 주문 전체 가져오기
 router.get(
   '/api/orders',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const orders = await Order.find({})
       .populate('userId', 'email username')

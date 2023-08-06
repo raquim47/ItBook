@@ -3,6 +3,7 @@ import { asyncApiHandler } from '../utils/asyncHandler';
 import Product from '../models/product';
 import buildResponse from '../utils/build-response';
 import { ERROR } from '../../public/js/utils/constants';
+import adminRequired from '../middlewares/admin-required';
 
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.get(
 // 상품 등록
 router.post(
   '/api/product',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const productData = req.body;
     const newProduct = await Product.create(productData);
@@ -49,6 +51,7 @@ router.post(
 // 상품 수정
 router.put(
   '/api/product/:productId',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const productId = req.params.productId;
     const updatedProductData = req.body;
@@ -70,6 +73,7 @@ router.put(
 // 상품 삭제
 router.delete(
   '/api/product/:productId',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const productId = req.params.productId;
     const product = await Product.findByIdAndRemove(productId);

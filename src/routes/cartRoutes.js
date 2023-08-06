@@ -3,11 +3,13 @@ import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
 import { ERROR } from '../../public/js/utils/constants';
+import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();
 
 router.get(
   '/api/cart',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     res.json(buildResponse(user.cart));
@@ -16,6 +18,7 @@ router.get(
 
 router.post(
   '/api/cart',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { productId, quantity } = req.body;
@@ -44,6 +47,7 @@ router.post(
 
 router.post(
   '/api/cart/merge',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const localCartItems = req.body;
@@ -66,6 +70,7 @@ router.post(
 
 router.put(
   '/api/cart/:productId/:direction',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { productId, direction } = req.params;
@@ -87,6 +92,7 @@ router.put(
 // 장바구니 상품 여러개(배열) 삭제
 router.delete(
   '/api/cart',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const productIds = req.body.productIds;
@@ -103,6 +109,7 @@ router.delete(
 // 장바구니 상품 하나만 삭제
 router.delete(
   '/api/cart/:productId',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { productId } = req.params;

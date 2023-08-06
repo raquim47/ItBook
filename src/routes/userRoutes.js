@@ -4,12 +4,14 @@ import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
 import { ERROR } from '../../public/js/utils/constants';
+import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();
 
 // 유저 정보 수정
 router.put(
   '/api/user',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { username, address, phone } = req.body;
@@ -26,6 +28,7 @@ router.put(
 // 유저 삭제 (탈퇴)
 router.delete(
   '/api/user',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     if (req.user.isAdmin) {
       return res
@@ -47,6 +50,7 @@ router.delete(
 // 찜한 상품 저장
 router.put(
   '/api/user/wishlist/:productId',
+  loginRequired,
   asyncApiHandler(async (req, res) => {
     const productId = req.params.productId;
     const user = await User.findById(req.user._id);

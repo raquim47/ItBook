@@ -3,6 +3,7 @@ import { asyncApiHandler } from '../utils/asyncHandler';
 import Category from '../models/category';
 import buildResponse from '../utils/build-response';
 import { ERROR } from '../../public/js/utils/constants';
+import adminRequired from '../middlewares/admin-required';
 
 const router = express.Router();
 
@@ -35,6 +36,7 @@ router.get(
 // 카테고리 등록
 router.post(
   '/api/category',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const categoryData = req.body;
 
@@ -61,6 +63,7 @@ router.post(
 // 카테고리 name (소분류) 수정
 router.put(
   '/api/category/:categoryId',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const categoryId = req.params.categoryId;
     const updatedCategoryData = { name: req.body.name };
@@ -92,6 +95,7 @@ router.put(
 // 카테고리 삭제
 router.delete(
   '/api/category/:categoryId',
+  adminRequired,
   asyncApiHandler(async (req, res) => {
     const categoryId = req.params.categoryId;
     const category = await Category.findByIdAndRemove(categoryId);
