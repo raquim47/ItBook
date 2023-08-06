@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/home.css" />
+    <script src="/js/pages/home.js" type="module" defer></script>
+  </head>
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <section aria-label="메인 슬라이드" class="main-slide">
+        <ul class="main-slide__list">
+          <li class="main-slide__item">
+            <a href="#"
+              ><img
+                src="/img/main-banner01.jpg"
+                alt="배너01 - 모바일 미래보고서"
+            /></a>
+          </li>
+          <li class="main-slide__item">
+            <a href="#"
+              ><img
+                src="/img/main-banner02.jpg"
+                alt="배너02 - 스프링 부트, AWS로 배우는 웹 개발"
+            /></a>
+          </li>
+          <li class="main-slide__item">
+            <a href="#"
+              ><img
+                src="/img/main-banner03.jpg"
+                alt="배너03 - 가장 쉬운 독학 알고리즘"
+            /></a>
+          </li>
+        </ul>
+        <div class="main-slide__pagination">
+          <div class="main-slide__dot"></div>
+          <div class="main-slide__dot"></div>
+          <div class="main-slide__dot"></div>
+        </div>
+      </section>
+      <div class="container">
+        <section aria-label="신상품 추천 슬라이드" class="new-books">
+          <h2 class="new-books__title">새로 나왔어요</h2>
+          <div class="product-slider">
+            <div class="product-slider__wrap">
+              <ul class="product-slider__list" id="product-slider__list">
+                <!-- newProducts -->
+                <% for (const product of newProducts) { %>
+                <li class="product-item">
+                  <a href="/product/<%= product._id %>">
+                    <img
+                      src="<%= product.imageUrl %>"
+                      alt="<%= product.title %>"
+                    />
+                    <div class="product-item__info">
+                      <strong class="product-item__category">
+                        <%= product.subCategories.map(category =>
+                        category.name).join(', ') %>
+                      </strong>
+                      <h4 class="product-item__title"><%= product.title %></h4>
+                      <p class="product-item__price">
+                        <%= product.price.toLocaleString() %>원
+                      </p>
+                    </div>
+                  </a>
+                </li>
+                <% }%>
+              </ul>
+            </div>
+            <button class="product-slider__btn prev"></button>
+            <button class="product-slider__btn next"></button>
+          </div>
+        </section>
+        <section aria-label="메인 배너">
+          <figure class="main-banner">
+            <a href="/product/123">
+              <img src="/img/main_banner.jpg" alt="Main banner description" />
+            </a>
+          </figure>
+        </section>
+        <% if (recommendedProducts.length > 0) { %>
+        <section aria-label="웹 개발 추천 도서" class="recommand-books">
+          <h2 class="recommand-books__title">웹 개발 추천 도서</h2>
+          <ul class="recommand-books__list">
+            <% for (const product of recommendedProducts) { %>
+            <li class="product-item">
+              <a href="/product/<%= product._id %>">
+                <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+                <div class="product-item__info">
+                  <strong class="product-item__category">
+                    <%= product.subCategories.map(category =>
+                    category.name).join(', ') %>
+                  </strong>
+                  <h4 class="product-item__title"><%= product.title %></h4>
+                  <p class="product-item__price">
+                    <%= product.price.toLocaleString() %>원
+                  </p>
+                </div>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </section>
+        <% } %>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

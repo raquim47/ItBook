@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/user.css" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/pages/user.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="user">
+          <h2 class="user__title"><a href="/user">마이페이지</a></h2>
+          <div class="user__content">
+            <aside>
+              <nav class="user__nav">
+                <a
+                  href="/user/edit"
+                  class="<%= section === 'edit' ? 'active' : '' %>"
+                  >회원 정보 변경</a
+                >
+                <a
+                  href="/user/order"
+                  class="<%= section === 'order' ? 'active' : '' %>"
+                  >주문 내역</a
+                >
+              </nav>
+            </aside>
+            <div class="user__sections">
+              <% if (section === 'mypage') { %>
+              <section class="greet">
+                <h3 class="greet__message">
+                  <span>반가워요, </span>
+                  <span><strong><%= userData.username %></strong> 님</span>
+                </h3>
+              </section>
+              <!-- 최근 본 상품 -->
+              <section class="wishlist">
+                <h3 class="user__section-title">찜한 상품</h3>
+                <% if (wishList && wishList.length > 0) { %>
+                <ul class="wishlist__list">
+                  <% wishList.forEach(product => { %>
+                  <li class="product-item">
+                    <a href="/product/<%= product._id %>">
+                      <img
+                        src="<%= product.imageUrl %>"
+                        alt="<%= product.title %>"
+                      />
+                      <div class="product-item__info">
+                        <h4 class="product-item__title">
+                          <%= product.title %>
+                        </h4>
+                      </div>
+                    </a>
+                  </li>
+                  <% }) %>
+                </ul>
+                <% } else { %>
+                <p class="empty">찜한 상품이 없습니다.</p>
+                <% } %>
+              </section>
+              <% } else if (section === 'edit') { %>
+              <!-- 회원 정보 수정 -->
+              <section class="edit-user">
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 회원정보
+                </h3>
+                <form class="user-form">
+                  <div class="user-form__row readonly">
+                    <label for="email"
+                      >이메일<span class="required">*</span></label
+                    >
+                    <input
+                      id="email"
+                      type="email"
+                      value="<%= userData.email %>"
+                      readonly
+                    />
+                  </div>
+                  <div class="user-form__row">
+                    <label for="username"
+                      >이름<span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value="<%= userData.username %>"
+                    />
+                  </div>
+                  <div class="user-form__row">
+                    <label for="address">주소</label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value="<%= userData.address %>"
+                    />
+                    <button class="address-search-btn" type="button">
+                      배송지 검색
+                    </button>
+                  </div>
+                  <div class="user-form__row">
+                    <label for="phone">전화번호</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value="<%= userData.phone %>"
+                    />
+                  </div>
+                  <button class="user-form__save-btn">저장하기</button>
+                </form>
+                <a href="/user/resign" class="resign-btn">회원 탈퇴 &gt;</a>
+              </section>
+              <% } else if (section === 'order') { %>
+              <!-- 주문 조회/수정 -->
+              <section class="order">
+                <h3 class="user__section-title">
+                  <strong id="usernameTitle"><%= userData.username %></strong
+                  >님의 주문내역
+                </h3>
+                <table class="order__table">
+                  <thead>
+                    <tr>
+                      <th class="th-date">날짜</th>
+                      <th class="th-content">내용</th>
+                      <th class="th-price">결제금액</th>
+                      <th class="th-delivery">배송상태</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
+              <% } else if (section === 'resign') { %>
+              <!-- 회원탈퇴 -->
+              <section class="resign">
+                <h3 class="user__section-title">회원 탈퇴</h3>
+                <form class="resign-form" id="resignForm">
+                  <div class="resign-form__row">
+                    <label for="resignPassword">비밀번호를 입력해주세요</label>
+                    <input
+                      id="resignPassword"
+                      type="password"
+                      autocomplete="new-password"
+                    />
+                    <button class="resign-form__btn">회원 탈퇴</button>
+                  </div>
+                  <p class="resign__warning">
+                    탈퇴 시 모든 정보가 영구적으로 삭제됩니다.<br />이 동작은
+                    취소할 수 없습니다.
+                  </p>
+                </form>
+              </section>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

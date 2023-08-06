@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/admin-product.css" />
+    <script src="/js/pages/admin-product.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="admin">
+          <h2 class="admin__title">관리자 페이지</h2>
+          <div class="admin__content">
+            <aside>
+              <nav class="admin__nav">
+                <a href="/admin/product" class="active">상품 관리</a>
+                <a href="/admin/order">주문 관리</a>
+                <a href="/admin/category">카테고리 관리</a>
+              </nav>
+            </aside>
+            <div class="admin__sections">
+              <section class="admin-section" id="viewTable">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title">
+                    상품 관리<span id="productsAmount" aria-label="등록된 상품 수"></span>
+                  </h3>
+                  <div class="admin-section__options">
+                    <div class="product-search">
+                      <form id="searchForm">
+                        <input
+                          aria-label="검색"
+                          type="search"
+                          placeholder="상품명 입력"
+                          id="searchName"
+                        />
+                        <button class="btn search-btn">검색</button>
+                      </form>
+                    </div>
+                    <button
+                      href="/admin/product/add"
+                      class="btn add-product-btn"
+                      id="addProductBtn"
+                    >
+                      상품 등록
+                    </button>
+                  </div>
+                </header>
+                <table class="product-table">
+                  <thead>
+                    <tr>
+                      <th class="product-table__th--category">카테고리</th>
+                      <th class="product-table__th--info">상품 정보</th>
+                      <th class="product-table__th--image">이미지</th>
+                      <th class="product-table__th--edit">관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 상품 목록 -->
+                  </tbody>
+                </table>
+              </section>
+              <section class="admin__section hidden" id="editForm">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title" id="editFormTitle">
+                    상품 등록
+                  </h3>
+                  <div class="admin-section__options">
+                    <button aria-label="목록 보기" id="showProductBtn">
+                      목록 보기
+                    </button>
+                  </div>
+                </header>
+                <form id="form" class="product-form">
+                  <ul class="product-form__list">
+                    <li class="product-form__row">
+                      <label for="title" class="product-form__row-title">상품명</label>
+                      <input type="text" id="title" name="title" required />
+                    </li>
+                    <li class="product-form__row">
+                      <label for="imageUrl" class="product-form__row-title">이미지(url)</label>
+                      <input
+                        type="text"
+                        id="imageUrl"
+                        name="imageUrl"
+                        required
+                      />
+                    </li>
+
+                    <li class="product-form__row">
+                      <label for="description" class="product-form__row-title">설명</label>
+                      <input
+                        type="text"
+                        id="description"
+                        name="description"
+                        required
+                      />
+                    </li>
+                    <li class="product-form__row">
+                      <label for="price" class="product-form__row-title">가격(원)</label>
+                      <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        class="numberInput"
+                        required
+                      />
+                    </li>
+                    <li class="product-form__row">
+                      <label for="author" class="product-form__row-title">저자</label>
+                      <input type="text" id="author" name="author" required />
+                    </li>
+                    <li class="product-form__row">
+                      <label for="pages" class="product-form__row-title">페이지(쪽)</label>
+                      <input
+                        type="number"
+                        id="pages"
+                        name="pages"
+                        class="numberInput"
+                        required
+                      />
+                    </li>
+                    <li class="product-form__row">
+                      <label for="mainCategory" class="product-form__row-title">대분류</label>
+                      <select name="mainCategory" id="mainCategory">
+                        <option value="FrontEnd">프론트엔드</option>
+                        <option value="BackEnd">백엔드</option>
+                        <option value="CS">CS</option>
+                      </select>
+                    </li>
+                    <li class="product-form__row">
+                      <p class="product-form__row-title">소분류</p>
+                      <div id="subCategory" class="subCategories">
+                        <!-- JS로 렌더링될 서브 카테고리 체크박스 항목들 -->
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="product-form__btns">
+                    <button type="button" class="product-form__cancle-btn" id="cancleBtn">취소</button>
+                    <button
+                      type="submit"
+                      class="product-form__submit-btn"
+                      id="submitBtn"
+                    >
+                      저장
+                    </button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

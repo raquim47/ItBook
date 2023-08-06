@@ -1,0 +1,276 @@
+.user {
+  padding: 60px 50px 0;
+}
+
+.user__title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.user__content {
+  display: flex;
+  gap: 35px;
+}
+
+.user__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 220px;
+  font-weight: 500;
+}
+
+.user__nav a {
+  font-size: 18px;
+  color: #303030;
+}
+
+.user__nav a:hover,
+.user__nav a.active {
+  color: #7156ed;
+}
+
+.user__sections {
+  flex: 1px;
+}
+
+.user__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user__section-title strong {
+  color: #7156ed;
+}
+
+/* greet */
+.greet {
+  background-color: #f9f9f9;
+  padding: 80px 30px 30px;
+  border-radius: 8px;
+  margin-bottom: 50px;
+}
+
+.greet__message {
+  display: flex;
+  gap: 10px;
+  font-size: 38px;
+  font-weight: 600;
+}
+
+.greet__message strong {
+  color: #7156ed;
+}
+
+/* wishlist */
+.wishlist__list{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem 3rem;
+  margin-top: 30px;
+}
+
+.product-item {
+  position: relative;
+  padding-bottom: 200%; 
+  overflow: hidden;
+}
+
+.product-item a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-item img {
+  height: 70%;
+  max-width: 100%;
+  border-radius: 4px;
+  object-fit: cover;
+  transition: filter 0.15s ease-in;
+}
+
+.product-item__info {
+  text-align: center;
+  padding-top: 10px;
+  flex-grow: 1; 
+}
+
+.product-item__title {
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 두 줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.product-item a:hover img {
+  filter: brightness(0.8); 
+}
+
+.product-item a:hover .product-item__title {
+  text-decoration: underline;
+}
+
+/* edit-user */
+.edit-user {
+  position: relative;
+}
+
+.user-form {
+  padding: 15px;
+}
+
+.user-form__row {
+  position: relative;
+  max-width: 450px;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+}
+
+.required {
+  color: #7156ed;
+}
+
+.user-form__row.readonly input {
+  color: #000;
+}
+
+.user-form__row label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #000;
+}
+
+.user-form__row input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 16px;
+  color: #919191;
+}
+
+.address-search-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 80px;
+  font-size: 12px;
+  padding: 6px 0;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #7156ed;
+}
+
+.user-form__save-btn {
+  width: 100%;
+  max-width: 450px;
+  margin-top: 10px;
+  padding: 15px 10px;
+  border-radius: 4px;
+  background-color: #ddd;
+  color: #000;
+  transition: 0.2s ease-in;
+}
+
+.user-form__save-btn:hover {
+  background-color: #7156ed;
+  color: #fff;
+}
+
+.resign-btn {
+  font-size: 13px;
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+
+/* resign */
+.resign-form {
+  padding: 15px;
+}
+
+.resign-form__row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.resign-form__row label {
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.resign-form__row input {
+  width: 200px;
+  border: 1px solid #ddd;
+  outline: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.resign-form__btn {
+  background-color: #f45552;
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+
+.resign__warning {
+  font-size: 14px;
+  margin-top: 15px;
+  line-height: 1.3;
+  color: #f45552;
+}
+
+/* order */
+.order__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order__table th,
+.order__table td {
+  padding: 12px 0;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.th-date,
+.th-price,
+.th-delivery  {
+  width: 130px;
+}
+
+.order__cancel-btn {
+  display: block;
+  margin: 10px auto 0;
+  padding: 4px 8px;
+  background-color: #f45552;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.order__cancel-btn[disabled] {
+  background-color: #ccc;
+  cursor: default;
+}
+
