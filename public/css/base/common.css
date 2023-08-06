@@ -22,7 +22,6 @@ body {
   display: none;
 }
 
-
 /* x-btn */
 .x-btn {
   position: relative;
@@ -70,7 +69,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   font-size: 14px;
+  line-height: 1.4;
   color: #fff;
   border-radius: 12px;
   opacity: 0;

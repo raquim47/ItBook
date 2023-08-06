@@ -33,50 +33,50 @@
   color: #7156ed;
 }
 
-/* admin__sections */
-.admin__sections {
-  flex: 1px;
-}
-
-.admin__section-title {
-  font-size: 20px;
-  font-weight: 600;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #ddd;
-}
-
-.admin__section-title span {
-  font-size: 14px;
-  font-weight: 400;
-  margin-left: 5px;
-}
-
-.admin__section-options {
-  position: absolute;
-  top: -5px;
-  right: 0;
-  display: flex;
-  gap: 5px;
-  font-size: 12px;
-}
-
-/* product view */
-.product-view {
-  position: relative;
-}
-
 .btn {
   padding: 4px 10px;
   border: none;
   background-color: #ddd;
   border-radius: 3px;
+  padding: 4px 10px;
   font-size: 12px;
-  cursor: pointer;
 }
 
 .btn:hover {
   background-color: #919191;
   color: #fff;
+}
+
+/* admin__sections */
+.admin__sections {
+  flex: 1px;
+  width: 100%;
+  min-width: 750px;
+}
+
+.admin-section__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.admin-section__title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.admin-section__title span {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.admin-section__options {
+  display: flex;
+  gap: 5px;
+  font-size: 12px;
 }
 
 .product-search form {
@@ -87,7 +87,7 @@
   width: 120px;
   outline: none;
   border: 1px solid #ddd;
-  padding: 5px 10px;
+  padding: 0 10px;
   border-radius: 4px 0 0 4px;
 }
 

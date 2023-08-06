@@ -1,10 +1,8 @@
 import setupHeader from '../components/header.js';
 import renderScrollTopBtn from '../components/scroll-top-btn.js';
-import showToast from '../components/toast-message.js';
 import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
-import { SUCCESS, TOAST_TYPES } from '../utils/constants.js';
 
 const renderOrder = (order) => {
   return `
@@ -55,15 +53,14 @@ const renderOrder = (order) => {
     </td>
     <td>
       <div class="cell-wrapper">
-        <button class="delete-btn">삭제</button>
+        <button class="btn delete-btn">삭제</button>
       </div>
     </td>
   </tr>
   `;
 };
 
-const updateOrderTable = () => {
-  const { orders } = orderService;
+const updateOrderTable = (orders) => {
   const ordersAmount = document.getElementById('ordersAmount');
   ordersAmount.textContent = `(${orders.length}건)`;
 
@@ -83,6 +80,7 @@ const updateOrderTable = () => {
 };
 
 const filterOrdersByStatus = () => {
+  
   const status = document.getElementById('orderStatusFilter').value;
   const { orders } = orderService;
   if (status === '전체') {
@@ -90,6 +88,7 @@ const filterOrdersByStatus = () => {
     return;
   }
   const filteredOrders = orders.filter((order) => order.status === status);
+  console.log(status, orders, filteredOrders)
   updateOrderTable(filteredOrders);
 };
 
@@ -108,13 +107,15 @@ const handleDeleteOrder = async (event) => {
   const orderId = event.target.closest('.order-table__row').dataset.orderId;
   const result = await orderService.deleteOrder(orderId);
   if (result.error) return;
-  updateOrderTable();
+  const { orders } = orderService;
+  updateOrderTable(orders);
 };
 
 const fetchOrders = async () => {
   const result = await orderService.getAllOrders();
   if (result.error) return;
-  updateOrderTable();
+  const { orders } = orderService;
+  updateOrderTable(orders);
 };
 
 // 배송 수정/삭제 이벤트 -- 이벤트 위임, 배송상태 필터

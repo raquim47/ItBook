@@ -172,8 +172,8 @@ const renderSubCategories = async (
 };
 
 const toggleFormDisplay = () => {
-  document.querySelector('.product-view').classList.toggle(CLASSNAME.HIDDEN);
-  document.querySelector('.product-edit').classList.toggle(CLASSNAME.HIDDEN);
+  document.getElementById('viewTable').classList.toggle(CLASSNAME.HIDDEN);
+  document.getElementById('editForm').classList.toggle(CLASSNAME.HIDDEN);
 };
 
 const populateFormWithData = (data) => {
@@ -190,8 +190,8 @@ const showAddForm = () => {
   formElement.reset();
   formElement.dataset.productId = '';
   renderSubCategories(document.getElementById('mainCategory').value);
-  const productEditTitle = document.getElementById('productEditTitle');
-  productEditTitle.textContent = '상품 등록';
+  const editFormTitle = document.getElementById('editFormTitle');
+  editFormTitle.textContent = '상품 등록';
   toggleFormDisplay();
 };
 
@@ -203,8 +203,8 @@ const showEditForm = async (event) => {
   if (result.error) return;
   const product = result.data;
 
-  const productEditTitle = document.getElementById('productEditTitle');
-  productEditTitle.textContent = '상품 수정';
+  const editFormTitle = document.getElementById('editFormTitle');
+  editFormTitle.textContent = '상품 수정';
   populateFormWithData(product);
   renderSubCategories(product.mainCategory, product.subCategories);
   toggleFormDisplay();

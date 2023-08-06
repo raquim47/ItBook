@@ -21,30 +21,32 @@
               </nav>
             </aside>
             <div class="admin__sections">
-              <section class="product-view">
-                <h3 class="admin__section-title">
-                  상품 관리<span id="productsAmount" aria-label="등록된 상품 수"></span>
-                </h3>
-                <div class="admin__section-options">
-                  <div class="product-search">
-                    <form id="searchForm">
-                      <input
-                        aria-label="검색"
-                        type="search"
-                        placeholder="상품명 입력"
-                        id="searchName"
-                      />
-                      <button class="btn search-btn">검색</button>
-                    </form>
+              <section class="admin-section" id="viewTable">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title">
+                    상품 관리<span id="productsAmount" aria-label="등록된 상품 수"></span>
+                  </h3>
+                  <div class="admin-section__options">
+                    <div class="product-search">
+                      <form id="searchForm">
+                        <input
+                          aria-label="검색"
+                          type="search"
+                          placeholder="상품명 입력"
+                          id="searchName"
+                        />
+                        <button class="btn search-btn">검색</button>
+                      </form>
+                    </div>
+                    <button
+                      href="/admin/product/add"
+                      class="btn add-product-btn"
+                      id="addProductBtn"
+                    >
+                      상품 등록
+                    </button>
                   </div>
-                  <button
-                    href="/admin/product/add"
-                    class="btn add-product-btn"
-                    id="addProductBtn"
-                  >
-                    상품 등록
-                  </button>
-                </div>
+                </header>
                 <table class="product-table">
                   <thead>
                     <tr>
@@ -59,13 +61,17 @@
                   </tbody>
                 </table>
               </section>
-              <section class="product-edit hidden">
-                <h3 class="admin__section-title" id="productEditTitle">상품 등록</h3>
-                <div class="admin__options">
-                  <button aria-label="목록 보기" id="showProductBtn">
-                    목록 보기
-                  </button>
-                </div>
+              <section class="admin__section hidden" id="editForm">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title" id="editFormTitle">
+                    상품 등록
+                  </h3>
+                  <div class="admin-section__options">
+                    <button aria-label="목록 보기" id="showProductBtn">
+                      목록 보기
+                    </button>
+                  </div>
+                </header>
                 <form id="form" class="product-form">
                   <ul class="product-form__list">
                     <li class="product-form__row">

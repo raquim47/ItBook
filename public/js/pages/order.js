@@ -39,17 +39,12 @@ const renderOrderItems = async (products) => {
   const tbody = document.querySelector('.table tbody');
 
   for (const product of products) {
-    const result = await productService.getProduct(
-      product.productId,
-      'title'
-    );
-
+    const result = await productService.getProduct(product.productId);
     if (result.error) {
-      showToast(result.error);
       continue;
     }
 
-    const title = result.data;
+    const title = result.data.title;
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>${title}</td><td>${product.quantity}</td>`;
     tbody.appendChild(tr);

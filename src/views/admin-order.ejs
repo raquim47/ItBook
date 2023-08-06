@@ -21,25 +21,29 @@
               </nav>
             </aside>
             <div class="admin__sections">
-              <section class="admin__section order">
-                <h3 class="admin__section-title">
-                  주문 관리<span
-                    id="ordersAmount"
-                    aria-label="등록된 주문 수"
-                  ></span>
-                </h3>
-                <div class="admin__section-options">
-                  <label for="orderStatusFilter" class="admin__section-label"
-                    >주문 상태별 조회</label
-                  >
-                  <select id="orderStatusFilter" class="order-status-filter">
-                    <option value="전체">전체</option>
-                    <option value="상품준비중">상품준비중</option>
-                    <option value="배송중">배송중</option>
-                    <option value="배송완료">배송완료</option>
-                    <option value="주문취소">주문취소</option>
-                  </select>
-                </div>
+              <section class="admin-section">
+                <header class="admin-section__header ">
+                  <h3 class="admin-section__title">
+                    주문 관리<span
+                      id="ordersAmount"
+                      aria-label="등록된 주문 수"
+                    ></span>
+                  </h3>
+                  <div class="admin-section__options">
+                    <div class="status-filter">
+                      <label for="orderStatusFilter" class="admin__section-label"
+                        >주문 상태별 조회</label
+                      >
+                      <select id="orderStatusFilter">
+                        <option value="전체">전체</option>
+                        <option value="상품준비중">상품준비중</option>
+                        <option value="배송중">배송중</option>
+                        <option value="배송완료">배송완료</option>
+                        <option value="주문취소">주문취소</option>
+                      </select>
+                    </div>
+                  </div>
+                </header>
                 <table class="order-table">
                   <thead>
                     <tr>

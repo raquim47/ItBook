@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/pages/admin-category.css" />
+    <script src="/js/pages/admin-category.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <%- include('./includes/header.ejs') %>
+    <main class="main">
+      <div class="container">
+        <div class="admin">
+          <h2 class="admin__title">관리자 페이지</h2>
+          <div class="admin__content">
+            <aside>
+              <nav class="admin__nav">
+                <a href="/admin/product">상품 관리</a>
+                <a href="/admin/order">주문 관리</a>
+                <a href="/admin/category" class="active">카테고리 관리</a>
+              </nav>
+            </aside>
+            <div class="admin__sections">
+              <section class="admin-section" id="viewTable">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title">카테고리 관리</h3>
+                  <div class="admin-section__options">
+                    <div class="status-filter">
+                      <label
+                        for="orderStatusFilter"
+                        class="admin__section-label"
+                        >대분류 별 조회</label
+                      >
+                      <select id="mainCateFilter" class="main-cate-filter">
+                        <option value="전체">전체</option>
+                        <option value="FrontEnd">FrontEnd</option>
+                        <option value="BackEnd">BackEnd</option>
+                        <option value="CS">CS</option>
+                      </select>
+                    </div>
+                    <button class="btn add-cate-btn" id="addCateBtn">
+                      카테고리 등록
+                    </button>
+                  </div>
+                </header>
+                <table class="cate-table">
+                  <thead>
+                    <tr>
+                      <th class="cate-table__th--main">대분류</th>
+                      <th class="cate-table__th--sub">소분류</th>
+                      <th class="cate-table__th--edit">관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 카테고리 목록 -->
+                  </tbody>
+                </table>
+              </section>
+              <section class="admin-section hidden" id="editForm">
+                <header class="admin-section__header">
+                  <h3 class="admin-section__title" id="editTitle">
+                    카테고리 수정
+                  </h3>
+                  <div class="admin-section__options">
+                    <button id="showViewBtn">목록 보기</button>
+                  </div>
+                </header>
+                <form class="cate-form" id="form">
+                  <div class="cate-form__row">
+                    <label for="mainCateSelect">대분류</label>
+                    <select id="mainCateSelect" name="type">
+                      <option value="FrontEnd">FrontEnd</option>
+                      <option value="BackEnd">BackEnd</option>
+                      <option value="CS">CS</option>
+                    </select>
+                  </div>
+                  <div class="cate-form__row">
+                    <label for="subCateInput">소분류</label>
+                    <input type="text" id="subCateInput" name="name" required/>
+                  </div>
+                  <div class="cate-form__btns">
+                    <button class="cancle-btn" type="button">취소</button>
+                    <button class="submit-btn">저장</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('./includes/scroll-top-btn.ejs') %> <%-
+    include('./includes/footer.ejs') %>
+  </body>
+</html>

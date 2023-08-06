@@ -24,7 +24,7 @@ class AuthService {
   async initializeAuth() {
     await this.getAuthStatus();
   }
-
+  // 로그인 상태 가져오기
   async getAuthStatus() {
     const onSuccess = (data) => {
       this._isAuth = data.isAuth;
@@ -33,6 +33,7 @@ class AuthService {
     return await requestHandler('/api/auth', 'GET', null, onSuccess);
   }
 
+  // 로그인
   async postLogin(requestData) {
     const onSuccess = (data) => {
       this._isAuth = data.isAuth;
@@ -55,7 +56,8 @@ class AuthService {
       onError
     );
   }
-
+  
+  // 회원가입
   async postJoin(requestData) {
     const onSuccess = () => {
       showToast(SUCCESS.JOIN, TOAST_TYPES.SUCCESS);

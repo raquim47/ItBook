@@ -5,6 +5,7 @@ import Category from '../models/category';
 import User from '../models/user';
 import { asyncRenderHandler } from '../utils/asyncHandler';
 import { ERROR_PAGE } from '../../public/js/utils/constants';
+import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();
 
@@ -115,6 +116,7 @@ router.get(
 // 주문서 페이지
 router.get(
   '/order',
+  loginRequired,
   asyncRenderHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { username, email, address, phone } = user;
@@ -135,6 +137,7 @@ router.get(
 // 사용자 페이지 - 마이페이지/회원정보변경/주문내역/회원탈퇴
 router.get(
   '/user/:section?',
+  loginRequired,
   asyncRenderHandler(async (req, res) => {
     const user = await User.findById(req.user._id).populate('wishList');
     const section = req.params.section || 'mypage';
@@ -176,6 +179,17 @@ router.get(
     res.render('admin-order', {
       authStatus: req.user,
       pageTitle: `주문관리 - 잇북`,
+    });
+  })
+);
+
+// 관리자 페이지 - 카테고리 관리
+router.get(
+  '/admin/category',
+  asyncRenderHandler(async (req, res) => {
+    res.render('admin-category', {
+      authStatus: req.user,
+      pageTitle: `카테고리관리 - 잇북`,
     });
   })
 );

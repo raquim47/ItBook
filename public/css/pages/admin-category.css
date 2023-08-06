@@ -67,12 +67,6 @@
   font-weight: 600;
 }
 
-.admin-section__title span {
-  font-size: 14px;
-  font-weight: 400;
-  margin-left: 5px;
-}
-
 .admin-section__options {
   display: flex;
   gap: 5px;
@@ -85,7 +79,7 @@
   gap: 10px;
 }
 
-.status-filter select{
+.status-filter select {
   padding: 2px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -105,35 +99,87 @@
   margin-left: 5px;
 }
 
-.order-table {
+.add-cate-btn {
+  background-color: #7156ed;
+  color: #fff;
+}
+
+.add-cate-btn:hover {
+  background-color: #7156ed;
+}
+/* cate-form  */
+.cate-form {
+  width: 300px;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.cate-form.hidden {
+  display: none;
+}
+
+.cate-form__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cate-form__row label {
+  width: 45px;
+}
+
+.cate-form__row input,
+.cate-form__row select {
+  flex: 1;
+  padding: 10px;
+  outline: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.cate-form__btns {
+  display: flex;
+  gap: 10px;
+}
+
+.cancle-btn {
+  flex-grow: 1;
+  background-color: #ddd;
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.submit-btn {
+  flex-grow: 1;
+  background-color: #7156ed;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.cate-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
-.order-table th {
+.cate-table th {
   font-size: 15px;
   padding: 15px 0;
   border-bottom: 1px solid #ddd;
 }
 
-.order-table__th--date {
+.cate-table__th--main{
   width: 100px;
 }
 
-.order-table__th--price{
-  width: 80px;
-}
-
-.order-table__th--edit {
+.cate-table__th--edit {
   width: 60px;
 }
 
-.order-table__th--status {
-  width: 110px;
-}
-
-.order-table__row > td {
+.cate-table__row > td {
   padding: 14px 8px;
   border-bottom: 1px solid #ddd;
   text-align: center;
@@ -146,6 +192,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 5px;
   height: 100%;
 }
 
@@ -155,7 +202,7 @@
 }
 
 .product-title span {
-  max-width: 250px;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,4 +217,14 @@
   border: 1px solid #ddd;
   padding: 4px;
   border-radius: 4px;
+}
+
+.delete-btn {
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background-color: #ddd;
 }
