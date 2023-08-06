@@ -15,10 +15,10 @@ router.get(
       .sort({ createdAt: -1 });
 
     if (!myOrders.length) {
-      return res.json(buildResponse({ myOrders: [] }));
+      return res.json(buildResponse([]));
     }
 
-    res.json(buildResponse({ myOrders }));
+    res.json(buildResponse(myOrders));
   })
 );
 
@@ -57,19 +57,6 @@ router.put(
   })
 );
 
-// 주문 전체 가져오기
-router.get(
-  '/api/orders',
-  asyncApiHandler(async (req, res) => {
-    const orders = await Order.find({})
-      .populate('userId', 'email username')
-      .populate('products.productId', 'title')
-      .sort({ createdAt: -1 });
-
-    res.json(buildResponse({ orders }));
-  })
-);
-
 // 주문 상태 수정
 router.put(
   '/api/order/:orderId/status',
@@ -77,7 +64,7 @@ router.put(
     const orderId = req.params.orderId;
     const { status } = req.body;
     const order = await Order.findById(orderId);
-    
+
     if (!order) {
       return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
     }
@@ -98,6 +85,19 @@ router.delete(
       return res.status(404).json(buildResponse(null, ERROR.ORDER_NOT_FOUND));
     }
     res.json(buildResponse());
+  })
+);
+
+// 주문 전체 가져오기
+router.get(
+  '/api/orders',
+  asyncApiHandler(async (req, res) => {
+    const orders = await Order.find({})
+      .populate('userId', 'email username')
+      .populate('products.productId', 'title')
+      .sort({ createdAt: -1 });
+
+    res.json(buildResponse(orders));
   })
 );
 

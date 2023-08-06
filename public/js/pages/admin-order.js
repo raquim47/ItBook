@@ -62,7 +62,8 @@ const renderOrder = (order) => {
   `;
 };
 
-const updateOrderTable = (orders) => {
+const updateOrderTable = () => {
+  const { orders } = orderService;
   const ordersAmount = document.getElementById('ordersAmount');
   ordersAmount.textContent = `(${orders.length}건)`;
 
@@ -94,14 +95,10 @@ const filterOrdersByStatus = () => {
 
 const handleStatusChange = async (event) => {
   const orderId = event.target.closest('.order-table__row').dataset.orderId;
-  const newStatus = event.target.value;
-  const { error } = await orderService.putOrderStatus(
-    orderId,
-    newStatus
-  );
-  if (error) return;
+  const status = event.target.value;
+  const result = await orderService.putOrderStatus(orderId, { status });
+  if (result.error) return;
   filterOrdersByStatus();
-  showToast(SUCCESS.ORDER_STATUS_UPDATED, TOAST_TYPES.SUCCESS);
 };
 
 const handleDeleteOrder = async (event) => {
@@ -109,14 +106,15 @@ const handleDeleteOrder = async (event) => {
     return;
   }
   const orderId = event.target.closest('.order-table__row').dataset.orderId;
-  await orderService.deleteOrder(orderId);
-  showToast(SUCCESS.ORDER_DELETED, TOAST_TYPES.SUCCESS);
+  const result = await orderService.deleteOrder(orderId);
+  if (result.error) return;
+  updateOrderTable();
 };
 
 const fetchOrders = async () => {
-  const orders = await orderService.getAllOrders();
-  console.log(orders);
-  updateOrderTable(orders);
+  const result = await orderService.getAllOrders();
+  if (result.error) return;
+  updateOrderTable();
 };
 
 // 배송 수정/삭제 이벤트 -- 이벤트 위임, 배송상태 필터

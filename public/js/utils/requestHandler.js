@@ -22,14 +22,14 @@ const requestHandler = async (
     const result = await response.json();
     if (!response.ok || result.error) {
       if (onError) {
-        onError(result.error);
+        await onError(result.error);
       } else {
         showToast(result.error);
       }
       return buildResponse(null, result.error);
     }
 
-    onSuccess && onSuccess(result.data);
+    onSuccess && await onSuccess(result.data);
     return buildResponse(result.data, null);
   } catch (error) {
     console.error(`Error in request for ${url} / ${method}`, error);

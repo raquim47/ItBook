@@ -78,7 +78,9 @@ const cancelOrder = async (orderId) => {
 };
 
 const initOrderPage = async () => {
-  const { myOrders } = await orderService.getMyOrder();
+  const result = await orderService.getMyOrder();
+  if(result.error) return;
+  const myOrders = result.data;
   const orderTableBody = document.querySelector('.order__table tbody');
   if (myOrders.length === 0) {
     orderTableBody.innerHTML =
