@@ -1,8 +1,6 @@
 import express from 'express';
 import { asyncApiHandler } from '../utils/asyncHandler';
-import Category from '../models/category';
 import Product from '../models/product';
-import Order from '../models/order';
 import buildResponse from '../utils/build-response';
 import { ERROR } from '../../public/js/utils/constants';
 
@@ -14,8 +12,20 @@ router.get(
     const products = await Product.find()
       .populate('subCategories')
       .sort({ createdAt: -1 });
+    res.json(buildResponse(products));
+  })
+);
 
-    res.json(buildResponse({ products }));
+router.get(
+  '/api/product/:productId',
+  asyncApiHandler(async (req, res) => {
+    const productId = req.params.productId;
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
+    }
+
+    res.json(buildResponse(product));
   })
 );
 
@@ -26,9 +36,7 @@ router.post(
     const newProduct = await Product.create(productData);
 
     if (!newProduct) {
-      return res
-        .status(500)
-        .json(buildResponse(null, ERROR.PRODUCT_CREATION_FAILED));
+      return res.status(500).json(buildResponse(null, ERROR.PRODUCT_NOT_FOUND));
     }
 
     res.json(buildResponse());

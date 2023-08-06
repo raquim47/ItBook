@@ -9,7 +9,6 @@ import { ERROR } from '../../public/js/utils/constants';
 
 const router = express.Router();
 
-// data
 router.get(
   '/api/auth',
   asyncApiHandler(async (req, res) => {

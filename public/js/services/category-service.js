@@ -1,20 +1,8 @@
-import buildResponse from '../utils/build-response.js';
-import { ERROR } from '../utils/constants.js';
+import requestHandler from '../utils/requestHandler.js';
 
 class CategoryService {
   async getCategories() {
-    try {
-      const response = await fetch('/api/category');
-      const result = await response.json();
-      if (!response.ok) {
-        return buildResponse(null, result.error);
-      }
-
-      return buildResponse(result.data);
-    } catch (error) {
-      console.error('In getCategories', error);
-      return buildResponse(null, ERROR.REQUEST_FAILED);
-    }
+    return requestHandler('/api/category');
   }
 }
 

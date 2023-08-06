@@ -5,7 +5,7 @@ import authService from '../services/auth-service.js';
 import cartService from '../services/cart-service.js';
 import categoryService from '../services/category-service.js';
 import productService from '../services/product-service.js';
-import { CLASSNAME, ERROR, SUCCESS, TOAST_TYPES } from '../utils/constants.js';
+import { CLASSNAME, ERROR } from '../utils/constants.js';
 
 const handleSearch = (e) => {
   e.preventDefault();
@@ -17,12 +17,9 @@ const handleDeleteProduct = async (event) => {
   const productId = event?.target.closest('tr')?.dataset.productId;
   if (!productId) return;
 
-  const isConfirmed = confirm('정말로 이 상품을 삭제하시겠습니까?');
-
-  if (isConfirmed) {
-    const { error } = await productService.deleteProduct(productId);
-    if (error) return;
-    showToast('상품이 성공적으로 삭제되었습니다.', TOAST_TYPES.SUCCESS);
+  if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+    const result = await productService.deleteProduct(productId);
+    if (result.error) return;
     renderProductsTable();
   }
 };
@@ -68,9 +65,10 @@ const renderProduct = (product) => {
 };
 
 const renderProductsTable = async (searchTerm = '') => {
-  const { data, error } = await productService.getProducts();
-  if (error) return;
-  const { products } = data;
+  const result = await productService.getProducts();
+  if (result.error) return;
+  const products = result.data;
+
   const productsAmount = document.getElementById('productsAmount');
   productsAmount.textContent = `(${products.length}건)`;
 
@@ -133,15 +131,11 @@ const submitProductForm = async (e) => {
   const productId = form.dataset.productId;
   const method = productId ? 'putProduct' : 'postProduct';
   const args = productId ? [productId, productData] : [productData];
-  const toastMessage = productId
-    ? SUCCESS.PRODUCT_UPDATED
-    : SUCCESS.PRODUCT_POSTED;
 
-  const { error } = await productService[method](...args);
-  if (!error) {
+  const result = await productService[method](...args);
+  if (!result.error) {
     renderProductsTable();
     toggleFormDisplay();
-    showToast(toastMessage, TOAST_TYPES.SUCCESS);
   }
 };
 
@@ -149,11 +143,11 @@ const renderSubCategories = async (
   mainCategory,
   selectedSubCategories = []
 ) => {
-  const subCategoryContainer = document.getElementById('subCategory');
-  const { data, error } = await categoryService.getCategories();
-  if (error) return;
-  const { categories } = data;
+  const result = await categoryService.getCategories();
+  if (result.error) return;
+  const categories = result.data;
 
+  const subCategoryContainer = document.getElementById('subCategory');
   const subCategoryHTML = categories
     .filter((category) => category.type === mainCategory)
     .map((subCategory) => {
@@ -205,9 +199,9 @@ const showEditForm = async (event) => {
   const productId = event?.target.closest('tr')?.dataset.productId;
   if (!productId) return;
 
-  const { data, error } = await productService.getProduct(productId);
-  if (error) return;
-  const { product } = data;
+  const result = await productService.getProduct(productId);
+  if (result.error) return;
+  const product = result.data;
 
   const productEditTitle = document.getElementById('productEditTitle');
   productEditTitle.textContent = '상품 수정';

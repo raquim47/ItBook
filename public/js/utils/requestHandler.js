@@ -20,7 +20,7 @@ const requestHandler = async (
   try {
     const response = await fetch(url, options);
     const result = await response.json();
-    if (!response.ok) {
+    if (!response.ok || result.error) {
       if (onError) {
         onError(result.error);
       } else {

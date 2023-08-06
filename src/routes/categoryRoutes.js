@@ -9,7 +9,7 @@ router.get(
   '/api/category',
   asyncApiHandler(async (req, res) => {
     const categories = await Category.find();
-    res.json(buildResponse({ categories }));
+    res.json(buildResponse(categories));
   })
 );
 

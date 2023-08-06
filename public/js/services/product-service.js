@@ -1,3 +1,5 @@
+import showToast from '../components/toast-message.js';
+import { SUCCESS, TOAST_TYPES } from '../utils/constants.js';
 import requestHandler from '../utils/requestHandler.js';
 
 class ProductService {
@@ -10,15 +12,34 @@ class ProductService {
   }
 
   async postProduct(productData) {
-    return requestHandler('/api/product', 'POST', productData);
+    const onSuccess = () => {
+      showToast(SUCCESS.PRODUCT_POSTED, TOAST_TYPES.SUCCESS);
+    };
+    return requestHandler('/api/product', 'POST', productData, onSuccess);
   }
 
   async putProduct(productId, productData) {
-    return requestHandler(`/api/product/${productId}`, 'PUT', productData);
+    const onSuccess = () => {
+      showToast(SUCCESS.PRODUCT_UPDATED, TOAST_TYPES.SUCCESS);
+    };
+    return requestHandler(
+      `/api/product/${productId}`,
+      'PUT',
+      productData,
+      onSuccess
+    );
   }
 
   async deleteProduct(productId) {
-    return requestHandler(`/api/product/${productId}`, 'DELETE');
+    const onSuccess = () => {
+      showToast(SUCCESS.PRODUCT_DELETED, TOAST_TYPES.SUCCESS);
+    };
+    return requestHandler(
+      `/api/product/${productId}`,
+      'DELETE',
+      null,
+      onSuccess
+    );
   }
 }
 
