@@ -2,7 +2,7 @@ import express from 'express';
 import { asyncApiHandler } from '../utils/asyncHandler';
 import Order from '../models/order';
 import buildResponse from '../utils/build-response';
-import { ERROR } from '../../public/js/utils/constants';
+import { ERROR } from '../utils/constants';
 import loginRequired from '../middlewares/login-required';
 import adminRequired from '../middlewares/admin-required';
 

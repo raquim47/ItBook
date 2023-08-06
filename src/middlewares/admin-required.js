@@ -1,4 +1,4 @@
-import { ERROR_PAGE } from "../../public/js/utils/constants";
+import { ERROR_PAGE } from '../utils/constants';
 
 const adminRequired = (req, res, next) => {
   if (!req.user || !req.user.isAdmin) {

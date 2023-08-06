@@ -1,4 +1,4 @@
-import { ERROR } from '../../public/js/utils/constants';
+import { ERROR } from './constants';
 import buildResponse from './build-response';
 
 export const asyncApiHandler = (fn) => async (req, res, next) => {

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { asyncApiHandler } from '../utils/asyncHandler';
 import buildResponse from '../utils/build-response';
 import User from '../models/user';
-import { ERROR } from '../../public/js/utils/constants';
+import { ERROR } from '../utils/constants';
 import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();
