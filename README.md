@@ -1,4 +1,4 @@
-# 잇북(IT-Book) : 개발 서적 판매 쇼핑몰 Project
+# 잇북(IT-Book) : 개발 서적 판매 쇼핑몰
 
 ## 데모 링크
  - http://ec2-43-201-106-90.ap-northeast-2.compute.amazonaws.com/
