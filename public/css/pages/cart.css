@@ -180,3 +180,41 @@
   color: #fff;
   background-color: #7156ed;
 }
+
+@media screen and (max-width: 1024px) {
+  .cart {
+    padding: 60px 0 0;
+  }
+  .cart-item__option {
+    position: absolute;
+    right: 5px;
+    bottom: 10px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .cart-item__price {
+    order: 1;
+  }
+
+  .count-control {
+    order: 2;
+  }
+
+  .cart-item__delete {
+    position: absolute;
+    right: 0;
+    top: 10px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .cart__sections {
+    flex-direction: column;
+  }
+
+  .cart__payment {
+    width: 100%;
+    margin-left: 0;
+  }
+}
