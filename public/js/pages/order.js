@@ -111,10 +111,11 @@ const constructOrderData = (orderData) => {
       : 0;
   const totalPrice = Number(orderData.productAmount) + deliveryCharge;
   const formData = new FormData(document.querySelector('#orderForm'));
+  const username = formData.get('username');
   const address = formData.get('address');
   const phone = formData.get('phone');
 
-  return { address, phone, totalPrice, products: orderData.products };
+  return { username, address, phone, totalPrice, products: orderData.products };
 };
 
 const updateUserInfo = async (address, phone) => {

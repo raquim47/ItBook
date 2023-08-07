@@ -30,13 +30,16 @@ router.post(
   '/api/order',
   loginRequired,
   asyncApiHandler(async (req, res) => {
-    const { products, address, phone, totalPrice } = req.body;
+    const { username, products, address, phone, totalPrice } = req.body;
+    console.log({ username, products, address, phone, totalPrice })
     const newOrder = new Order({
-      products: products,
-      userId: req.user._id,
-      totalPrice: totalPrice,
-      address: address,
-      phone: phone,
+      userId : req.user._id,
+      products,
+      username,
+      email: req.user.email,
+      totalPrice,
+      address,
+      phone,
     });
 
     await newOrder.save();
