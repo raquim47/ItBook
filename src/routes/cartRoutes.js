@@ -7,6 +7,7 @@ import loginRequired from '../middlewares/login-required';
 
 const router = express.Router();
 
+// 유저의 장바구니 데이터 가져오기
 router.get(
   '/api/cart',
   loginRequired,
@@ -16,6 +17,7 @@ router.get(
   })
 );
 
+// 장바구니 상품 추가
 router.post(
   '/api/cart',
   loginRequired,
@@ -45,6 +47,7 @@ router.post(
   })
 );
 
+// 로그인시 로컬스토래지 -> DB merge
 router.post(
   '/api/cart/merge',
   loginRequired,
@@ -68,6 +71,7 @@ router.post(
   })
 );
 
+// 장바구니 수량 변경
 router.put(
   '/api/cart/:productId/:direction',
   loginRequired,
@@ -101,7 +105,6 @@ router.delete(
     );
 
     await user.save();
-    console.log(user.cart);
     res.json(buildResponse(user.cart));
   })
 );

@@ -31,7 +31,6 @@ router.post(
   loginRequired,
   asyncApiHandler(async (req, res) => {
     const { products, address, phone, totalPrice } = req.body;
-
     const newOrder = new Order({
       products: products,
       userId: req.user._id,

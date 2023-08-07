@@ -124,18 +124,12 @@ const updateUserInfo = async (address, phone) => {
 
 const deleteCartItems = async (products) => {
   const productIds = products.map((product) => product.productId);
-  const result = await cartService.deleteMultipleFromCart(productIds);
+  console.log('productIds', productIds);
+  const result = await cartService.deleteMultipleFromCart({ productIds });
 
   if (result.error) {
     return showToast(result.error);
   }
-};
-
-const postOrder = async (data) => {
-  await orderService.postOrder(data);
-  showToast(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
-
-  setTimeout(() => (location.href = '/user/order'), 2500);
 };
 
 // 주문 폼 제출
@@ -155,7 +149,10 @@ const bindOrderSubmitBtn = (orderData) => {
         await deleteCartItems(data.products);
       }
 
-      await postOrder(data);
+      const result = await orderService.postOrder(data);
+      if (result.error) return;
+      showToast(SUCCESS.ORDER, TOAST_TYPES.SUCCESS);
+      // setTimeout(() => (location.href = '/user/order'), 2500);
     });
 };
 

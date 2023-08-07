@@ -88,7 +88,6 @@ const filterOrdersByStatus = () => {
     return;
   }
   const filteredOrders = orders.filter((order) => order.status === status);
-  console.log(status, orders, filteredOrders)
   updateOrderTable(filteredOrders);
 };
 
