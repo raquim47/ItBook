@@ -402,9 +402,10 @@ header.onScroll {
 }
 
 @media screen and (max-width: 1024px) {
-  /* .nav-main {
-    padding-left: 20px;
-  } */
+  .nav-main__list li,
+  .nav-user__list li {
+    font-size: 15px;
+  }
 }
 
 @media screen and (max-width: 900px) {
@@ -420,7 +421,6 @@ header.onScroll {
   .nav-main__list li,
   .nav-user__list li {
     padding: 0 12px;
-    font-size: 15px;
   }
 }
 
