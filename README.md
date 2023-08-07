@@ -1,7 +1,7 @@
 # 잇북(IT-Book) : 개발 서적 판매 쇼핑몰 Project
 
 ## 데모 링크
- - http://kdt-sw-5-team15.elicecoding.com/
+ - [http://kdt-sw-5-team15.elicecoding.com/](http://ec2-43-201-106-90.ap-northeast-2.compute.amazonaws.com/)
  - 일반 사용자 계정 : test@test.com / 123456
  - 관리자 계정 : admin@admin.com / 123456
 
