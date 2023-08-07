@@ -1,62 +1,66 @@
 <% const activeCategory = typeof mainCategory !== 'undefined' ? mainCategory :
 ''; %>
 <header class="header" id="header">
-  <div class="container">
-    <div class="header__inner">
-      <a href="/" class="header__logo">
-        <img src="/img/logo2.svg" alt="ItBook Logo" />
-      </a>
-      <nav class="nav-main">
-        <ul class="nav-main__list" id="headerMenu">
-          <li>
-            <a
-              class="<%= activeCategory === 'all' ? 'active' : '' %>"
-              href="/products/all"
-              >전체</a
-            >
-          </li>
-          <li>
-            <a
-              class="<%= activeCategory === 'frontend' ? 'active' : '' %>"
-              href="/products/frontend"
-              >프론트엔드</a
-            >
-          </li>
-          <li>
-            <a
-              class="<%= activeCategory === 'backend' ? 'active' : '' %>"
-              href="/products/backend"
-              >백엔드</a
-            >
-          </li>
-          <li>
-            <a
-              class="<%= activeCategory === 'cs' ? 'active' : '' %>"
-              href="/products/cs"
-              >CS</a
-            >
-          </li>
-        </ul>
-      </nav>
-      <nav class="nav-user">
-        <ul class="nav-user__list" id="userMenu">
-          <li>
-            <a href="/cart" class="nav-user__cart-btn" aria-label="장바구니 버튼">
-              <span data-is-auth="<%= authStatus ? 'true' : 'false' %>" id="cartBadge" aria-label="장바구니 개수" class="cart-badge"></span>
-            </a>
-          </li>
-          <% if (!authStatus) { %>
-            <li><button id="loginBtn">로그인</button></li>
-            <li><button id="joinBtn">회원가입</button></li>
-          <% } else { %>
-            <li><a href="/user">마이페이지</a></li>
-            <% if (authStatus.isAdmin) { %>
-              <li><a href="/admin/product">관리자페이지</a></li>
-            <% } %>
-            <li><button id="logoutBtn">로그아웃</button></li>
-          <% } %>
-        </ul>
-      </nav>
-    </div>
+  <div class="header__inner">
+    <a href="/" class="header__logo">
+      <img src="/img/logo.svg" alt="ItBook Logo" class="logo-default" />
+      <img src="/img/logo-mobile.png" alt="ItBook Logo" class="logo-mobile" />
+    </a>
+    <nav class="nav-main">
+      <ul class="nav-main__list" id="headerMenu">
+        <li>
+          <a
+            class="<%= activeCategory === 'all' ? 'active' : '' %>"
+            href="/products/all"
+            >전체</a
+          >
+        </li>
+        <li>
+          <a
+            class="<%= activeCategory === 'frontend' ? 'active' : '' %>"
+            href="/products/frontend"
+            >프론트엔드</a
+          >
+        </li>
+        <li>
+          <a
+            class="<%= activeCategory === 'backend' ? 'active' : '' %>"
+            href="/products/backend"
+            >백엔드</a
+          >
+        </li>
+        <li>
+          <a
+            class="<%= activeCategory === 'cs' ? 'active' : '' %>"
+            href="/products/cs"
+            >CS</a
+          >
+        </li>
+      </ul>
+    </nav>
+    <nav class="nav-user">
+      <ul class="nav-user__list" id="userMenu">
+        <li>
+          <a href="/cart" class="nav-user__cart-btn" aria-label="장바구니 버튼">
+            <span
+              data-is-auth="<%= authStatus ? 'true' : 'false' %>"
+              id="cartBadge"
+              aria-label="장바구니 개수"
+              class="cart-badge"
+            ></span>
+          </a>
+        </li>
+        <% if (!authStatus) { %>
+        <li><button id="loginBtn">로그인</button></li>
+        <li><button id="joinBtn">회원가입</button></li>
+        <% } else { %>
+        <li><a href="/user">마이페이지</a></li>
+        <% if (authStatus.isAdmin) { %>
+        <li><a href="/admin/product">관리자페이지</a></li>
+        <% } %>
+        <li><button id="logoutBtn">로그아웃</button></li>
+        <% } %>
+      </ul>
+    </nav>
   </div>
 </header>
