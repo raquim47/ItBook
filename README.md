@@ -39,7 +39,7 @@
 <p>- 헤더에 현재 장바구니 상태를 보여주는 배지를 구현.</p>
 </details>
 
-<hr>
+
 <details><summary>상품 리스트</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-list.gif?raw=true" />
@@ -49,7 +49,7 @@
 </details>
 
 
-<hr>
+
 <details><summary>상품 상세</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-detail.gif?raw=true" />
@@ -59,7 +59,7 @@
 <p>- 바로 구매하기 클릭시 주문 페이지로 바로 이동(로그인 검증).</p>
 </details>
 
-<hr>
+
 <details><summary>장바구니</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-cart.gif?raw=true" />
@@ -69,7 +69,7 @@
 <p>- 주문하기 또는 바로구매 클릭시(로그인 필요) 로컬 스토래지에 주문 임시 데이터를 저장하고 주문 페이지에서 활용.</p>
 </details>
 
-<hr>
+
 <details><summary>주문</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-order.gif?raw=true" />
@@ -79,7 +79,7 @@
 <p>- 결제 성공 시 사용자는 주문 확인 페이지로 자동 이동.</p>
 </details>
 
-<hr>
+
 <details><summary>사용자 페이지</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-user.gif?raw=true" />
@@ -88,7 +88,7 @@
 <p>- 주문 내역 조회, 주문 건의 주문 상태가 '상품준비중'일 경우 '주문취소' 버튼이 활성화되어 주문 취소 가능.</p>
 </details>
 
-<hr>
+
 <details><summary>관리자 - 상품관리</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-p.gif?raw=true" />
@@ -96,14 +96,14 @@
 <p>- 상품 등록/수정 시, 대분류를 변경하면 해당하는 소분류 카테고리가 렌더링되도록 구현.</p>
 <p>- 상품명 검색 기능 제공.</p>
 </details>
-<hr>
+
 <details><summary>관리자 - 주문관리</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-o.gif?raw=true" />
 <p>- 등록된 주문 조회/삭제 기능.</p>
 <p>- 주문 상태 별 조회 기능.</p>
 </details>
-<hr>
+
 <details><summary>관리자 - 카테고리관리</summary>
 
 <img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-c.gif?raw=true" />
