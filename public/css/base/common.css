@@ -146,7 +146,7 @@ header.onScroll {
 }
 
 .nav-main {
-  padding-left: 50px;
+  padding-left: 20px;
   margin-top: 4px;
 }
 
@@ -401,6 +401,12 @@ header.onScroll {
   cursor: pointer;
 }
 
+@media screen and (max-width: 1024px) {
+  /* .nav-main {
+    padding-left: 20px;
+  } */
+}
+
 @media screen and (max-width: 900px) {
   .logo-mobile {
     display: block;
@@ -411,8 +417,10 @@ header.onScroll {
     display: none;
   }
 
-  .nav-main {
-    padding-left: 20px;
+  .nav-main__list li,
+  .nav-user__list li {
+    padding: 0 12px;
+    font-size: 15px;
   }
 }
 
@@ -435,14 +443,7 @@ header.onScroll {
     flex-wrap: wrap;
     height: auto;
   }
-  /* .header__inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 50px;
-    display: flex;
-    align-items: center;
-    height: 90px;
-  } */
+
   .logo-mobile {
     margin-left: 30px;
     width: 35px;
@@ -450,12 +451,6 @@ header.onScroll {
   
   footer .logo-mobile {
     margin-left: 0;
-  }
-
-  .nav-main__list li,
-  .nav-user__list li {
-    padding: 0 12px;
-    font-size: 15px;
   }
 
   .nav-user {
@@ -489,5 +484,11 @@ header.onScroll {
 
   .footer__contact {
     flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 0 20px;
   }
 }
