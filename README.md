@@ -1,112 +1,115 @@
 # 잇북(IT-Book) : 개발 서적 판매 쇼핑몰 Project
 
-## 프로젝트 주제
-
-- 목적 : 온라인으로 빠르게 책을 구입하고 싶은 IT업계 취업준비생들을 위한 **개발 분야 서적** 판매 사이트
-- 목표
-    - 홈에서 신간도서와 추천도서 정보를 확인할 수 있습니다.
-    - 회원 가입을 하지 않아도 상품을 구경하고 장바구니에 넣을 수 있습니다.
-    - 카테고리를 세분화하여 최소한의 클릭으로 빠르게 상품을 찾고 구매할 수 있습니다.
-
-## 페르소나
-![페르소나](/uploads/40aa78b6bd79e4915f5bcf6644f8240e/페르소나.png)
-
-
-<br />
-
-## 서비스 소개
-
-#### 상품 등록, 장바구니 추가, 주문하기 등 쇼핑몰의 핵심 서비스를 구현합니다. 
-1. 회원가입(모달창), 로그인(모달창), 회원정보 수정 등 **유저 정보 관련 CRUD** 
-2. **상품 목록**을 조회 및, **상품 상세 정보**를 조회 가능함. 
-3. 장바구니에 상품을 추가할 수 있으며, **장바구니에서 CRUD** 작업이 가능함.
-4. 장바구니는에 넣는 기능은 비로그인 사용자는 **LocalStorage에** 정보가 저장되고, 로그인 사용자는 **DB에** 저장됨.
-5. 장바구니에서 주문을 진행하거나, 상품 상세페이지에서 바로 주문 진행 가능 **주문 완료 후 조회 및 취소**가 가능함.
-6. 관리자페이지에서 **주문관리 가능** 주문내역 삭제및 주문 상태 변경 가능
-
-
-<br />
-
-## 데모 사이트
+## 데모 링크
  - http://kdt-sw-5-team15.elicecoding.com/
- <div>
+ - 일반 사용자 계정 : test@test.com / 123456
+ - 관리자 계정 : admin@admin.com / 123456
 
- ![로고](/uploads/055f42f0e652e8dfc5e51fa8aa73ba67/로고.png)
+## 개요
+ - IT-Book은 개발 관련 서적을 판매하는 온라인 쇼핑몰입니다. 이 프로젝트는 바닐라 자바스크립트, CSS, EJS, Node.js Express, MongoDB, 그리고 Mongoose를 사용하여 제작되었습니다. 
 
- </div>
+## 주요 구현 사항 
+1. **유저 정보 관리**: 회원가입/로그인, 회원 정보 수정, 회원 탈퇴 등의 기능을 제공.
+2. **상품 관련 기능**: 카테고리별로 상품을 조회하고, 상품의 상세 정보를 확인.  
+3. **장바구니 기능**: 비로그인 사용자의 장바구니 정보는 LocalStorage에 저장하고, 로그인 시에는 DB에 저장되어 사용자 경험을 향상.
+4. **관리자 기능**: 관리자는 상품, 주문, 카테고리 정보에 대한 CRUD 연산을 수행.
 
- ### 1-1.기능 구현 리스트
+## 7.19 ~ 8.7 프로젝트 이후 기능 추가 구현, 리팩토링 진행
+1. **EJS 도입과 화면 렌더링 개선**: EJS를 도입하여 SSR과 CSR을 혼합한 유연한 화면 렌더링을 구현.
+2. **API 요청 로직 모듈화**: API 요청 로직을 클래스 메서드로 분리하여 모듈화하여 코드의 가독성과 유지보수성을 향상.
+3. **API 요청 모듈 핸들러**: API를 요청하는 모듈 핸들러를 만들어서 간결하고 추상화된 API 요청 메서드를 구현.
+4. **서버와 클라이언트의 상태 동기화**: 장바구니, 인증 정보 등의 상태를 서버와 동기화하여 로직을 구현.
+5. **커스텀 이벤트 활용**: 커스텀 이벤트를 사용하여 모듈간 의존성을 줄이고 각 모듈을 독립적으로 실행할 수 있도록 설계.
+6. **Toast UI 추가**: 에러 메시지와 성공 메시지를 시각적으로 표현하여 사용자 경험을 향상.
+7. **카테고리 재구성**: 카테고리를 대분류와 소분류로 재구성하여 효율적인 상품 분류 가능.
+8. **관리자 페이지 리뉴얼**: 관리자 페이지를 리뉴얼, 상품, 주문, 카테고리 관리 로직을 개선. 분류에 따라 조회할 수 있는 기능 추가.
+9. **함수형 프로그래밍**: 코드의 품질과 가독성을 향상시키기 위해 함수형 프로그래밍 도입.
+10. **상수 모듈화**: 메시지, 키, 상태값 등을 별도의 상수 모듈로 분리하여 관리.
+11. **상품 찜하기 기능** 추가**: 사용자가 찜한 상품을 마이페이지에서 확인 가능.
+12. **웹 디자인 개선**: 시멘틱 마크업을 재설계하고 반응형 디자인을 개선.
+13. **동적 에러 페이지**: 에러 상황에 따라 동적으로 내용을 보여주는 에러 페이지.
 
- - https://www.notion.so/elice/b47c327c54454ad08f41892dbeee89a6?v=30b981f436ef4baaa24f7880f1d84451
+## 프로젝트 구현 상세 내용 / 동작 시현 GIF
 
- ## Tech Stack
+<details><summary>홈</summary>
 
- - ![기술스택](/uploads/9d958d4bc258cc3d1794c785430f6009/기술스택.png)
-
- <br/>
-
- ### 데모 영상
-
-
-
- <details><summary>홈 & 카테고리별 상품조회</summary>
-
-![list](/uploads/388c28ab02039ab58cb54e8c2b7a33a6/list.gif)
-
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-home.gif?raw=true" />
+<p>- 바닐라 자바스크립트를 이용하여 배너와 상품 슬라이드를 구현.</p>
+<p>- passport.js와 JWT를 사용해 회원가입과 로그인을 구현, form의 유효성 검사도 클라이언트, 서버(이메일 중복, 비밀번호 오류)에서 모두 처리.</p>
+<p>- 헤더에 현재 장바구니 상태를 보여주는 배지를 구현.</p>
 </details>
 
 
-<details><summary>로그인 & 회원가입</summary>
+<details><summary>상품 리스트</summary>
 
-![login](/uploads/7c6bce68a1fdb9655c8d7d192913da79/login.gif)
-
-</details>
-
-
-<details><summary>회원정보수정 & 회원탈퇴</summary>
-
-![user-info](/uploads/4ed95973a8f13ed4e560999005b0af1d/user-info.gif)
-
-</details>
-
-
-
-<details><summary>장바구니 기능</summary>
-
-![cart](/uploads/6a543e811bb286adba1a370bdd95b4ed/cart.gif)
-
-</details>
-
-
-<details><summary>즉시구매 & 장바구니구매</summary>
-
-![payment](/uploads/c01cfd477f97b84a8ed334ebd09061aa/payment.gif)
-
-</details>
-
-
-<details><summary>주문내역조회 & 주문취소</summary>
-
-![user-order](/uploads/94caa9fc7cc571e802e89384b28e04a8/user-order.gif)
-
-</details>
-
-
-<details><summary>최신순 & 가격순 정렬</summary>
-
-![filter](/uploads/190890a23ba560a71955a224cdb4c6b0/filter.gif)
-
-</details>
-
-
-<details><summary>관리자</summary>
-
-![admin](/uploads/c21004ee13c57974dbf3652f477214a4/admin.gif)
-
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-list.gif?raw=true" />
+<p>- 카테고리에 따라 분류된 상품 리스트.</p>
+<p>- 메인 카테고리에 해당하는 소분류 카테고리 버튼을 렌더링하고, 버튼을 클릭하면 관련 상품만 렌더링.</p>
+<p>- 최신순, 오래된순, 가격 높은 순, 가격 낮은 순 정렬 기능 제공.</p>
 </details>
 
 
 
+<details><summary>상품 상세</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-detail.gif?raw=true" />
+<p>- 새로고침 없이 수량, 총 금액 변경 구현.</p>
+<p>- 찜하기 기능, 마이페이지에서 확인 가능.</p>
+<p>- 장바구니 담기 토스트 메시지,</p>
+<p>- 바로 구매하기 클릭시 주문 페이지로 바로 이동(로그인 검증).</p>
+</details>
+
+
+<details><summary>장바구니</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-cart.gif?raw=true" />
+<p>- 비로그인 사용자는 로컬스토래지, 로그인 사용자는 DB에서 장바구니 데이터 관리.</p>
+<p>- 비로그인 사용자가 로그인할 경우, 로컬스토리지의 데이터가 DB로 병합.</p>
+<p>- 수량 변경, 삭제, 체크 박스 상태, 총 금액 등 새로고침 없는 UI 동작 구현.</p>
+<p>- 주문하기 또는 바로구매 클릭시(로그인 필요) 로컬 스토래지에 주문 임시 데이터를 저장하고 주문 페이지에서 활용.</p>
+</details>
+
+
+<details><summary>주문</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-order.gif?raw=true" />
+<p>- 주문 유효성 검사 - 배송지, 전화번호, 동의 사항 체크 필요.</p>
+<p>- 다음 주소지 검색 api 활용.</p>
+<p>- '현재 배송 정보를 기본 정보로 저장'을 체크할 경우 결제시 해당 정보가 사용자 정보로 저장.</p>
+<p>- 결제 성공 시 사용자는 주문 확인 페이지로 자동 이동.</p>
+</details>
+
+
+<details><summary>사용자 페이지</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-user.gif?raw=true" />
+<p>- 마이페이지에서 찜한 상품 확인 가능.</p>
+<p>- 회원 정보 변경 및 회원 탈퇴(비밀번호 인증 필요)기능 구현.</p>
+<p>- 주문 내역 조회, 주문 건의 주문 상태가 '상품준비중'일 경우 '주문취소' 버튼이 활성화되어 주문 취소 가능.</p>
+</details>
+
+
+<details><summary>관리자 - 상품관리</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-p.gif?raw=true" />
+<p>- 등록된 상품 조회/수정/삭제 기능.</p>
+<p>- 상품 등록/수정 시, 대분류를 변경하면 해당하는 소분류 카테고리가 렌더링되도록 구현.</p>
+<p>- 상품명 검색 기능 제공.</p>
+</details>
+
+<details><summary>관리자 - 주문관리</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-o.gif?raw=true" />
+<p>- 등록된 주문 조회/삭제 기능.</p>
+<p>- 주문 상태 별 조회 기능.</p>
+</details>
+
+<details><summary>관리자 - 카테고리관리</summary>
+
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-c.gif?raw=true" />
+<p>- 메인 카테고리는 고정, 소분류 카테고리만 등록,수정,삭제 가능.</p>
+<p>- 대분류(메인카테고리)에 해당하는 카테고리 조회 가능.</p>
+</details>
 
 <br />
 
@@ -125,7 +128,6 @@
 ### 프론트엔드
 
 - **Vanilla javascript**, html, css
-- Font-awesome 
 - Daum 도로명 주소 api 
 - 윤성지
   + 회원가입, 로그인, 주문서 페이지, 사용자 주문조회 페이지 레이아웃
@@ -157,7 +159,6 @@
 
 
 ## Collaboration Tools
-
 - Padlet : 초반 주제 기획시 의사결정 빠르게 하는 칸반 보드 용도
 - Notion : 기능 구현 체크리스트, 회의록, 진행 상황 및 계획
 - Discord : 음성 채팅방 활용 의견 제시
@@ -173,46 +174,6 @@
 - 필요시 주말에도 프론트/백엔드 전체 스크럼 진행
 
 
-## 코드 컨벤션
-- 메인 폰트 : 'Pretendard'
-- 비동기 방식 : async/await
-- 들여쓰기 : 2칸
-- 네이밍 컨벤션 : 변수명은 camelCase, 파일/폴더명은 케밥-케이스
-- 함수 정의 방법 : 함수 표현식
-- Css selector : class selector
-
-
-## 커밋 컨벤션
-- feat : 새로운 기능 추가
-- fix : 버그 수정
-- template : html, css, js 관련 파일 추가
-- docs : 문서 수정
-- style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우
-- refactor : 코드 리팩토링
-- delete : 삭제
-
-
-## 브랜치 전략
-- ![브랜치전략](/uploads/e79c240c7e74701a2a23214c7ded12eb/브랜치전략.png)
-
-
-## 트러블 슈팅
-- ![트러블슈팅](/uploads/c32279ffe3a33a7763698eb692e59094/트러블슈팅.png)
-
-
-## 실행 방법
-```bash
-git clone {.....repository_name}.git
-cd {repository_name}
-npm install
-npm start
-```
-
-
-### .env 설정
-```
-JWT_SECRET_KEY = {YOUR_JWT_SECRET_KEY}
-```
 ---
 
 본 프로젝트에서 제공하는 모든 코드 등의는 저작권법에 의해 보호받는 ㈜엘리스의 자산이며, 무단 사용 및 도용, 복제 및 배포를 금합니다.

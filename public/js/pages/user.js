@@ -73,7 +73,7 @@ const cancelOrder = async (orderId) => {
   const statusElement = orderItemElement.querySelector('td:nth-child(4)');
   statusElement.innerHTML = `
     <span>주문취소</span>
-    <button class="order__cancel-btn" disabled>배송취소</button>
+    <button class="order__cancel-btn" disabled>주문취소</button>
   `;
 };
 
@@ -109,8 +109,8 @@ const initOrderPage = async () => {
           <span>${order.status}</span>
           ${
             order.status === '상품준비중'
-              ? '<button class="order__cancel-btn">배송취소</button>'
-              : '<button class="order__cancel-btn" disabled>배송취소</button>'
+              ? '<button class="order__cancel-btn">주문취소</button>'
+              : '<button class="order__cancel-btn" disabled>주문취소</button>'
           }
         </td>
       </tr>

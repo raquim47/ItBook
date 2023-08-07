@@ -22,7 +22,6 @@ router.get(
   asyncApiHandler(async (req, res) => {
     const categoryId = req.params.categoryId;
     const category = await Category.findById(categoryId);
-    console.log(categoryId, category);
     if (!category) {
       return res
         .status(404)

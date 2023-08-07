@@ -194,4 +194,21 @@
   margin-top: 2px;
   margin-left: 4px;
   line-height: 1.5;
-} 
+}
+
+@media screen and (max-width: 1024px) {
+  .order {
+    padding: 60px 0 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .order__sections {
+    flex-direction: column;
+  }
+  
+  .order__payment {
+    width: 100%;
+    margin-left: 0;
+  }
+}

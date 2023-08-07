@@ -116,6 +116,10 @@ body {
   z-index: 99;
 }
 
+.logo-mobile {
+  display: none;
+}
+
 .header.shadow {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.16);
 }
@@ -128,18 +132,21 @@ header.onScroll {
 }
 
 .header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px;
   display: flex;
   align-items: center;
   height: 90px;
 }
 
-.header__logo img {
+.logo-default {
   width: 140px;
   height: 65px;
 }
 
 .nav-main {
-  padding-left: 50px;
+  padding-left: 20px;
   margin-top: 4px;
 }
 
@@ -165,7 +172,6 @@ header.onScroll {
 .nav-user {
   margin-right: -10px;
   margin-left: auto;
-  margin-top: 8px;
 }
 
 .nav-user__list {
@@ -216,7 +222,7 @@ header.onScroll {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   z-index: 100;
   opacity: 0;
@@ -352,10 +358,6 @@ header.onScroll {
   background-color: #c9c9c9;
 }
 
-.footer__logo img {
-  width: 150px;
-}
-
 .footer__inner {
   display: flex;
   align-items: center;
@@ -397,4 +399,96 @@ header.onScroll {
     no-repeat;
   z-index: 10;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .nav-main__list li,
+  .nav-user__list li {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .logo-mobile {
+    display: block;
+    width: 40px;
+  }
+
+  .logo-default {
+    display: none;
+  }
+
+  .nav-main__list li,
+  .nav-user__list li {
+    padding: 0 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    padding: 50px 0 100px;
+  }
+  .container {
+    padding: 0 30px;
+    margin: 0 auto;
+  }
+
+  .header {
+    padding: 0;
+    margin: 0 auto;
+  }
+  
+  .header__inner {
+    padding: 0;
+    flex-wrap: wrap;
+    height: auto;
+  }
+
+  .logo-mobile {
+    margin-left: 30px;
+    width: 35px;
+  }
+  
+  footer .logo-mobile {
+    margin-left: 0;
+  }
+
+  .nav-user {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    order: 2;
+    margin-right: 30px;
+    padding: 20px 0;
+  }
+
+  .nav-main {
+    padding: 20px 30px;
+    border-top: 1px solid #ddd;
+    order: 3;
+    width: 100%;
+  }
+
+  .nav-main__list {
+    margin-left: -10px;
+  }
+
+  .nav-user__list {
+    margin-right: -10px;
+  }
+  
+  .footer__inner {
+    gap: 50px;
+    line-height: 1.5;
+  }
+
+  .footer__contact {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 0 20px;
+  }
 }

@@ -64,10 +64,28 @@ const setUpProductSlide = () => {
   let slideIndex = 0;
 
   const slideGap = parseInt(getComputedStyle(sliderList).gap);
-  let slideWidth =
-    sliderList.querySelector('.product-item').clientWidth + slideGap;
-  const slideCount = sliderList.querySelectorAll('.product-item').length;
-  const maxIndex = slideCount - 3;
+
+  // Viewport width에 따른 maxIndex와 slideWidth를 결정하는 함수
+  const updateSlideProperties = () => {
+    let slideWidth =
+      sliderList.querySelector('.product-item').clientWidth + slideGap;
+
+    // 768px 이하일 때
+    if (window.innerWidth <= 768) {
+      return {
+        slideWidth,
+        maxIndex: sliderList.querySelectorAll('.product-item').length - 1,
+      };
+    }
+
+    // 768px 초과일 때
+    return {
+      slideWidth,
+      maxIndex: sliderList.querySelectorAll('.product-item').length - 3,
+    };
+  };
+
+  let { slideWidth, maxIndex } = updateSlideProperties();
 
   updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
   updateProductNavigationBtns(slideIndex, maxIndex, prevButton, nextButton);
@@ -99,11 +117,12 @@ const setUpProductSlide = () => {
   });
 
   window.addEventListener('resize', () => {
-    slideWidth =
-      sliderList.querySelector('.product-item').clientWidth + slideGap;
+    // 뷰포트 너비 변경 시 maxIndex와 slideWidth 업데이트
+    ({ slideWidth, maxIndex } = updateSlideProperties());
     updateProductSlidePosition(sliderList, -slideWidth * slideIndex);
   });
 };
+
 
 const initPage = async () => {
   await authService.initializeAuth();
