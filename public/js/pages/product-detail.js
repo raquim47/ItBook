@@ -43,6 +43,11 @@ const bindEventsCountBtns = () => {
 const bindWishlistBtn = () => {
   const wishlistBtn = document.querySelector('.product-detail__wishlist-btn');
   wishlistBtn.addEventListener('click', async (e) => {
+    const { isAuth } = authService;
+    if(!isAuth) {
+      showToast(ERROR.AUTH_REQUIRED);
+      return;
+    }
     const currentBtn = e.currentTarget;
     const productId = window.location.pathname.split('/').pop();
     const result = await userService.putUserWishlist(productId);
@@ -59,7 +64,6 @@ const bindCartBtn = () => {
     const quantity = Number(document.getElementById('quantity').textContent);
 
     const result = await cartService.postToCart({ productId, quantity });
-    console.log(result);
     if (result.error) return;
 
     const toastContent = `
