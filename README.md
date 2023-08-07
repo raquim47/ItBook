@@ -1,12 +1,13 @@
 # 잇북(IT-Book) : 개발 서적 판매 쇼핑몰 Project
 
 ## 데모 링크
- - http://kdt-sw-5-team15.elicecoding.com/
+ - http://ec2-43-201-106-90.ap-northeast-2.compute.amazonaws.com/products/all
  - 일반 사용자 계정 : test@test.com / 123456
  - 관리자 계정 : admin@admin.com / 123456
 
 ## 개요
  - IT-Book은 개발 관련 서적을 판매하는 온라인 쇼핑몰입니다. 이 프로젝트는 바닐라 자바스크립트, CSS, EJS, Node.js Express, MongoDB, 그리고 Mongoose를 사용하여 제작되었습니다. 
+ - 배포 : AWS EC2
 
 ## 주요 구현 사항 
 1. **유저 정보 관리**: 회원가입/로그인, 회원 정보 수정, 회원 탈퇴 등의 기능을 제공.
