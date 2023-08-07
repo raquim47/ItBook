@@ -110,9 +110,6 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 50px;
   background-color: #fff;
   box-shadow: none;
   transition: 0.2s;
@@ -135,6 +132,9 @@ header.onScroll {
 }
 
 .header__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px;
   display: flex;
   align-items: center;
   height: 90px;
@@ -431,10 +431,18 @@ header.onScroll {
   }
   
   .header__inner {
+    padding: 0;
     flex-wrap: wrap;
     height: auto;
   }
-
+  /* .header__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    height: 90px;
+  } */
   .logo-mobile {
     margin-left: 30px;
     width: 35px;
@@ -466,8 +474,12 @@ header.onScroll {
     width: 100%;
   }
 
-  .nav-main ul {
+  .nav-main__list {
     margin-left: -10px;
+  }
+
+  .nav-user__list {
+    margin-right: -10px;
   }
   
   .footer__inner {
