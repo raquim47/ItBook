@@ -29,85 +29,85 @@
 12. **웹 디자인 개선**: 시멘틱 마크업을 재설계하고 반응형 디자인을 개선.
 13. **동적 에러 페이지**: 에러 상황에 따라 동적으로 내용을 보여주는 에러 페이지.
 
-## 이미지 자료, 구체적인 기능 구현 사항
+## 프로젝트 구현 상세 내용 / 동작 시현 GIF
 
 <details><summary>홈</summary>
 
-![login](/uploads/7c6bce68a1fdb9655c8d7d192913da79/login.gif)
-- 배너, 상품 슬라이드 구현(바닐라 자바스크립트)
-- 회원가입, 로그인 구현(passport.js, JWT), 유효성 검사
-- 헤더에서 현재 장바구니 상태를 보여주는 badge 구현.
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-home.gif?raw=true" />
+- 바닐라 자바스크립트를 이용하여 배너와 상품 슬라이드를 구현.
+- passport.js와 JWT를 사용해 회원가입과 로그인을 구현, form의 유효성 검사도 클라이언트, 서버(이메일 중복, 비밀번호 오류)에서 모두 처리.
+- 헤더에 현재 장바구니 상태를 보여주는 배지를 구현.
 </details>
 
 
 <details><summary>상품 리스트</summary>
 
-![user-info](/uploads/4ed95973a8f13ed4e560999005b0af1d/user-info.gif)
-- 카테고리에 따라 분류된 상품 리스트
-- 해당 메인 카테고리에 해당하는 소분류 카테고리 버튼 렌더링, 클릭시 해당하는 상품만 렌더링
-- 최신순, 오래된순, 가격 높은 순, 가격 낮은 순 정렬 기능
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-list.gif?raw=true" />
+- 카테고리에 따라 분류된 상품 리스트.
+- 메인 카테고리에 해당하는 소분류 카테고리 버튼을 렌더링하고, 버튼을 클릭하면 관련 상품만 렌더링.
+- 최신순, 오래된순, 가격 높은 순, 가격 낮은 순 정렬 기능 제공.
 </details>
 
 
 
 <details><summary>상품 상세</summary>
 
-![cart](/uploads/6a543e811bb286adba1a370bdd95b4ed/cart.gif)
-- 새로고침 없이 수량, 총 금액 렌더링
-- 찜하기 기능, 마이페이지에서 확인 가능
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-detail.gif?raw=true" />
+- 새로고침 없이 수량, 총 금액 변경 구현.
+- 찜하기 기능, 마이페이지에서 확인 가능.
 - 장바구니 담기 토스트 메시지,
-- 바로 구매하기 클릭시 주문 페이지로 바로 이동
+- 바로 구매하기 클릭시 주문 페이지로 바로 이동(로그인 검증).
 </details>
 
 
 <details><summary>장바구니</summary>
 
-![payment](/uploads/c01cfd477f97b84a8ed334ebd09061aa/payment.gif)
-- 비로그인 사용자는 로컬스토래지, 로그인 사용자는 DB에서 장바구니 데이터 관리
-- 비로그인 사용자가 로그인 시 로컬스토래지의 데이터가 DB로 병합
-- 수량 변경, 삭제, 체크 박스 상태, 총 금액 렌더링 등 새로고침 없는 UI 동작 구현
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-cart.gif?raw=true" />
+- 비로그인 사용자는 로컬스토래지, 로그인 사용자는 DB에서 장바구니 데이터 관리.
+- 비로그인 사용자가 로그인할 경우, 로컬스토리지의 데이터가 DB로 병합.
+- 수량 변경, 삭제, 체크 박스 상태, 총 금액 등 새로고침 없는 UI 동작 구현.
 - 주문하기 또는 바로구매 클릭시(로그인 필요) 로컬 스토래지에 주문 임시 데이터를 저장하고 주문 페이지에서 활용.
 </details>
 
 
 <details><summary>주문</summary>
 
-![user-order](/uploads/94caa9fc7cc571e802e89384b28e04a8/user-order.gif)
-- 주문 유효성 검사- 배송지, 전화번호, 동의 사항 체크 필요
-- 다음 주소지 검색 api 활용
-- 현재 배송정보 저장 체크할 경우 결제시 해당 정보가 사용자 정보로 저장.
-- 결제 성공 시 사용자 주문 확인 페이지로 이동
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-order.gif?raw=true" />
+- 주문 유효성 검사 - 배송지, 전화번호, 동의 사항 체크 필요.
+- 다음 주소지 검색 api 활용.
+- '현재 배송 정보를 기본 정보로 저장'을 체크할 경우 결제시 해당 정보가 사용자 정보로 저장.
+- 결제 성공 시 사용자는 주문 확인 페이지로 자동 이동.
 </details>
 
 
 <details><summary>사용자 페이지</summary>
 
-![filter](/uploads/190890a23ba560a71955a224cdb4c6b0/filter.gif)
-- 마이페이지에서 찜한 상품 확인
-- 회원 정보 변경 및 회원 탈퇴(비밀번호 인증)기능 구현
-- 주문 내역 조회, 주문 건의 배송 상태가 상품 준비중일 경우 배송 취소 버튼 활성화-> 주문 취소 가능
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-user.gif?raw=true" />
+- 마이페이지에서 찜한 상품 확인 가능.
+- 회원 정보 변경 및 회원 탈퇴(비밀번호 인증 필요)기능 구현.
+- 주문 내역 조회, 주문 건의 주문 상태가 '상품준비중'일 경우 '주문취소' 버튼이 활성화되어 주문 취소 가능.
 </details>
 
 
 <details><summary>관리자 - 상품관리</summary>
 
-![admin](/uploads/c21004ee13c57974dbf3652f477214a4/admin.gif)
-- 등록된 상품 조회/수정/삭제 기능
-- 상품 등록/수정에서 대분류 select를 변경시 해당하는 소분류 카테고리가 렌더링 되도록 구현
-- 상품명 검색 기능
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-p.gif?raw=true" />
+- 등록된 상품 조회/수정/삭제 기능.
+- 상품 등록/수정 시, 대분류를 변경하면 해당하는 소분류 카테고리가 렌더링되도록 구현.
+- 상품명 검색 기능 제공.
 </details>
 <details><summary>관리자 - 주문관리</summary>
 
-![admin](/uploads/c21004ee13c57974dbf3652f477214a4/admin.gif)
-- 등록된 주문 조회/삭제 기능
-- 주문 상태별 조회 가능
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-o.gif?raw=true" />
+- 등록된 주문 조회/삭제 기능.
+- 주문 상태 별 조회 기능.
 </details>
 
 <details><summary>관리자 - 카테고리관리</summary>
 
-![admin](/uploads/c21004ee13c57974dbf3652f477214a4/admin.gif)
+<img width="90%" src="https://github.com/raquim47/data/blob/main/itbook/ib-admin-c.gif?raw=true" />
 - 메인 카테고리는 고정, 소분류 카테고리만 등록,수정,삭제 가능.
-- 대분류(메인카테고리) 별 카테고리 조회 가능.
+- 대분류(메인카테고리)에 해당하는 카테고리 조회 가능.
 </details>
 
 <br />
