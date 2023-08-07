@@ -5,6 +5,7 @@ import cartService from '../services/cart-service.js';
 import orderService from '../services/order-service.js';
 
 const renderOrder = (order) => {
+  console.log(order)
   return `
   <tr class="order-table__row" data-order-id="${order._id}">
     <td>
@@ -14,8 +15,8 @@ const renderOrder = (order) => {
     </td>
     <td>
       <div class="cell-wrapper">
-        <h4>${order.userId.username}</h4>
-        <p>${order.userId.email}</p>
+        <h4>${order.username}</h4>
+        <p>${order.email}</p>
         <p>${order.address}</p>
         <p>${order.phone}</p>
       </div>
